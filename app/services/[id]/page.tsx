@@ -39,7 +39,7 @@ const ServicePage: FC = () => {
           alias: "botanical-hair-coloring",
           name: "Colorazione con erbe botaniche",
           description: "Tinte naturali e tecniche innovative",
-          image: "/erbe.jpg",
+          image: "/ERBE.jpg",
           imageAlt: "Colorazione con erbe botaniche",
           detailedDescription: "La nostra colorazione con erbe botaniche è un trattamento delicato e naturale per i vostri capelli. Utilizziamo solo ingredienti di origine vegetale per ottenere colori vibranti e duraturi, proteggendo al contempo la salute dei vostri capelli.",
         },
