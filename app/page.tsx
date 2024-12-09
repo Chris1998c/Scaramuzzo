@@ -29,6 +29,19 @@ export default function Component() {
     root.classList.add(theme)
   }, [theme])
 
+  // --- Inizio modifica per tornare a prodotti o servizi in modo diretto ---
+  useEffect(() => {
+    const navigateTo = localStorage.getItem('navigateTo')
+    if (navigateTo === 'products') {
+      setCurrentPage('products')
+      localStorage.removeItem('navigateTo')
+    } else if (navigateTo === 'services') {
+      setCurrentPage('services')
+      localStorage.removeItem('navigateTo')
+    }
+  }, [])
+  // --- Fine modifica ---
+
   const translations = {
     it: {
       home: "Home",

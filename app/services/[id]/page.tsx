@@ -178,6 +178,7 @@ const ServicePage: FC = () => {
 
   const handleBackClick = useCallback(() => {
     router.push('/')
+    localStorage.setItem('navigateTo', 'services')
     setShouldNavigateBack(true)
   }, [router])
 

@@ -20,7 +20,7 @@ const Home: FC<HomeProps> = ({ language }) => {
   return (
     <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
       <Image
-        src="/ce05c68e-2914-4d1e-9f4f-f70e87cbf919.webp" 
+        src="/img-home.webp" 
         fill
         alt="Salon Background"
         style={{ objectFit: 'cover' }} 
