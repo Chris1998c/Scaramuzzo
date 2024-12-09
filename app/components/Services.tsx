@@ -59,7 +59,7 @@ const Services: FC<ServicesProps> = ({ language }) => {
           id: "sanlai",
           name: "Sanlai",
           description: "Schiariture",
-          image: "/sanlai.jpg",
+          image: "/sanlai.webp",
           imageAlt: "Schiariture Sanlai",
           detailedDescription: "La tecnica Sanlai è il nostro metodo innovativo per schiarire i capelli in modo naturale e delicato. Questa tecnica permette di ottenere riflessi luminosi e naturali, rispettando la struttura del capello e mantenendolo sano e forte.",
         },

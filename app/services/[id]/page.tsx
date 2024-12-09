@@ -124,7 +124,7 @@ const ServicePage: FC = () => {
           alias: "sanlai",
           name: "Sanlai",
           description: "Hair lightening",
-          image: "/sanlai.jpg",
+          image: "/sanlai.webp",
           imageAlt: "Sanlai Hair Lightening",
           detailedDescription: "The Sanlai technique is our innovative method for lightening hair naturally and gently. This technique allows for bright and natural-looking highlights while respecting the hair structure and keeping it healthy and strong.",
         },

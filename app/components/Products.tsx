@@ -39,8 +39,8 @@ const Products: FC<ProductsProps> = ({ language }) => {
           detailedDescription: "La Maschera riflessante con estratto di hennè è un trattamento intensivo che combina le proprietà nutrienti e ristrutturanti dell'hennè con una formula ricca di principi attivi. Il puro estratto di hennè, ricco di zuccheri naturali, penetra in profondità nella fibra capillare, riparandola e rinforzandola dall'interno. Questo trattamento non solo mantiene vivaci i riflessi, ma migliora anche la struttura del capello, lasciandolo più forte, elastico e luminoso.",
         },
         {
-          id: "olio-capelli",
-          name: "Olio per Capelli",
+          id: "Shampoo seboregolatore",
+          name: "Shampoo seboregolatore",
           description: "Olio leggero per capelli lucenti",
           image: "/placeholder.svg",
           imageAlt: "Olio per Capelli",
