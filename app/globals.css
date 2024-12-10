@@ -1,8 +1,6 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 body {
   font-family: 'Cormorant Garamond', serif,bold;
@@ -12,19 +10,18 @@ body {
 
 .navbar-font {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem; /* Cambia la dimensione del font come preferisci */
-  font-weight: bold; /* Puoi cambiare lo stile, ad esempio 'normal' o 'bold' */
-  font-style: italic; /* Se vuoi mantenere il testo in corsivo */
+  font-size: 1.3rem;
+  font-weight: bold;
+  font-style: italic;
 }
-
 
 @layer base {
   :root {
     --background: 24 71% 12%; /* Colore corten puro */
     --foreground: 0 0% 98%;
-    --card: 24 71% 12%; /* Colore corten puro per le card */
+    --card: 24 71% 12%;
     --card-foreground: 0 0% 98%;
-    --popover: 24 71% 12%; /* Colore corten puro per i popover */
+    --popover: 24 71% 12%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
@@ -80,5 +77,21 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    position: relative; /* per il posizionamento del pseudo-elemento */
   }
+}
+
+
+@layer base {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png') center center no-repeat;
+    background-size: contain;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0; 
+  }
+  
 }

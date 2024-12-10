@@ -42,7 +42,26 @@ const ProductPage: FC = () => {
           image: "/mask-hennè.webp",
           detailedDescription: "La Maschera riflessante con estratto di hennè è un trattamento intensivo che combina le proprietà nutrienti e ristrutturanti dell'hennè con una formula ricca di principi attivi. Il puro estratto di hennè, ricco di zuccheri naturali, penetra in profondità nella fibra capillare, riparandola e rinforzandola dall'interno. Questo trattamento non solo mantiene vivaci i riflessi, ma migliora anche la struttura del capello, lasciandolo più forte, elastico e luminoso.",
         },
-        // Aggiungi altri prodotti qui...
+        {
+        id: "Shampoo-Purificante-seboregolatore",
+        name: "Shampoo Purificante-seboregolatore",
+        description: "Olio leggero per capelli lucenti",
+        image: "/sh-hennè.webp",
+        detailedDescription: "Il nostro Olio per Capelli è una formula leggera ma potente, studiata per nutrire in profondità i capelli senza appesantirli. Arricchito con oli naturali selezionati, questo prodotto aiuta a combattere il crespo, aumenta la lucentezza e protegge i capelli dai danni ambientali. Perfetto per tutti i tipi di capelli, può essere utilizzato sia come trattamento pre-shampoo che come finish per domare i capelli ribelli."},
+        {
+          id: "Bagnoschiuma-Purificante",
+          name: "Bagnoschiuma-Purificante",
+          description: "Bagnoschiuma-Purificante",
+          image: "/sh-hennè.webp",
+          detailedDescription: "Azione antibatterica grazie all'estratto di liquirizia, bergamotto, ortica, cedro che dona alla pelle un'eccezionale sensazione di pulizia e freschezza.Azione calmante e lenitiva grazie all'utilizzo dell'acqua termale",
+        },
+        {
+          id: "Olio-lenitivo-olivo-e-girasole",
+          name: "Olio lenitivo olivo e girasole",
+          description: "Azione lenitiva intensa",
+          image: "/sh-hennè.webp",
+          detailedDescription: "Formulato con puri oli di girasole e oliva, per un'idratazione emolliente intensad",
+        },
       ],
     },
     en: {
