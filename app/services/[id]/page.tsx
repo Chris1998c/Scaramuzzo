@@ -50,7 +50,14 @@ const ServicePage: FC = () => {
           description: "Trattamenti per capelli danneggiati e cure specifiche",
           image: "/trattamento.jpg",
           imageAlt: "Trattamenti",
-          detailedDescription: "Offriamo una vasta gamma di trattamenti per capelli danneggiati, secchi o difficili da gestire. I nostri trattamenti professionali ripristinano la salute e la vitalità dei vostri capelli, lasciandoli morbidi, lucenti e facili da gestire.",
+          detailedDescription: 
+`Offriamo una vasta gamma di trattamenti per capelli:
+- Cheratina Vegetale: Ripristina forza, elasticità e lucentezza naturale.
+- Trattamenti Cute con Erbe: Soluzioni naturali per migliorare la salute del cuoio capelluto.
+- Peeling: Detersione profonda per un cuoio capelluto rigenerato.
+- Rigenerante: Rivitalizza i capelli fragili e danneggiati.
+- Post Colore: Mantieni la brillantezza e la durata del colore.
+- Trattamento di Rigenerazione: Rigenera i capelli in profondità per un aspetto sano e forte.`,
         },
         {
           id: "acconciature",
@@ -66,7 +73,7 @@ const ServicePage: FC = () => {
           alias: "sanlai",
           name: "Sanlai",
           description: "Schiariture",
-          image: "/erbe.jpg",
+          image: "/sanlai.webp",
           imageAlt: "Schiariture Sanlai",
           detailedDescription: "La tecnica Sanlai è il nostro metodo innovativo per schiarire i capelli in modo naturale e delicato. Questa tecnica permette di ottenere riflessi luminosi e naturali, rispettando la struttura del capello e mantenendolo sano e forte.",
         },
@@ -75,7 +82,7 @@ const ServicePage: FC = () => {
           alias: "scalp-massage",
           name: "Massaggio del Cuoio Capelluto",
           description: "Rilassante massaggio per la salute dei capelli",
-          image: "/erbe.jpg",
+          image: "/Massaggio.webp",
           imageAlt: "Massaggio del Cuoio Capelluto",
           detailedDescription: "Il nostro massaggio del cuoio capelluto non è solo rilassante, ma anche benefico per la salute dei vostri capelli. Stimola la circolazione, promuove la crescita dei capelli e aiuta a ridurre lo stress, lasciandovi completamente rinnovati.",
         },
@@ -108,7 +115,14 @@ const ServicePage: FC = () => {
           description: "Treatments for damaged hair and specific care",
           image: "/erbe.jpg",
           imageAlt: "Treatments",
-          detailedDescription: "We offer a wide range of treatments for damaged, dry, or hard-to-manage hair. Our professional treatments restore the health and vitality of your hair, leaving it soft, shiny, and easy to manage.",
+          detailedDescription:
+`We offer a wide range of treatments for hair:
+- Plant-Based Keratin: Restores strength, elasticity, and natural shine.
+- Herbal Scalp Treatments: Natural solutions to improve scalp health.
+- Peeling: Deep cleansing for a rejuvenated scalp.
+- Revitalizing: Revitalizes fragile and damaged hair.
+- Post Color: Maintains color brilliance and longevity.
+- Deep Regeneration Treatment: Deeply regenerates hair for a healthy and strong look.`,
         },
         {
           id: "hairstyling",
@@ -157,7 +171,7 @@ const ServicePage: FC = () => {
     return () => {
       window.removeEventListener('storage', handleLanguageChange)
     }
-  }, [])
+  }, [language])
 
   useEffect(() => {
     if (params.id) {
@@ -220,7 +234,8 @@ const ServicePage: FC = () => {
         </div>
       </div>
       <div className="container mx-auto px-4 py-16">
-        <p className="text-lg mb-8">{service.detailedDescription}</p>
+        {/* Aggiunta della classe whitespace-pre-line per rispettare i ritorni a capo */}
+        <p className="text-lg mb-8 whitespace-pre-line">{service.detailedDescription}</p>
         <Button onClick={handleBackClick}>
           {language === 'it' ? 'Torna ai Servizi' : 'Back to Services'}
         </Button>

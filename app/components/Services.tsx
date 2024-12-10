@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { FC } from "react";
 import {
@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-
 import { useRouter } from "next/navigation";
 
 interface ServicesProps {
@@ -27,7 +26,7 @@ const Services: FC<ServicesProps> = ({ language }) => {
           id: "taglio-di-capelli",
           name: "Taglio di Capelli",
           description: "Taglio personalizzato per uomo e donna",
-          image: "/taglio.jpg",
+          image: "/TaglioNew.jpg",
           imageAlt: "Taglio di Capelli",
           detailedDescription: "Il nostro servizio di taglio capelli offre un'esperienza personalizzata per ogni cliente. I nostri stilisti esperti lavorano con voi per creare un look che si adatti perfettamente al vostro stile di vita e alla forma del vostro viso.",
         },
@@ -45,7 +44,14 @@ const Services: FC<ServicesProps> = ({ language }) => {
           description: "Trattamenti per capelli danneggiati e cure specifiche",
           image: "/trattamento.jpg",
           imageAlt: "Trattamenti",
-          detailedDescription: "Offriamo una vasta gamma di trattamenti per capelli danneggiati, secchi o difficili da gestire. I nostri trattamenti professionali ripristinano la salute e la vitalità dei vostri capelli, lasciandoli morbidi, lucenti e facili da gestire.",
+          detailedDescription: 
+`Offriamo una vasta gamma di trattamenti per capelli:
+- Cheratina Vegetale: Ripristina forza, elasticità e lucentezza naturale.
+- Trattamenti Cute con Erbe: Soluzioni naturali per migliorare la salute del cuoio capelluto.
+- Peeling: Detersione profonda per un cuoio capelluto rigenerato.
+- Rigenerante: Rivitalizza i capelli fragili e danneggiati.
+- Post Colore: Mantieni la brillantezza e la durata del colore.
+- Trattamento di Rigenerazione: Rigenera i capelli in profondità per un aspetto sano e forte.`,
         },
         {
           id: "acconciature",
@@ -67,7 +73,7 @@ const Services: FC<ServicesProps> = ({ language }) => {
           id: "massaggio-del-cuoio-capelluto",
           name: "Massaggio del Cuoio Capelluto",
           description: "Rilassante massaggio per la salute dei capelli",
-          image: "/ERBE.jpg",
+          image: "/massaggio.webp",
           imageAlt: "Massaggio del Cuoio Capelluto",
           detailedDescription: "Il nostro massaggio del cuoio capelluto non è solo rilassante, ma anche benefico per la salute dei vostri capelli. Stimola la circolazione, promuove la crescita dei capelli e aiuta a ridurre lo stress, lasciandovi completamente rinnovati.",
         },
@@ -96,9 +102,16 @@ const Services: FC<ServicesProps> = ({ language }) => {
           id: "treatments",
           name: "Treatments",
           description: "Treatments for damaged hair and specific care",
-          image: "/placeholder.svg",
+          image: "/trattamento.jpg",
           imageAlt: "Treatments",
-          detailedDescription: "We offer a wide range of treatments for damaged, dry, or hard-to-manage hair. Our professional treatments restore the health and vitality of your hair, leaving it soft, shiny, and easy to manage.",
+          detailedDescription:
+`We offer a wide range of treatments for hair:
+- Plant-Based Keratin: Restores strength, elasticity, and natural shine.
+- Herbal Scalp Treatments: Natural solutions to improve scalp health.
+- Peeling: Deep cleansing for a rejuvenated scalp.
+- Revitalizing: Revitalizes fragile and damaged hair.
+- Post Color: Maintains color brilliance and longevity.
+- Deep Regeneration Treatment: Deeply regenerates hair for a healthy and strong look.`,
         },
         {
           id: "hairstyling",
@@ -112,7 +125,7 @@ const Services: FC<ServicesProps> = ({ language }) => {
           id: "sanlai",
           name: "Sanlai",
           description: "Hair lightening",
-          image: "/sanlai.jpg",
+          image: "/sanlai.webp",
           imageAlt: "Sanlai Hair Lightening",
           detailedDescription: "The Sanlai technique is our innovative method for lightening hair naturally and gently. This technique allows for bright and natural-looking highlights while respecting the hair structure and keeping it healthy and strong.",
         },
@@ -120,7 +133,7 @@ const Services: FC<ServicesProps> = ({ language }) => {
           id: "scalp-massage",
           name: "Scalp Massage",
           description: "Relaxing massage for hair health",
-          image: "/ERBE.jpg",
+          image: "/massaggio.webp",
           imageAlt: "Scalp Massage",
           detailedDescription: "Our scalp massage is not only relaxing but also beneficial for your hair health. It stimulates circulation, promotes hair growth, and helps reduce stress, leaving you feeling completely renewed.",
         },
@@ -131,6 +144,10 @@ const Services: FC<ServicesProps> = ({ language }) => {
   const handleServiceClick = (serviceId: string) => {
     router.push(`/services/${serviceId}`);
   };
+
+  // Per mostrare i trattamenti su più righe, aggiungiamo una classe per gestire il whitespace
+  // Assicurati che la classe "whitespace-pre-line" esista (tailwind la supporta di default)
+  // e che "CardDescription" accetti className (dal tuo codice sembra di sì, è un componente UI generico).
 
   return (
     <section className="py-16 bg-background">
@@ -145,7 +162,7 @@ const Services: FC<ServicesProps> = ({ language }) => {
               className="w-full h-full flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"
               onClick={() => handleServiceClick(service.id)}
             >
-              <div className="relative w-full h-56">
+              <div className="relative w-full h-64">
                 <Image
                   src={service.image}
                   alt={service.imageAlt || service.name}
@@ -161,7 +178,9 @@ const Services: FC<ServicesProps> = ({ language }) => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <CardDescription>{service.description}</CardDescription>
+                  <CardDescription className="whitespace-pre-line">
+                    {service.description}
+                  </CardDescription>
                 </CardContent>
               </div>
             </Card>

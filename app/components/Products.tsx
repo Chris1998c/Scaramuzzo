@@ -42,7 +42,7 @@ const Products: FC<ProductsProps> = ({ language }) => {
           id: "Shampoo seboregolatore",
           name: "Shampoo seboregolatore",
           description: "Olio leggero per capelli lucenti",
-          image: "/placeholder.svg",
+          image: "/sh-hennè.webp",
           imageAlt: "Olio per Capelli",
           detailedDescription: "Il nostro Olio per Capelli è una formula leggera ma potente, studiata per nutrire in profondità i capelli senza appesantirli. Arricchito con oli naturali selezionati, questo prodotto aiuta a combattere il crespo, aumenta la lucentezza e protegge i capelli dai danni ambientali. Perfetto per tutti i tipi di capelli, può essere utilizzato sia come trattamento pre-shampoo che come finish per domare i capelli ribelli.",
         },
