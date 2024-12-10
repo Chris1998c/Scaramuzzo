@@ -114,7 +114,7 @@ const Products: FC<ProductsProps> = ({ language }) => {
           {translations[language].title}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {translations[language].products.map((product, index) => (
+          {translations[language].products.map((product) => (
             <Card 
               key={product.id}
               className="w-full h-full flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"

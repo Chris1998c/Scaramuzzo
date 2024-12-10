@@ -188,7 +188,7 @@ const ServicePage: FC = () => {
 
       setService(currentService || null);
     }
-  }, [params.id, language])
+  }, [params.id, language,translations])
 
   const handleBackClick = useCallback(() => {
     router.push('/')
