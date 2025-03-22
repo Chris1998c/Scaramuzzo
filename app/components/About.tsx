@@ -17,10 +17,12 @@ const About: FC<AboutProps> = ({ language }) => {
   }
 
   return (
-    <section className="py-16 bg-background">
+    <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8 text-center">{translations[language].title}</h2>
-        <p className="text-lg leading-relaxed max-w-3xl mx-auto text-center">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center">
+          {translations[language].title}
+        </h2>
+        <p className="text-base sm:text-lg md:text-xl leading-relaxed max-w-4xl mx-auto text-center">
           {translations[language].description}
         </p>
       </div>

@@ -1,143 +1,100 @@
 'use client'
 
-import { Moon, Sun, Languages, Menu } from 'lucide-react'
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import { Moon, Sun, Languages, Menu } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import Home from "@/app/components/Home"
-import About from "@/app/components/About"
-import Services from "@/app/components/Services"
-import Products from "@/app/components/Products"
-import Contact from "@/app/components/Contact"
+} from "@/components/ui/dropdown-menu";
+import Image from "next/image";
+import Link from "next/link";
+import Home from "@/app/components/Home";
+import About from "@/app/components/About";
+import Services from "@/app/components/Services";
+import Products from "@/app/components/Products";
+import Contact from "@/app/components/Contact";
 
-export default function Component() {
-  const [theme, setTheme] = useState<"light" | "dark">("light")
-  const [language, setLanguage] = useState<"it" | "en">("it")
-  const [currentPage, setCurrentPage] = useState("home")
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+export default function Page() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [language, setLanguage] = useState<"it" | "en">("it");
+  const [currentPage, setCurrentPage] = useState("home");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    const root = window.document.documentElement
-    root.classList.remove("light", "dark")
-    root.classList.add(theme)
-  }, [theme])
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
+  }, [theme]);
 
-  // --- Inizio modifica per tornare a prodotti o servizi in modo diretto ---
+  // Controllo navigazione rapida a sezioni
   useEffect(() => {
-    const navigateTo = localStorage.getItem('navigateTo')
-    if (navigateTo === 'products') {
-      setCurrentPage('products')
-      localStorage.removeItem('navigateTo')
-    } else if (navigateTo === 'services') {
-      setCurrentPage('services')
-      localStorage.removeItem('navigateTo')
+    const navigateTo = localStorage.getItem('navigateTo');
+    if (navigateTo) {
+      setCurrentPage(navigateTo);
+      localStorage.removeItem('navigateTo');
     }
-  }, [])
-  // --- Fine modifica ---
+  }, []);
 
   const translations = {
-    it: {
-      home: "Home",
-      about: "Chi Siamo",
-      services: "Servizi",
-      products: "Prodotti",
-      contact: "Contatti",
-    },
-    en: {
-      home: "Home",
-      about: "About Us",
-      services: "Services",
-      products: "Products",
-      contact: "Contact",
-    },
-  }
+    it: { home: "Home", about: "Chi Siamo", services: "Servizi", products: "Prodotti", contact: "Contatti" },
+    en: { home: "Home", about: "About Us", services: "Services", products: "Products", contact: "Contact" }
+  };
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'home':
-        return <Home language={language} />
-      case 'about':
-        return <About language={language} />
-      case 'services':
-        return <Services language={language} />
-      case 'products':
-        return <Products language={language} />
-      case 'contact':
-        return <Contact language={language} />
-      default:
-        return <Home language={language} />
+      case 'home': return <Home language={language} />;
+      case 'about': return <About language={language} />;
+      case 'services': return <Services language={language} />;
+      case 'products': return <Products language={language} />;
+      case 'contact': return <Contact language={language} />;
+      default: return <Home language={language} />;
     }
-  }
+  };
 
   const NavItems = () => (
     <>
-      <Button
-        variant="ghost"
-        onClick={() => setCurrentPage('home')}
-        className="transition-colors hover:text-foreground/80 navbar-font"
-      >
-        {translations[language].home}
-      </Button>
-      <Button
-        variant="ghost"
-        onClick={() => setCurrentPage('about')}
-        className="transition-colors hover:text-foreground/80 navbar-font"
-      >
-        {translations[language].about}
-      </Button>
-      <Button
-        variant="ghost"
-        onClick={() => setCurrentPage('services')}
-        className="transition-colors hover:text-foreground/80 navbar-font"
-      >
-        {translations[language].services}
-      </Button>
-      <Button
-        variant="ghost"
-        onClick={() => setCurrentPage('products')}
-        className="transition-colors hover:text-foreground/80 navbar-font"
-      >
-        {translations[language].products}
-      </Button>
-      <Button
-        variant="ghost"
-        onClick={() => setCurrentPage('contact')}
-        className="transition-colors hover:text-foreground/80 navbar-font"
-      >
-        {translations[language].contact}
-      </Button>
+      {Object.keys(translations[language]).map((key) => (
+        <Button
+          key={key}
+          variant="ghost"
+          onClick={() => setCurrentPage(key)}
+          className={`transition-all hover:text-primary font-semibold text-lg ${currentPage === key ? "text-primary" : ""}`}
+        >
+          {translations[language][key]}
+        </Button>
+      ))}
     </>
-  )
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-20 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2" onClick={() => setCurrentPage('home')}>
+      {/* ✅ HEADER - NAVBAR */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-md shadow-sm">
+        <div className="container flex h-16 items-center justify-between px-4 md:px-8">
+          <Link href="/" onClick={() => setCurrentPage('home')}>
             <Image
-              src="/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png"
+              src="/Scaramuzzo-Hair-Natural-Beauty-Logo.png"
               alt="Scaramuzzo Logo"
-              width={100}
-              height={100}
-              className="h-20 w-auto object-contain"
+              width={120}
+              height={40}
+              className="object-contain"
             />
           </Link>
-          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+
+          {/* NAVBAR - DESKTOP */}
+          <nav className="hidden md:flex items-center space-x-6 text-base">
             <NavItems />
           </nav>
+
+          {/* ICONS & MENU MOBILE */}
           <div className="flex items-center space-x-2">
+            {/* Switch Lingua */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <Languages className="h-4 w-4" />
-                  <span className="sr-only">Toggle language</span>
+                <Button variant="ghost" size="icon">
+                  <Languages className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -145,12 +102,13 @@ export default function Component() {
                 <DropdownMenuItem onClick={() => setLanguage("en")}>English</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Switch Tema */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                  <span className="sr-only">Toggle theme</span>
+                <Button variant="ghost" size="icon">
+                  <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                  <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -158,28 +116,29 @@ export default function Component() {
                 <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="ghost" size="icon" className="h-9 w-9 md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              <Menu className="h-4 w-4" />
-              <span className="sr-only">Toggle menu</span>
+
+            {/* MENU MOBILE */}
+            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <Menu className="h-6 w-6" />
             </Button>
           </div>
         </div>
+
+        {/* NAV MOBILE */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <nav className="flex flex-col items-center space-y-2 p-4">
-              <NavItems />
-            </nav>
-          </div>
+          <nav className="md:hidden flex flex-col items-center bg-background/95 backdrop-blur-md p-4">
+            <NavItems />
+          </nav>
         )}
       </header>
-      <main>
-        {renderPage()}
-      </main>
-      <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container py-8 text-center">
-          <p>© 2024 Scaramuzzo Hair Natural Beauty. All rights reserved.</p>
-        </div>
+
+      {/* ✅ CONTENUTO PRINCIPALE */}
+      <main className="py-8">{renderPage()}</main>
+
+      {/* ✅ FOOTER */}
+      <footer className="border-t bg-background/90 backdrop-blur-md text-center p-6 text-sm">
+        <p>© 2024 Scaramuzzo Hair Natural Beauty. All rights reserved.</p>
       </footer>
     </div>
-  )
+  );
 }
