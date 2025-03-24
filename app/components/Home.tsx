@@ -20,11 +20,14 @@ const Home: FC<HomeProps> = ({ language }) => {
   return (
     <section className="relative h-[60vh] md:h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
       <Image
-        src="/img-home.webp"
-        alt="Salon Background"
+        src="/roma-salone-hero-wide.jpg"
         fill
-        className="object-cover brightness-50"
+        alt="Salone Roma"
+        style={{ objectFit: 'cover' }}
+        className="brightness-[0.4]"
+        priority
       />
+
       <div className="container mx-auto px-4 text-center text-white z-10">
         <h1 className="font-bold text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-6">
           {translations[language].hero}

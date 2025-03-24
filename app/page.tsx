@@ -67,15 +67,16 @@ export default function Page() {
     }
   }
 
-  const pageKeys: PageKey[] = ['home', 'about', 'services', 'products', 'contact']
-
   const NavItems = () => (
     <>
-      {pageKeys.map((key) => (
+      {(Object.keys(translations[language]) as PageKey[]).map((key) => (
         <Button
           key={key}
           variant="ghost"
-          onClick={() => setCurrentPage(key)}
+          onClick={() => {
+            setCurrentPage(key)
+            setIsMenuOpen(false) // ✅ chiude l’hamburger menu al click
+          }}
           className={`transition-all hover:text-primary font-semibold text-lg ${currentPage === key ? "text-primary" : ""}`}
         >
           {translations[language][key]}
@@ -107,7 +108,7 @@ export default function Page() {
 
           {/* ICONS & MENU MOBILE */}
           <div className="flex items-center space-x-2">
-            {/* Switch Lingua */}
+            {/* Lingua */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -120,7 +121,7 @@ export default function Page() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Switch Tema */}
+            {/* Tema */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -134,14 +135,19 @@ export default function Page() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* MENU MOBILE */}
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {/* Menu Mobile */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
               <Menu className="h-6 w-6" />
             </Button>
           </div>
         </div>
 
-        {/* NAV MOBILE */}
+        {/* NAVBAR MOBILE */}
         {isMenuOpen && (
           <nav className="md:hidden flex flex-col items-center bg-background/95 backdrop-blur-md p-4">
             <NavItems />
@@ -150,7 +156,9 @@ export default function Page() {
       </header>
 
       {/* ✅ CONTENUTO PRINCIPALE */}
-      <main className="py-8">{renderPage()}</main>
+      <main className="py-8">
+        {renderPage()}
+      </main>
 
       {/* ✅ FOOTER */}
       <footer className="border-t bg-background/90 backdrop-blur-md text-center p-6 text-sm">
