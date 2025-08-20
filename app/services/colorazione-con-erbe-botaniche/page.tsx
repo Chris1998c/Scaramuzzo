@@ -49,9 +49,7 @@ const BotanicalDetailPage: FC = () => {
   const router = useRouter()
 
   const handleBackClick = useCallback(() => {
-    // Torna alla home e poi alla sezione Servizi
-    router.push('/')
-    localStorage.setItem('navigateTo', 'services')
+    router.push('/services')
   }, [router])
 
   return (

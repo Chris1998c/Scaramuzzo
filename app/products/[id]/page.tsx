@@ -92,6 +92,7 @@ const ProductPage: FC = () => {
     }
   }, [])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (params.id) {
       const currentProduct = translations[language].products.find(p => p.id === params.id)
@@ -102,7 +103,7 @@ const ProductPage: FC = () => {
         const otherLanguage = language === 'it' ? 'en' : 'it'
         const matchingProduct = translations[otherLanguage].products.find(p => p.id === params.id)
         if (matchingProduct) {
-          const correspondingProduct = translations[language].products.find(p => 
+          const correspondingProduct = translations[language].products.find(p =>
             (language === 'it' && p.id === 'shampoo-riflessante-henne' && matchingProduct.id === 'reflective-henna-shampoo') ||
             (language === 'it' && p.id === 'maschera-riflessante-henne' && matchingProduct.id === 'reflective-henna-mask') ||
             (language === 'en' && p.id === 'reflective-henna-shampoo' && matchingProduct.id === 'shampoo-riflessante-henne') ||
@@ -114,32 +115,14 @@ const ProductPage: FC = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id, language])
 
   const handleBackClick = useCallback(() => {
-    router.push('/')  // adesso torni alla home
-    localStorage.setItem('navigateTo', 'products')
+    router.push('/products')
   }, [router])
   
 
-  useEffect(() => {
-    const navigateTo = localStorage.getItem('navigateTo')
-    if (navigateTo === 'products') {
-      const timer = setTimeout(() => {
-        const buttons = document.querySelectorAll('button');
-        const productsButton = Array.from(buttons).find(button => 
-          button.textContent === 'Prodotti' || button.textContent === 'Products'
-        ) as HTMLButtonElement | undefined;
-        
-        if (productsButton) {
-          productsButton.click();
-        }
-        localStorage.removeItem('navigateTo')
-      }, 100);
-
-      return () => clearTimeout(timer);
-    }
-  }, [])
 
   if (!product) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>

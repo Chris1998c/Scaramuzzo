@@ -179,10 +179,7 @@ const ServicePage: FC = () => {
   }, [params.id, language])
 
   const handleBackClick = useCallback(() => {
-    // Torna alla home
-    router.push('/')
-    // Imposta navigateTo = 'services' così la home selezionerà la scheda Servizi
-    localStorage.setItem('navigateTo', 'services')
+    router.push('/services')
   }, [router])
 
   if (!service) {

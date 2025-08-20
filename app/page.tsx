@@ -11,11 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 import Link from "next/link"
-import Home from "@/app/components/Home"
-import About from "@/app/components/About"
-import Services from "@/app/components/Services"
-import Products from "@/app/components/Products"
-import Contact from "@/app/components/Contact"
+import { usePathname } from "next/navigation"
 
 type Language = 'it' | 'en'
 type PageKey = 'home' | 'about' | 'services' | 'products' | 'contact'
@@ -40,8 +36,8 @@ const translations: Record<Language, Record<PageKey, string>> = {
 export default function Page() {
   const [theme, setTheme] = useState<"light" | "dark">("light")
   const [language, setLanguage] = useState<Language>("it")
-  const [currentPage, setCurrentPage] = useState<PageKey>("home")
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark")
@@ -49,39 +45,35 @@ export default function Page() {
   }, [theme])
 
   useEffect(() => {
-    const navigateTo = localStorage.getItem('navigateTo') as PageKey | null
-    if (navigateTo) {
-      setCurrentPage(navigateTo)
-      localStorage.removeItem('navigateTo')
-    }
-  }, [])
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home': return <Home language={language} />
-      case 'about': return <About language={language} />
-      case 'services': return <Services language={language} />
-      case 'products': return <Products language={language} />
-      case 'contact': return <Contact language={language} />
-      default: return <Home language={language} />
-    }
+    localStorage.setItem('language', language)
+  }, [language])
+  const homeTranslations = {
+    it: {
+      hero: "Il tuo stile, naturalmente perfetto",
+      description: "Trasformiamo i tuoi capelli con cura naturale",
+    },
+    en: {
+      hero: "Your style, naturally perfect",
+      description: "We transform your hair with natural care",
+    },
   }
 
   const NavItems = () => (
     <>
-      {(Object.keys(translations[language]) as PageKey[]).map((key) => (
-        <Button
-          key={key}
-          variant="ghost"
-          onClick={() => {
-            setCurrentPage(key)
-            setIsMenuOpen(false) // ✅ chiude l’hamburger menu al click
-          }}
-          className={`transition-all hover:text-primary font-semibold text-lg ${currentPage === key ? "text-primary" : ""}`}
-        >
-          {translations[language][key]}
-        </Button>
-      ))}
+      {(Object.keys(translations[language]) as PageKey[]).map((key) => {
+        const path = key === 'home' ? '/' : `/${key}`
+        return (
+          <Button
+            key={key}
+            variant="ghost"
+            asChild
+            onClick={() => setIsMenuOpen(false)}
+            className={`transition-all hover:text-primary font-semibold text-lg ${pathname === path ? "text-primary" : ""}`}
+          >
+            <Link href={path}>{translations[language][key]}</Link>
+          </Button>
+        )
+      })}
     </>
   )
 
@@ -90,7 +82,7 @@ export default function Page() {
       {/* ✅ HEADER - NAVBAR */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-md shadow-sm">
         <div className="container flex h-16 items-center justify-between px-4 md:px-8">
-          <Link href="/" onClick={() => setCurrentPage('home')}>
+          <Link href="/">
             <Image
               src="/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png"
               alt="Scaramuzzo Logo"
@@ -157,7 +149,25 @@ export default function Page() {
 
       {/* ✅ CONTENUTO PRINCIPALE */}
       <main className="py-8">
-        {renderPage()}
+        <section className="relative h-[60vh] md:h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
+          <Image
+            src="/roma-salone-hero-wide.jpg"
+            fill
+            alt="Salone Roma"
+            style={{ objectFit: 'cover' }}
+            className="brightness-[0.4]"
+            priority
+          />
+
+          <div className="container mx-auto px-4 text-center text-white z-10">
+            <h1 className="font-bold text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-6">
+              {homeTranslations[language].hero}
+            </h1>
+            <p className="text-lg md:text-2xl lg:text-3xl">
+              {homeTranslations[language].description}
+            </p>
+          </div>
+        </section>
       </main>
 
       {/* ✅ FOOTER */}

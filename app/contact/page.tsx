@@ -1,62 +1,68 @@
 'use client'
 
-import { FC, useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
-interface ContactProps {
-  language: 'it' | 'en'
-}
+type Language = 'it' | 'en'
 
-const Contact: FC<ContactProps> = ({ language }) => {
-  const translations = {
-    it: {
-      title: "Contattaci",
-      name: "Nome",
-      email: "Email",
-      message: "Messaggio",
-      send: "Invia",
-      sending: "Inviando...",
-      success: "Messaggio inviato con successo!",
-      error: "Si è verificato un errore nell'invio del messaggio."
-    },
-    en: {
-      title: "Contact Us",
-      name: "Name",
-      email: "Email",
-      message: "Message",
-      send: "Send",
-      sending: "Sending...",
-      success: "Message sent successfully!",
-      error: "An error occurred while sending the message."
-    },
-  }
-
+export default function ContactPage() {
+  const [language, setLanguage] = useState<Language>('it')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+
+  useEffect(() => {
+    const stored = localStorage.getItem('language') as Language | null
+    if (stored) {
+      setLanguage(stored)
+    }
+  }, [])
+
+  const translations = {
+    it: {
+      title: 'Contattaci',
+      name: 'Nome',
+      email: 'Email',
+      message: 'Messaggio',
+      send: 'Invia',
+      sending: 'Inviando...',
+      success: 'Messaggio inviato con successo!',
+      error: "Si è verificato un errore nell'invio del messaggio.",
+    },
+    en: {
+      title: 'Contact Us',
+      name: 'Name',
+      email: 'Email',
+      message: 'Message',
+      send: 'Send',
+      sending: 'Sending...',
+      success: 'Message sent successfully!',
+      error: 'An error occurred while sending the message.',
+    },
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setStatus("sending")
+    setStatus('sending')
     try {
       const res = await fetch('/api/sendMail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message })
+        body: JSON.stringify({ name, email, message }),
       })
       if (res.ok) {
-        setStatus("sent")
+        setStatus('sent')
         setName('')
         setEmail('')
         setMessage('')
       } else {
-        setStatus("error")
+        setStatus('error')
       }
     } catch {
-      setStatus("error")
+      setStatus('error')
     }
   }
 
@@ -103,4 +109,3 @@ const Contact: FC<ContactProps> = ({ language }) => {
   )
 }
 
-export default Contact
