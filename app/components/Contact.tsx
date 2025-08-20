@@ -67,7 +67,11 @@ const Contact: FC<ContactProps> = ({ language }) => {
         <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
+              <label htmlFor="name" className="sr-only">
+                {translations[language].name}
+              </label>
               <Input
+                id="name"
                 placeholder={translations[language].name}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -75,7 +79,11 @@ const Contact: FC<ContactProps> = ({ language }) => {
               />
             </div>
             <div>
+              <label htmlFor="email" className="sr-only">
+                {translations[language].email}
+              </label>
               <Input
+                id="email"
                 type="email"
                 placeholder={translations[language].email}
                 value={email}
@@ -84,7 +92,11 @@ const Contact: FC<ContactProps> = ({ language }) => {
               />
             </div>
             <div>
+              <label htmlFor="message" className="sr-only">
+                {translations[language].message}
+              </label>
               <Textarea
+                id="message"
                 placeholder={translations[language].message}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
