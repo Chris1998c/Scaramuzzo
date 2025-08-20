@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { FC } from "react";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { productsTranslations } from "@/lib/translations";
 
 interface ProductsProps {
   language: "it" | "en";
@@ -18,88 +19,7 @@ interface ProductsProps {
 const Products: FC<ProductsProps> = ({ language }) => {
   const router = useRouter();
 
-  const translations = {
-    it: {
-      title: "I Nostri Prodotti",
-      products: [
-        {
-          id: "shampoo-riflessante-henne",
-          name: "Shampoo Riflessante con Henné",
-          description: "Mantiene i riflessi naturali dei capelli trattati con henné.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Shampoo Riflessante con Henné",
-        },
-        {
-          id: "maschera-riflessante-henne",
-          name: "Maschera Riflessante con Henné",
-          description: "Nutre e ravviva il colore naturalmente.",
-          image: "/mask-hennè.webp",
-          imageAlt: "Maschera Riflessante con Henné",
-        },
-        {
-          id: "Shampoo-Purificante-seboregolatore",
-          name: "Shampoo Purificante-Seboregolatore",
-          description: "Azione riequilibrante per cute grassa o sensibile.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Shampoo Purificante",
-        },
-        {
-          id: "Bagnoschiuma-Purificante",
-          name: "Bagnoschiuma Purificante",
-          description: "Sensazione di freschezza e pulizia profonda.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Bagnoschiuma",
-        },
-        {
-          id: "Olio-lenitivo-olivo-e-girasole",
-          name: "Olio Lenitivo Olivo & Girasole",
-          description: "Idratazione intensa e naturale.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Olio Lenitivo",
-        },
-      ],
-    },
-    en: {
-      title: "Our Products",
-      products: [
-        {
-          id: "reflective-henna-shampoo",
-          name: "Reflective Shampoo with Henna",
-          description: "Enhances and maintains henna-treated hair tones.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Reflective Shampoo",
-        },
-        {
-          id: "reflective-henna-mask",
-          name: "Reflective Mask with Henna",
-          description: "Deeply nourishes and enhances reflections.",
-          image: "/mask-hennè.webp",
-          imageAlt: "Reflective Mask",
-        },
-        {
-          id: "hair-oil",
-          name: "Purifying Shampoo",
-          description: "Sebum-balancing formula for a clean scalp.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Purifying Shampoo",
-        },
-        {
-          id: "hydrating-bodywash",
-          name: "Purifying Bodywash",
-          description: "Deep cleansing and fresh sensation.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Bodywash",
-        },
-        {
-          id: "soothing-oil",
-          name: "Soothing Oil - Olive & Sunflower",
-          description: "Moisturizing and softening treatment.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Soothing Oil",
-        },
-      ],
-    },
-  };
+  const translations = productsTranslations;
 
   const handleProductClick = (id: string) => {
     router.push(`/products/${id}`);

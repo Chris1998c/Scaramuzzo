@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { FC } from "react";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { servicesTranslations } from "@/lib/translations";
 
 interface ServicesProps {
   language: "it" | "en";
@@ -18,102 +19,7 @@ interface ServicesProps {
 const Services: FC<ServicesProps> = ({ language }) => {
   const router = useRouter();
 
-  const translations = {
-    it: {
-      title: "I Nostri Servizi",
-      services: [
-        {
-          id: "taglio-di-capelli",
-          name: "Taglio di Capelli",
-          description: "Taglio personalizzato per uomo e donna",
-          image: "/TaglioNew.jpg",
-          imageAlt: "Taglio di Capelli",
-        },
-        {
-          id: "colorazione-con-erbe-botaniche",
-          name: "Colorazione con erbe botaniche",
-          description: "Tinte naturali e tecniche innovative",
-          image: "/ERBE.jpg",
-          imageAlt: "Colorazione con erbe botaniche",
-        },
-        {
-          id: "trattamenti",
-          name: "Trattamenti",
-          description: "Trattamenti per capelli danneggiati e cure specifiche",
-          image: "/trattamento.jpg",
-          imageAlt: "Trattamenti",
-        },
-        {
-          id: "acconciature",
-          name: "Acconciature",
-          description: "Styling per ogni occasione",
-          image: "/Acconciatura.jpg",
-          imageAlt: "Acconciature",
-        },
-        {
-          id: "sanlai",
-          name: "Sanlai",
-          description: "Schiariture naturali e luminose",
-          image: "/sanlai.webp",
-          imageAlt: "Schiariture Sanlai",
-        },
-        {
-          id: "massaggio-del-cuoio-capelluto",
-          name: "Massaggio del Cuoio Capelluto",
-          description: "Rilassante massaggio per la salute dei capelli",
-          image: "/Massaggio.webp",
-          imageAlt: "Massaggio del Cuoio Capelluto",
-        },
-      ],
-    },
-    en: {
-      title: "Our Services",
-      services: [
-        {
-          id: "haircut",
-          name: "Haircut",
-          description: "Personalized cut for men and women",
-          image: "/TaglioNew.jpg",
-          imageAlt: "Haircut",
-        },
-        {
-          id: "botanical-hair-coloring",
-          name: "Botanical Hair Coloring",
-          description: "Natural dyes and innovative techniques",
-          image: "/ERBE.jpg",
-          imageAlt: "Botanical Hair Coloring",
-        },
-        {
-          id: "treatments",
-          name: "Treatments",
-          description: "Treatments for damaged hair and specific care",
-          image: "/trattamento.jpg",
-          imageAlt: "Treatments",
-        },
-        {
-          id: "hairstyling",
-          name: "Hairstyling",
-          description: "Styling for every occasion",
-          image: "/Acconciatura.jpg",
-          imageAlt: "Hairstyling",
-        },
-        {
-          id: "sanlai",
-          name: "Sanlai",
-          description: "Natural and bright highlights",
-          image: "/sanlai.webp",
-          imageAlt: "Sanlai Highlights",
-        },
-        {
-          id: "scalp-massage",
-          name: "Scalp Massage",
-          description: "Relaxing massage for hair health",
-          image: "/Massaggio.webp",
-          imageAlt: "Scalp Massage",
-        },
-      ],
-    },
-  };
+  const translations = servicesTranslations;
 
   const handleServiceClick = (id: string) => {
     router.push(`/services/${id}`);

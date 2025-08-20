@@ -16,26 +16,7 @@ import About from "@/app/components/About"
 import Services from "@/app/components/Services"
 import Products from "@/app/components/Products"
 import Contact from "@/app/components/Contact"
-
-type Language = 'it' | 'en'
-type PageKey = 'home' | 'about' | 'services' | 'products' | 'contact'
-
-const translations: Record<Language, Record<PageKey, string>> = {
-  it: {
-    home: "Home",
-    about: "Chi Siamo",
-    services: "Servizi",
-    products: "Prodotti",
-    contact: "Contatti",
-  },
-  en: {
-    home: "Home",
-    about: "About Us",
-    services: "Services",
-    products: "Products",
-    contact: "Contact",
-  }
-}
+import { navbarTranslations, Language, PageKey } from "@/lib/translations"
 
 export default function Page() {
   const [theme, setTheme] = useState<"light" | "dark">("light")
@@ -69,7 +50,7 @@ export default function Page() {
 
   const NavItems = () => (
     <>
-      {(Object.keys(translations[language]) as PageKey[]).map((key) => (
+      {(Object.keys(navbarTranslations[language]) as PageKey[]).map((key) => (
         <Button
           key={key}
           variant="ghost"
@@ -79,7 +60,7 @@ export default function Page() {
           }}
           className={`transition-all hover:text-primary font-semibold text-lg ${currentPage === key ? "text-primary" : ""}`}
         >
-          {translations[language][key]}
+          {navbarTranslations[language][key]}
         </Button>
       ))}
     </>

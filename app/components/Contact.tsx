@@ -1,37 +1,17 @@
-'use client'
+"use client"
 
 import { FC, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { contactTranslations } from "@/lib/translations"
 
 interface ContactProps {
   language: 'it' | 'en'
 }
 
 const Contact: FC<ContactProps> = ({ language }) => {
-  const translations = {
-    it: {
-      title: "Contattaci",
-      name: "Nome",
-      email: "Email",
-      message: "Messaggio",
-      send: "Invia",
-      sending: "Inviando...",
-      success: "Messaggio inviato con successo!",
-      error: "Si è verificato un errore nell'invio del messaggio."
-    },
-    en: {
-      title: "Contact Us",
-      name: "Name",
-      email: "Email",
-      message: "Message",
-      send: "Send",
-      sending: "Sending...",
-      success: "Message sent successfully!",
-      error: "An error occurred while sending the message."
-    },
-  }
+  const translations = contactTranslations
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')

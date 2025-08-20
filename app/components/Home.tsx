@@ -1,21 +1,13 @@
 import { FC } from 'react'
 import Image from 'next/image'
+import { homeTranslations } from '@/lib/translations'
 
 interface HomeProps {
   language: 'it' | 'en'
 }
 
 const Home: FC<HomeProps> = ({ language }) => {
-  const translations = {
-    it: {
-      hero: "Il tuo stile, naturalmente perfetto",
-      description: "Trasformiamo i tuoi capelli con cura naturale",
-    },
-    en: {
-      hero: "Your style, naturally perfect",
-      description: "We transform your hair with natural care",
-    },
-  }
+  const translations = homeTranslations
 
   return (
     <section className="relative h-[60vh] md:h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
