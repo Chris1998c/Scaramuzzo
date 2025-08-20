@@ -4,12 +4,14 @@ import nodemailer from 'nodemailer'
 export async function POST(request: NextRequest) {
   const { name, email, message } = await request.json()
 
+  const gmailUser = process.env.GMAIL_USER
+
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {
-      user: "scaramuzzohnb@gmail.com",
+      user: gmailUser,
       pass: process.env.GMAIL_APP_PASSWORD // Usa la variabile d'ambiente
     }
   })
@@ -17,7 +19,7 @@ export async function POST(request: NextRequest) {
   try {
     await transporter.sendMail({
       from: `"${name}" <${email}>`,
-      to: "scaramuzzohnb@gmail.com",
+      to: gmailUser,
       subject: "Nuovo messaggio dal form di contatto",
       text: `Nome: ${name}\nEmail: ${email}\nMessaggio: ${message}`,
       html: `<p><strong>Nome:</strong> ${name}</p>
