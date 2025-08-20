@@ -1,12 +1,4 @@
-codex/organize-routes-and-update-navbar
-'use client'
-
-import { FC, useEffect, useState, useCallback } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { Button } from "@/components/ui/button"
-
-interface Service {
+export interface Service {
   id: string
   alias?: string
   name: string
@@ -16,8 +8,7 @@ interface Service {
   detailedDescription: string
 }
 
-// Definisci translations fuori dal componente se vuoi evitare warning sui useEffect
-const translations = {
+export const serviceTranslations = {
   it: {
     services: [
       {
@@ -45,7 +36,7 @@ const translations = {
         description: "Trattamenti per capelli danneggiati e cure specifiche",
         image: "/trattamento.jpg",
         imageAlt: "Trattamenti",
-        detailedDescription: 
+        detailedDescription:
 `Offriamo una vasta gamma di trattamenti per capelli:
 - Cheratina Vegetale: ...
 - Trattamenti Cute con Erbe: ...
@@ -148,60 +139,4 @@ const translations = {
       },
     ],
   },
-};
-
-const ServicePage: FC = () => {
-  const params = useParams()
-  const router = useRouter()
-  const [language, setLanguage] = useState<'it' | 'en'>('it')
-  const [service, setService] = useState<Service | null>(null)
-
-  useEffect(() => {
-    const storedLanguage = localStorage.getItem('language') as 'it' | 'en'
-    if (storedLanguage && storedLanguage !== language) {
-      setLanguage(storedLanguage)
-    }
-  }, [language])
-
-  useEffect(() => {
-    if (params.id) {
-      let currentService = translations[language].services.find(s => s.id === params.id);
-      
-      if (!currentService) {
-        const otherLanguage = language === 'it' ? 'en' : 'it';
-        const serviceInOtherLanguage = translations[otherLanguage].services.find(s => s.id === params.id);
-        if (serviceInOtherLanguage) {
-          currentService = translations[language].services.find(s => s.alias === serviceInOtherLanguage.id);
-        }
-      }
-
-      setService(currentService || null);
-    }
-  }, [params.id, language])
-
-  const handleBackClick = useCallback(() => {
-    router.push('/services')
-  }, [router])
-
-  if (!service) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>
-import type { Metadata } from "next"
-import ServicePageClient from "../ServicePageClient"
-import { serviceTranslations } from "../data"
-
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params
-  const service =
-    serviceTranslations.it.services.find(s => s.id === id || s.alias === id) ||
-    serviceTranslations.en.services.find(s => s.id === id || s.alias === id)
-  return {
-    title: service ? `${service.name} | Scaramuzzo` : 'Servizio | Scaramuzzo',
-    description: service ? service.description : 'Dettagli del servizio',
-master
-  }
-}
-
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  return <ServicePageClient id={id} />
 }

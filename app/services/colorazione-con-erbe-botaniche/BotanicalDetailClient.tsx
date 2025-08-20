@@ -1,7 +1,5 @@
-import type { Metadata } from "next"
-import BotanicalDetailClient from "./BotanicalDetailClient"
+'use client'
 
-codex/organize-routes-and-update-navbar
 import { FC, useCallback } from 'react'
 import {
   Card,
@@ -47,11 +45,12 @@ const botanicalItems = [
   },
 ]
 
-const BotanicalDetailPage: FC = () => {
+const BotanicalDetailClient: FC = () => {
   const router = useRouter()
 
   const handleBackClick = useCallback(() => {
-    router.push('/services')
+    router.push('/')
+    localStorage.setItem('navigateTo', 'services')
   }, [router])
 
   return (
@@ -92,13 +91,6 @@ const BotanicalDetailPage: FC = () => {
       </div>
     </section>
   )
-
-export const metadata: Metadata = {
-  title: "Colorazione con Erbe Botaniche | Scaramuzzo",
-  description: "Scopri le nostre miscele botaniche per colori vibranti e naturali.",
-master
 }
 
-export default function Page() {
-  return <BotanicalDetailClient />
-}
+export default BotanicalDetailClient
