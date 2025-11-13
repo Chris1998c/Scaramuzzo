@@ -43,18 +43,28 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState<PageKey>("home")
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  // Carica tema + lingua da localStorage
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const storedTheme = localStorage.getItem('theme') as "light" | "dark" | null
+    const storedLanguage = localStorage.getItem('language') as Language | null
+
+    if (storedTheme) setTheme(storedTheme)
+    if (storedLanguage) setLanguage(storedLanguage)
+  }, [])
+
+  // Applica il tema a <html> e salva
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark")
     document.documentElement.classList.add(theme)
+    localStorage.setItem('theme', theme)
   }, [theme])
 
+  // Salva sempre la lingua scelta
   useEffect(() => {
-    const navigateTo = localStorage.getItem('navigateTo') as PageKey | null
-    if (navigateTo) {
-      setCurrentPage(navigateTo)
-      localStorage.removeItem('navigateTo')
-    }
-  }, [])
+    localStorage.setItem('language', language)
+  }, [language])
 
   const renderPage = () => {
     switch (currentPage) {
@@ -75,9 +85,11 @@ export default function Page() {
           variant="ghost"
           onClick={() => {
             setCurrentPage(key)
-            setIsMenuOpen(false) // ✅ chiude l’hamburger menu al click
+            setIsMenuOpen(false)
           }}
-          className={`transition-all hover:text-primary font-semibold text-lg ${currentPage === key ? "text-primary" : ""}`}
+          className={`transition-all hover:text-primary font-semibold text-lg ${
+            currentPage === key ? "text-primary" : ""
+          }`}
         >
           {translations[language][key]}
         </Button>
@@ -87,7 +99,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* ✅ HEADER - NAVBAR */}
+      {/* HEADER */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-md shadow-sm">
         <div className="container flex h-16 items-center justify-between px-4 md:px-8">
           <Link href="/" onClick={() => setCurrentPage('home')}>
@@ -101,7 +113,7 @@ export default function Page() {
             />
           </Link>
 
-          {/* NAVBAR - DESKTOP */}
+          {/* NAVBAR DESKTOP */}
           <nav className="hidden md:flex items-center space-x-6 text-base">
             <NavItems />
           </nav>
@@ -155,12 +167,12 @@ export default function Page() {
         )}
       </header>
 
-      {/* ✅ CONTENUTO PRINCIPALE */}
+      {/* CONTENUTO */}
       <main className="py-8">
         {renderPage()}
       </main>
 
-      {/* ✅ FOOTER */}
+      {/* FOOTER */}
       <footer className="border-t bg-background/90 backdrop-blur-md text-center p-6 text-sm">
         <p>© 2024 Scaramuzzo Hair Natural Beauty. All rights reserved.</p>
       </footer>

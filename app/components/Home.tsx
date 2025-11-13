@@ -1,8 +1,8 @@
-import { FC } from 'react'
-import Image from 'next/image'
+import { FC } from "react";
+import Image from "next/image";
 
 interface HomeProps {
-  language: 'it' | 'en'
+  language: "it" | "en";
 }
 
 const Home: FC<HomeProps> = ({ language }) => {
@@ -15,7 +15,7 @@ const Home: FC<HomeProps> = ({ language }) => {
       hero: "Your style, naturally perfect",
       description: "We transform your hair with natural care",
     },
-  }
+  };
 
   return (
     <section className="relative h-[60vh] md:h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
@@ -23,10 +23,10 @@ const Home: FC<HomeProps> = ({ language }) => {
         src="/roma-salone-hero-wide.jpg"
         fill
         alt="Salone Roma"
-        style={{ objectFit: 'cover' }}
-        className="brightness-[0.4]"
+        className="object-cover brightness-[0.45]"
         priority
       />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
 
       <div className="container mx-auto px-4 text-center text-white z-10">
         <h1 className="font-bold text-3xl md:text-5xl lg:text-6xl mb-4 md:mb-6">
@@ -37,7 +37,7 @@ const Home: FC<HomeProps> = ({ language }) => {
         </p>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

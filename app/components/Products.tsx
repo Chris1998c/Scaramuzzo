@@ -15,91 +15,92 @@ interface ProductsProps {
   language: "it" | "en";
 }
 
+const productsData = {
+  it: {
+    title: "I Nostri Prodotti",
+    products: [
+      {
+        id: "shampoo-riflessante-henne",
+        name: "Shampoo Riflessante con Henné",
+        description: "Mantiene i riflessi naturali dei capelli trattati con henné.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Shampoo Riflessante con Henné",
+      },
+      {
+        id: "maschera-riflessante-henne",
+        name: "Maschera Riflessante con Henné",
+        description: "Nutre e ravviva il colore naturalmente.",
+        image: "/mask-hennè.webp",
+        imageAlt: "Maschera Riflessante con Henné",
+      },
+      {
+        id: "shampoo-purificante-seboregolatore",
+        name: "Shampoo Purificante-Seboregolatore",
+        description: "Azione riequilibrante per cute grassa o sensibile.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Shampoo Purificante",
+      },
+      {
+        id: "bagnoschiuma-purificante",
+        name: "Bagnoschiuma Purificante",
+        description: "Sensazione di freschezza e pulizia profonda.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Bagnoschiuma",
+      },
+      {
+        id: "olio-lenitivo-olivo-e-girasole",
+        name: "Olio Lenitivo Olivo & Girasole",
+        description: "Idratazione intensa e naturale.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Olio Lenitivo",
+      },
+    ],
+  },
+  en: {
+    title: "Our Products",
+    products: [
+      {
+        id: "shampoo-riflessante-henne",
+        name: "Reflective Shampoo with Henna",
+        description: "Enhances and maintains henna-treated hair tones.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Reflective Shampoo",
+      },
+      {
+        id: "maschera-riflessante-henne",
+        name: "Reflective Mask with Henna",
+        description: "Deeply nourishes and enhances reflections.",
+        image: "/mask-hennè.webp",
+        imageAlt: "Reflective Mask",
+      },
+      {
+        id: "shampoo-purificante-seboregolatore",
+        name: "Purifying & Sebum-Balancing Shampoo",
+        description: "Rebalancing action for oily or sensitive scalp.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Purifying Shampoo",
+      },
+      {
+        id: "bagnoschiuma-purificante",
+        name: "Purifying Body Wash",
+        description: "Deep cleansing and a fresh sensation.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Purifying Body Wash",
+      },
+      {
+        id: "olio-lenitivo-olivo-e-girasole",
+        name: "Soothing Oil – Olive & Sunflower",
+        description: "Intense soothing and moisturizing action.",
+        image: "/sh-hennè.webp",
+        imageAlt: "Soothing Oil",
+      },
+    ],
+  },
+};
+
 const Products: FC<ProductsProps> = ({ language }) => {
   const router = useRouter();
-
-  const translations = {
-    it: {
-      title: "I Nostri Prodotti",
-      products: [
-        {
-          id: "shampoo-riflessante-henne",
-          name: "Shampoo Riflessante con Henné",
-          description: "Mantiene i riflessi naturali dei capelli trattati con henné.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Shampoo Riflessante con Henné",
-        },
-        {
-          id: "maschera-riflessante-henne",
-          name: "Maschera Riflessante con Henné",
-          description: "Nutre e ravviva il colore naturalmente.",
-          image: "/mask-hennè.webp",
-          imageAlt: "Maschera Riflessante con Henné",
-        },
-        {
-          id: "Shampoo-Purificante-seboregolatore",
-          name: "Shampoo Purificante-Seboregolatore",
-          description: "Azione riequilibrante per cute grassa o sensibile.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Shampoo Purificante",
-        },
-        {
-          id: "Bagnoschiuma-Purificante",
-          name: "Bagnoschiuma Purificante",
-          description: "Sensazione di freschezza e pulizia profonda.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Bagnoschiuma",
-        },
-        {
-          id: "Olio-lenitivo-olivo-e-girasole",
-          name: "Olio Lenitivo Olivo & Girasole",
-          description: "Idratazione intensa e naturale.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Olio Lenitivo",
-        },
-      ],
-    },
-    en: {
-      title: "Our Products",
-      products: [
-        {
-          id: "reflective-henna-shampoo",
-          name: "Reflective Shampoo with Henna",
-          description: "Enhances and maintains henna-treated hair tones.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Reflective Shampoo",
-        },
-        {
-          id: "reflective-henna-mask",
-          name: "Reflective Mask with Henna",
-          description: "Deeply nourishes and enhances reflections.",
-          image: "/mask-hennè.webp",
-          imageAlt: "Reflective Mask",
-        },
-        {
-          id: "hair-oil",
-          name: "Purifying Shampoo",
-          description: "Sebum-balancing formula for a clean scalp.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Purifying Shampoo",
-        },
-        {
-          id: "hydrating-bodywash",
-          name: "Purifying Bodywash",
-          description: "Deep cleansing and fresh sensation.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Bodywash",
-        },
-        {
-          id: "soothing-oil",
-          name: "Soothing Oil - Olive & Sunflower",
-          description: "Moisturizing and softening treatment.",
-          image: "/sh-hennè.webp",
-          imageAlt: "Soothing Oil",
-        },
-      ],
-    },
-  };
+  const t = productsData[language];
 
   const handleProductClick = (id: string) => {
     router.push(`/products/${id}`);
@@ -109,10 +110,10 @@ const Products: FC<ProductsProps> = ({ language }) => {
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center">
-          {translations[language].title}
+          {t.title}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {translations[language].products.map((product) => (
+          {t.products.map((product) => (
             <Card
               key={product.id}
               className="cursor-pointer hover:scale-105 transition-transform duration-200"

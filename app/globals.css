@@ -4,75 +4,102 @@
 
 @layer base {
   :root {
+    /* Tema chiaro */
     --background: 24 71% 12%;
     --foreground: 0 0% 98%;
+
+    --card: 24 71% 14%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 24 71% 14%;
+    --popover-foreground: 0 0% 98%;
+
     --primary: 24 85% 30%;
-    --secondary: 0 0% 96%;
-    --accent: 43 74% 66%;
-  }
-
-  .dark {
-    --background: 210 10% 10%;
-    --foreground: 210 20% 98%;
-    --primary: 210 100% 40%;
-    --secondary: 210 15% 20%;
-    --accent: 27 87% 67%;
-  }
-}
-
-
-/* ✅ Tipografia migliorata */
-body {
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  @apply bg-background text-foreground antialiased;
-}
-
-/* ✅ Navbar più elegante */
-.navbar-font {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-/* ✅ Variabili globali per il tema */
-@layer base {
-  :root {
-    --background: 24 71% 12%;
-    --foreground: 0 0% 98%;
-    --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 12%;
+
+    --muted: 24 20% 20%;
+    --muted-foreground: 0 0% 85%;
+
+    --accent: 43 74% 66%;
+    --accent-foreground: 24 71% 12%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 30%;
+    --input: 0 0% 30%;
+    --ring: 24 85% 30%;
+
     --radius: 0.5rem;
+
+    --gradient-start: 24 85% 30%;
+    --gradient-end: 43 74% 66%;
   }
 
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
+
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 98%;
+
     --primary: 0 0% 98%;
     --primary-foreground: 0 0% 9%;
-    --border: 0 0% 14.9%;
+
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 27 87% 67%;
+    --accent-foreground: 0 0% 12%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 98%;
+
+    --radius: 0.5rem;
+    --gradient-start: 27 87% 67%;
+    --gradient-end: 24 85% 30%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
   }
 }
 
-/* ✅ Ombre e bordi per UI più pulita */
+/* Navbar font, se vuoi tenerla distinta */
+.navbar-font {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Utilities */
 @layer utilities {
   .shadow-card {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   }
-  .rounded-lg {
-    border-radius: var(--radius);
-  }
 }
 
-/* ✅ Effetto sfondo leggero */
+/* Sfondo leggerissimo con logo */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: url('/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png') center center no-repeat;
+  background: url("/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png")
+    center center no-repeat;
   background-size: cover;
   opacity: 0.02;
   pointer-events: none;
+  z-index: -1;
 }
