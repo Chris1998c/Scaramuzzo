@@ -1,3 +1,4 @@
+// app/products/[id]/page.tsx
 import ProductPageClient from "./ProductPageClient";
 
 export type PageProps = {

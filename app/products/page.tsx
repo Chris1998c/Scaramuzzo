@@ -1,111 +1,108 @@
-'use client';
+// app/products/page.tsx
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 
-type Language = 'it' | 'en';
+type Language = "it" | "en";
 
 export default function ProductsPage() {
   const router = useRouter();
-  const [language, setLanguage] = useState<Language>('it');
+  const [language, setLanguage] = useState<Language>("it");
 
   useEffect(() => {
-    const stored = localStorage.getItem('language') as Language | null;
-    if (stored) {
+    const stored = localStorage.getItem("language") as Language | null;
+    if (stored === "it" || stored === "en") {
       setLanguage(stored);
     }
   }, []);
 
   const translations = {
     it: {
-      title: 'I Nostri Prodotti',
+      title: "I Nostri Prodotti",
       products: [
         {
-          id: 'shampoo-riflessante-henne',
-          name: 'Shampoo Riflessante con Henné',
-          description: 'Mantiene i riflessi naturali dei capelli trattati con henné.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Shampoo Riflessante con Henné',
+          id: "shampoo-riflessante-henne",
+          name: "Shampoo Riflessante all’Henné",
+          description:
+            "Shampoo ristrutturante con estratto di henné per riflessi luminosi.",
+          image: "/sh-hennè.webp",
+          imageAlt: "Shampoo Riflessante all’Henné",
         },
         {
-          id: 'maschera-riflessante-henne',
-          name: 'Maschera Riflessante con Henné',
-          description: 'Nutre e ravviva il colore naturalmente.',
-          image: '/mask-hennè.webp',
-          imageAlt: 'Maschera Riflessante con Henné',
+          id: "maschera-riflessante-henne",
+          name: "Maschera Riflessante all’Henné",
+          description:
+            "Maschera nutriente e illuminante per esaltare i riflessi dell’henné.",
+          image: "/mask-hennè.webp",
+          imageAlt: "Maschera Riflessante all’Henné",
         },
         {
-          id: 'Shampoo-Purificante-seboregolatore',
-          name: 'Shampoo Purificante-Seboregolatore',
-          description: 'Azione riequilibrante per cute grassa o sensibile.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Shampoo Purificante',
+          id: "shampoo-purificante-seboregolatore",
+          name: "Shampoo Purificante Seboregolatore",
+          description:
+            "Azione riequilibrante per cute grassa, radici pesanti e sebo in eccesso.",
+          image: "/sh-hennè.webp",
+          imageAlt: "Shampoo Purificante Seboregolatore",
         },
         {
-          id: 'Bagnoschiuma-Purificante',
-          name: 'Bagnoschiuma Purificante',
-          description: 'Sensazione di freschezza e pulizia profonda.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Bagnoschiuma',
-        },
-        {
-          id: 'Olio-lenitivo-olivo-e-girasole',
-          name: 'Olio Lenitivo Olivo & Girasole',
-          description: 'Idratazione intensa e naturale.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Olio Lenitivo',
+          id: "shampoo-volume",
+          name: "Shampoo Volume & Leggerezza",
+          description:
+            "Dona corpo ai capelli fini mantenendoli leggeri e morbidi.",
+          image: "/sh-hennè.webp",
+          imageAlt: "Shampoo Volume & Leggerezza",
         },
       ],
     },
     en: {
-      title: 'Our Products',
+      title: "Our Products",
       products: [
         {
-          id: 'reflective-henna-shampoo',
-          name: 'Reflective Shampoo with Henna',
-          description: 'Enhances and maintains henna-treated hair tones.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Reflective Shampoo',
+          id: "shampoo-riflessante-henne",
+          name: "Reflective Henna Shampoo",
+          description:
+            "Strengthening shampoo with henna extract for luminous reflections.",
+          image: "/sh-hennè.webp",
+          imageAlt: "Reflective Henna Shampoo",
         },
         {
-          id: 'reflective-henna-mask',
-          name: 'Reflective Mask with Henna',
-          description: 'Deeply nourishes and enhances reflections.',
-          image: '/mask-hennè.webp',
-          imageAlt: 'Reflective Mask',
+          id: "maschera-riflessante-henne",
+          name: "Reflective Henna Mask",
+          description:
+            "Nourishing and illuminating mask to enhance henna reflections.",
+          image: "/mask-hennè.webp",
+          imageAlt: "Reflective Henna Mask",
         },
         {
-          id: 'hair-oil',
-          name: 'Purifying Shampoo',
-          description: 'Sebum-balancing formula for a clean scalp.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Purifying Shampoo',
+          id: "shampoo-purificante-seboregolatore",
+          name: "Purifying Sebum-Regulating Shampoo",
+          description:
+            "Rebalancing action for oily scalp, heavy roots and excess sebum.",
+          image: "/sh-hennè.webp",
+          imageAlt: "Purifying Sebum-Regulating Shampoo",
         },
         {
-          id: 'hydrating-bodywash',
-          name: 'Purifying Bodywash',
-          description: 'Deep cleansing and fresh sensation.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Bodywash',
-        },
-        {
-          id: 'soothing-oil',
-          name: 'Soothing Oil - Olive & Sunflower',
-          description: 'Moisturizing and softening treatment.',
-          image: '/sh-hennè.webp',
-          imageAlt: 'Soothing Oil',
+          id: "shampoo-volume",
+          name: "Volume & Lightweight Shampoo",
+          description:
+            "Gives body to fine hair while keeping it airy and soft.",
+          image: "/sh-hennè.webp",
+          imageAlt: "Volume & Lightweight Shampoo",
         },
       ],
     },
   };
+
+  const t = translations[language];
 
   const handleProductClick = (id: string) => {
     router.push(`/products/${id}`);
@@ -115,11 +112,11 @@ export default function ProductsPage() {
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center">
-          {translations[language].title}
+          {t.title}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {translations[language].products.map((product) => (
+          {t.products.map((product) => (
             <Card
               key={product.id}
               className="cursor-pointer hover:scale-105 transition-transform duration-200"
