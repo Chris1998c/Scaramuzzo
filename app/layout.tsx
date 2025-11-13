@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "./components/site/Navbar"
+import Footer from "./components/site/Footer";
 
 const inter = localFont({
   src: "./fonts/Inter.woff2",
@@ -16,16 +18,24 @@ const mono = localFont({
 
 export const metadata: Metadata = {
   title: "Scaramuzzo | Hair Natural Beauty",
-  description: "Scopri i migliori servizi e prodotti naturali per la cura e la bellezza dei capelli.",
+  description: "Scopri i migliori servizi e prodotti per la cura naturale dei capelli.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="it" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${mono.variable} bg-background text-foreground antialiased min-h-screen`}
       >
-        {children}
+        <Navbar />
+        <main className="py-8">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

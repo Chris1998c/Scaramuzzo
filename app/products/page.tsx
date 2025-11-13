@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
-type Language = 'it' | 'en'
+type Language = 'it' | 'en';
 
 export default function ProductsPage() {
-  const router = useRouter()
-  const [language, setLanguage] = useState<Language>('it')
+  const router = useRouter();
+  const [language, setLanguage] = useState<Language>('it');
 
   useEffect(() => {
-    const stored = localStorage.getItem('language') as Language | null
+    const stored = localStorage.getItem('language') as Language | null;
     if (stored) {
-      setLanguage(stored)
+      setLanguage(stored);
     }
-  }, [])
+  }, []);
 
   const translations = {
     it: {
@@ -105,11 +105,11 @@ export default function ProductsPage() {
         },
       ],
     },
-  }
+  };
 
   const handleProductClick = (id: string) => {
-    router.push(`/products/${id}`)
-  }
+    router.push(`/products/${id}`);
+  };
 
   return (
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">
@@ -117,6 +117,7 @@ export default function ProductsPage() {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center">
           {translations[language].title}
         </h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {translations[language].products.map((product) => (
             <Card
@@ -134,11 +135,13 @@ export default function ProductsPage() {
                   priority
                 />
               </div>
+
               <CardHeader>
                 <CardTitle className="text-lg md:text-xl">
                   {product.name}
                 </CardTitle>
               </CardHeader>
+
               <CardContent>
                 <CardDescription className="text-sm md:text-base">
                   {product.description}
@@ -149,6 +152,5 @@ export default function ProductsPage() {
         </div>
       </div>
     </section>
-  )
+  );
 }
-

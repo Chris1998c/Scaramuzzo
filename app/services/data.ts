@@ -1,11 +1,11 @@
 export interface Service {
-  id: string
-  alias?: string
-  name: string
-  description: string
-  image: string
-  imageAlt: string
-  detailedDescription: string
+  id: string;
+  alias?: string;
+  name: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  detailedDescription: string;
 }
 
 export const serviceTranslations = {
@@ -16,18 +16,10 @@ export const serviceTranslations = {
         alias: "haircut",
         name: "Taglio di Capelli",
         description: "Taglio personalizzato per uomo e donna",
-        image: "/taglio.jpg",
+        image: "/TaglioNew.jpg",
         imageAlt: "Taglio di Capelli",
-        detailedDescription: "Il nostro servizio di taglio capelli offre un'esperienza personalizzata per ogni cliente. ...",
-      },
-      {
-        id: "colorazione-con-erbe-botaniche",
-        alias: "botanical-hair-coloring",
-        name: "Colorazione con erbe botaniche",
-        description: "Tinte naturali e tecniche innovative",
-        image: "/ERBE.jpg",
-        imageAlt: "Colorazione con erbe botaniche",
-        detailedDescription: "La nostra colorazione con erbe botaniche è un trattamento delicato e naturale ...",
+        detailedDescription:
+          "Il nostro servizio di taglio capelli offre un'esperienza completamente personalizzata. Studiamo la forma del viso, la struttura del capello e lo stile di vita per creare un taglio armonico, portabile e in linea con la tua personalità.",
       },
       {
         id: "trattamenti",
@@ -37,40 +29,42 @@ export const serviceTranslations = {
         image: "/trattamento.jpg",
         imageAlt: "Trattamenti",
         detailedDescription:
-`Offriamo una vasta gamma di trattamenti per capelli:
-- Cheratina Vegetale: ...
-- Trattamenti Cute con Erbe: ...
-- Peeling: ...
-- Rigenerante: ...
-- Post Colore: ...
-- Trattamento di Rigenerazione: ...`,
+`Offriamo una gamma di trattamenti mirati per capelli e cute:
+- Cheratina vegetale: per rinforzare e ricompattare la fibra.
+- Trattamenti cute con erbe: ideali per cute sensibile, grassa o desquamata.
+- Peeling cute: per purificare e ossigenare.
+- Trattamenti rigeneranti post-colore: per mantenere luce e morbidezza.
+Ogni trattamento viene scelto dopo una consulenza personalizzata.`,
       },
       {
         id: "acconciature",
         alias: "hairstyling",
         name: "Acconciature",
         description: "Styling per ogni occasione",
-        image: "/erbe.jpg",
+        image: "/Acconciatura.jpg",
         imageAlt: "Acconciature",
-        detailedDescription: "Che si tratti di un'occasione speciale o di un look quotidiano, ...",
+        detailedDescription:
+          "Dalle acconciature raccolte alle onde morbide, fino ai look più essenziali: creiamo styling per matrimoni, eventi, shooting o semplicemente per sentirti speciale. Ogni acconciatura nasce in armonia con il viso, l’abito e il carattere di chi la indossa.",
       },
       {
         id: "sanlai",
         alias: "sanlai",
         name: "Sanlai",
-        description: "Schiariture",
+        description: "Schiariture naturali e luminose",
         image: "/sanlai.webp",
         imageAlt: "Schiariture Sanlai",
-        detailedDescription: "La tecnica Sanlai è il nostro metodo innovativo per schiarire i capelli ...",
+        detailedDescription:
+          "Sanlai è la nostra tecnica di schiaritura a mano libera ispirata alla luce del sole. Lavoriamo per creare contrasti morbidi, naturali e luminosi, rispettando la struttura del capello e mantenendo un risultato elegante, mai artificiale.",
       },
       {
         id: "massaggio-del-cuoio-capelluto",
         alias: "scalp-massage",
         name: "Massaggio del Cuoio Capelluto",
-        description: "Rilassante massaggio per la salute dei capelli",
+        description: "Rilassante massaggio per la salute della cute",
         image: "/Massaggio.webp",
         imageAlt: "Massaggio del Cuoio Capelluto",
-        detailedDescription: "Il nostro massaggio del cuoio capelluto non è solo rilassante, ma anche benefico ...",
+        detailedDescription:
+          "Il massaggio del cuoio capelluto è un rituale di benessere che stimola la microcircolazione, favorisce l’ossigenazione della radice e dona una profonda sensazione di relax. Ideale in abbinamento a trattamenti specifici per cute e capelli.",
       },
     ],
   },
@@ -80,63 +74,57 @@ export const serviceTranslations = {
         id: "taglio-di-capelli",
         alias: "taglio-di-capelli",
         name: "Haircut",
-        description: "Personalized cut for men and women",
-        image: "/taglio.jpg",
+        description: "Personalized haircut for men and women",
+        image: "/TaglioNew.jpg",
         imageAlt: "Haircut",
-        detailedDescription: "Our haircut service offers a personalized experience ...",
-      },
-      {
-        id: "botanical-hair-coloring",
-        alias: "colorazione-con-erbe-botaniche",
-        name: "Botanical Hair Coloring",
-        description: "Natural dyes and innovative techniques",
-        image: "/erbe.jpg",
-        imageAlt: "Botanical Hair Coloring",
-        detailedDescription: "Our botanical hair coloring is a gentle and natural treatment ...",
+        detailedDescription:
+          "Our haircut service offers a fully personalized experience. We study face shape, hair structure, and lifestyle to create a harmonious, wearable cut that reflects your personality.",
       },
       {
         id: "treatments",
         alias: "trattamenti",
         name: "Treatments",
         description: "Treatments for damaged hair and specific care",
-        image: "/erbe.jpg",
+        image: "/trattamento.jpg",
         imageAlt: "Treatments",
         detailedDescription:
-`We offer a wide range of treatments for hair:
-- Plant-Based Keratin: ...
-- Herbal Scalp Treatments: ...
-- Peeling: ...
-- Revitalizing: ...
-- Post Color: ...
-- Deep Regeneration Treatment: ...`,
+`We offer a range of targeted treatments for hair and scalp:
+- Plant-based keratin: to strengthen and rebuild the fiber.
+- Herbal scalp treatments: ideal for sensitive, oily, or flaky scalp.
+- Scalp peeling: to purify and oxygenate.
+- Regenerating post-color treatments: to maintain shine and softness.
+Each treatment is chosen after a personalized consultation.`,
       },
       {
-        id: "hairstyling",
+        id: "acconciature",
         alias: "acconciature",
         name: "Hairstyling",
         description: "Styling for every occasion",
-        image: "/erbe.jpg",
+        image: "/Acconciatura.jpg",
         imageAlt: "Hairstyling",
-        detailedDescription: "Whether it's for a special occasion or an everyday look, ...",
+        detailedDescription:
+          "From updos to soft waves and essential looks: we create styling for weddings, events, shootings, or simply to make you feel special. Every hairstyle is designed in harmony with your face, outfit, and personality.",
       },
       {
         id: "sanlai",
         alias: "sanlai",
         name: "Sanlai",
-        description: "Hair lightening",
+        description: "Natural lightening technique",
         image: "/sanlai.webp",
         imageAlt: "Sanlai Hair Lightening",
-        detailedDescription: "The Sanlai technique is our innovative method for lightening hair ...",
+        detailedDescription:
+          "Sanlai is our freehand lightening technique inspired by sunlight. We work to create soft, natural, luminous contrasts, respecting the hair structure and ensuring an elegant, never artificial result.",
       },
       {
-        id: "scalp-massage",
+        id: "massaggio-del-cuoio-capelluto",
         alias: "massaggio-del-cuoio-capelluto",
         name: "Scalp Massage",
         description: "Relaxing massage for hair health",
-        image: "/erbe.jpg",
+        image: "/Massaggio.webp",
         imageAlt: "Scalp Massage",
-        detailedDescription: "Our scalp massage is not only relaxing but also beneficial ...",
+        detailedDescription:
+          "Our scalp massage is a wellness ritual that stimulates microcirculation, promotes root oxygenation, and offers deep relaxation. Perfect when combined with targeted scalp and hair treatments.",
       },
     ],
   },
-}
+};
