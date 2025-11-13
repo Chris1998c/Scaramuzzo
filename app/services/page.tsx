@@ -1,11 +1,5 @@
-import ServicePageClient from "./[id]/ServicePageClient";
+import ServicesClient from "./ServicesClient";
 
-interface ServicePageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function ServicePage({ params }: ServicePageProps) {
-  return <ServicePageClient id={params.id} />;
+export default function ServicesPage() {
+  return <ServicesClient />;
 }

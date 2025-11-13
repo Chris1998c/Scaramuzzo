@@ -63,6 +63,7 @@ const BotanicalDetailClient: FC = () => {
         <h1 className="text-3xl font-bold mb-6 text-center">
           Colorazione con Erbe Botaniche
         </h1>
+
         <p className="text-lg mb-10 text-center max-w-2xl mx-auto">
           Le nostre miscele botaniche professionali nascono da erbe selezionate
           e cereali della nostra terra. Pensate per riflessi naturali, profondi,
@@ -80,11 +81,13 @@ const BotanicalDetailClient: FC = () => {
                   className="object-cover rounded-t-lg"
                 />
               </div>
+
               <CardHeader>
                 <CardTitle className="text-lg font-semibold">
                   {item.name}
                 </CardTitle>
               </CardHeader>
+
               <CardContent>
                 <CardDescription>{item.description}</CardDescription>
               </CardContent>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BotanicalDetailClient from "@/app/services/erbe-botaniche/BotanicalDetailClient";
+import BotanicalDetailClient from "./BotanicalDetailClient";
 
 export const metadata: Metadata = {
   title: "Colorazione con Erbe Botaniche | Scaramuzzo",

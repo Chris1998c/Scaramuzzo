@@ -123,13 +123,13 @@ export default function ServicesClient() {
 
   const t = translations[language];
 
-  const handleServiceClick = (id: string) => {
-    if (id === "colorazione-con-erbe-botaniche") {
-      router.push("/services/erbe-botaniche");
-    } else {
-      router.push(`/services/${id}`);
-    }
-  };
+const handleServiceClick = (id: string) => {
+  if (id === "colorazione-con-erbe-botaniche") {
+    router.push("/services/erbe-botaniche");
+  } else {
+    router.push(`/services/${id}`);
+  }
+};
 
   return (
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">

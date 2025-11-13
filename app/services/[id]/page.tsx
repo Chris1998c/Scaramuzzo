@@ -1,9 +1,7 @@
 import ServicePageClient from "./ServicePageClient";
 
 interface ServicePageProps {
-  params: {
-    id: string;
-  };
+  params: { id: string };
 }
 
 export default function ServicePage({ params }: ServicePageProps) {
