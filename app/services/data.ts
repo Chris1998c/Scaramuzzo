@@ -19,7 +19,7 @@ export const serviceTranslations = {
         image: "/TaglioNew.jpg",
         imageAlt: "Taglio di Capelli",
         detailedDescription:
-          "Il nostro servizio di taglio capelli offre un'esperienza completamente personalizzata. Studiamo la forma del viso, la struttura del capello e lo stile di vita per creare un taglio armonico, portabile e in linea con la tua personalità.",
+          "Il nostro taglio nasce sempre da una consulenza attenta: analizziamo forma del viso, movimento naturale dei capelli e abitudini quotidiane per creare una linea pulita, contemporanea e facile da gestire anche a casa. Lavoriamo con forbici e, quando serve, rasoio, per dare leggerezza, volume o definizione rispettando la struttura naturale del capello.",
       },
       {
         id: "trattamenti",
@@ -28,13 +28,14 @@ export const serviceTranslations = {
         description: "Trattamenti per capelli danneggiati e cure specifiche",
         image: "/trattamento.jpg",
         imageAlt: "Trattamenti",
-        detailedDescription:
-`Offriamo una gamma di trattamenti mirati per capelli e cute:
-- Cheratina vegetale: per rinforzare e ricompattare la fibra.
-- Trattamenti cute con erbe: ideali per cute sensibile, grassa o desquamata.
-- Peeling cute: per purificare e ossigenare.
-- Trattamenti rigeneranti post-colore: per mantenere luce e morbidezza.
-Ogni trattamento viene scelto dopo una consulenza personalizzata.`,
+        detailedDescription: `I trattamenti Scaramuzzo uniscono attivi professionali e formulazioni delicate per ricostruire, idratare e proteggere la fibra del capello senza appesantirla.
+
+- Cheratina vegetale Biokeratin Solution: complesso di proteine vegetali e attivi condizionanti che ricompattano la fibra, migliorano elasticità e lucentezza.
+- Bond Repair con acido maleico e proteine idrolizzate: trattamento interno ispirato ai plex, aiuta a rinforzare i legami indeboliti da colore e decolorazioni, donando capelli più forti e resistenti.
+- Trattamenti idratanti intensivi: maschere e impacchi emollienti per capelli secchi, opachi o sensibilizzati.
+- Trattamento post-colore protettivo: aiuta a richiudere delicatamente la cuticola e mantiene il colore più brillante e omogeneo nel tempo.
+
+Ogni percorso viene scelto dopo una consulenza personalizzata, in base allo stato di cute e lunghezze.`,
       },
       {
         id: "acconciature",
@@ -44,7 +45,7 @@ Ogni trattamento viene scelto dopo una consulenza personalizzata.`,
         image: "/Acconciatura.jpg",
         imageAlt: "Acconciature",
         detailedDescription:
-          "Dalle acconciature raccolte alle onde morbide, fino ai look più essenziali: creiamo styling per matrimoni, eventi, shooting o semplicemente per sentirti speciale. Ogni acconciatura nasce in armonia con il viso, l’abito e il carattere di chi la indossa.",
+          "Dalle onde morbide ai raccolti strutturati dall’effetto naturale, creiamo acconciature pensate per matrimoni, eventi, shooting o semplicemente per farti sentire al meglio. Lavoriamo sempre in armonia con il viso, l’abito e lo stile personale, privilegiando volumi morbidi, texture leggere e una tenuta confortevole, mai rigida.",
       },
       {
         id: "sanlai",
@@ -54,7 +55,7 @@ Ogni trattamento viene scelto dopo una consulenza personalizzata.`,
         image: "/sanlai.webp",
         imageAlt: "Schiariture Sanlai",
         detailedDescription:
-          "Sanlai è la nostra tecnica di schiaritura a mano libera ispirata alla luce del sole. Lavoriamo per creare contrasti morbidi, naturali e luminosi, rispettando la struttura del capello e mantenendo un risultato elegante, mai artificiale.",
+          "Sanlai è la nostra tecnica di schiaritura a mano libera ispirata alla luce naturale del sole. Utilizziamo decolorazioni e ossigeni calibrati, evitando volumi eccessivamente alti, per rispettare il più possibile la struttura del capello. Il risultato sono riflessi morbidi, luminosi e sfumati, senza stacchi netti, pensati per crescere bene nel tempo e integrarsi con il colore naturale.",
       },
       {
         id: "massaggio-del-cuoio-capelluto",
@@ -64,7 +65,7 @@ Ogni trattamento viene scelto dopo una consulenza personalizzata.`,
         image: "/Massaggio.webp",
         imageAlt: "Massaggio del Cuoio Capelluto",
         detailedDescription:
-          "Il massaggio del cuoio capelluto è un rituale di benessere che stimola la microcircolazione, favorisce l’ossigenazione della radice e dona una profonda sensazione di relax. Ideale in abbinamento a trattamenti specifici per cute e capelli.",
+          "Al lavatesta trasformiamo lo shampoo in un vero rituale di benessere. Il massaggio del cuoio capelluto, eseguito con movimenti lenti e profondi, aiuta a stimolare la microcircolazione, favorire l’ossigenazione della radice e sciogliere le tensioni accumulate. È il momento ideale per rilassarsi, preparare la cute ai trattamenti specifici e prendersi una pausa solo per sé.",
       },
     ],
   },
@@ -78,7 +79,7 @@ Ogni trattamento viene scelto dopo una consulenza personalizzata.`,
         image: "/TaglioNew.jpg",
         imageAlt: "Haircut",
         detailedDescription:
-          "Our haircut service offers a fully personalized experience. We study face shape, hair structure, and lifestyle to create a harmonious, wearable cut that reflects your personality.",
+          "Our haircut service always starts with a careful consultation: we analyse face shape, natural hair movement and your daily routine to create a clean, contemporary cut that is easy to manage at home. We work with scissors and, when needed, razor techniques to add lightness, volume or definition while respecting the natural texture of the hair.",
       },
       {
         id: "treatments",
@@ -87,13 +88,14 @@ Ogni trattamento viene scelto dopo una consulenza personalizzata.`,
         description: "Treatments for damaged hair and specific care",
         image: "/trattamento.jpg",
         imageAlt: "Treatments",
-        detailedDescription:
-`We offer a range of targeted treatments for hair and scalp:
-- Plant-based keratin: to strengthen and rebuild the fiber.
-- Herbal scalp treatments: ideal for sensitive, oily, or flaky scalp.
-- Scalp peeling: to purify and oxygenate.
-- Regenerating post-color treatments: to maintain shine and softness.
-Each treatment is chosen after a personalized consultation.`,
+        detailedDescription: `Scaramuzzo treatments combine professional actives and gentle formulas to rebuild, hydrate and protect the hair fiber without weighing it down.
+
+- Plant-based keratin Biokeratin Solution: a blend of vegetable proteins and conditioning agents that compacts the fiber and improves elasticity and shine.
+- Bond Repair with maleic acid and hydrolysed proteins: an inner treatment inspired by plex systems, helping to reinforce bonds weakened by colour and lightening services for stronger, more resilient hair.
+- Intensive moisturising treatments: masks and emollient packs for dry, dull or sensitised hair.
+- Protective post-colour treatment: gently helps to close the cuticle and keeps colour brighter and more even over time.
+
+Each protocol is chosen after a personalised consultation, based on the condition of both scalp and lengths.`,
       },
       {
         id: "acconciature",
@@ -103,7 +105,7 @@ Each treatment is chosen after a personalized consultation.`,
         image: "/Acconciatura.jpg",
         imageAlt: "Hairstyling",
         detailedDescription:
-          "From updos to soft waves and essential looks: we create styling for weddings, events, shootings, or simply to make you feel special. Every hairstyle is designed in harmony with your face, outfit, and personality.",
+          "From soft waves to structured yet natural-looking updos, we create hairstyles designed for weddings, events, shootings or simply to make you feel your best. We always work in harmony with face shape, outfit and personality, favouring soft volumes, lightweight textures and a comfortable hold rather than rigid looks.",
       },
       {
         id: "sanlai",
@@ -113,7 +115,7 @@ Each treatment is chosen after a personalized consultation.`,
         image: "/sanlai.webp",
         imageAlt: "Sanlai Hair Lightening",
         detailedDescription:
-          "Sanlai is our freehand lightening technique inspired by sunlight. We work to create soft, natural, luminous contrasts, respecting the hair structure and ensuring an elegant, never artificial result.",
+          "Sanlai is our freehand lightening technique inspired by natural sunlight. We use carefully controlled lighteners and developers, avoiding excessively high volumes, to respect the hair structure as much as possible. The result is soft, luminous and blended highlights with no harsh lines, designed to grow out beautifully and blend with your natural colour.",
       },
       {
         id: "massaggio-del-cuoio-capelluto",
@@ -123,7 +125,7 @@ Each treatment is chosen after a personalized consultation.`,
         image: "/Massaggio.webp",
         imageAlt: "Scalp Massage",
         detailedDescription:
-          "Our scalp massage is a wellness ritual that stimulates microcirculation, promotes root oxygenation, and offers deep relaxation. Perfect when combined with targeted scalp and hair treatments.",
+          "At the backwash we turn shampoo time into a small wellness ritual. The scalp massage, performed with slow and deep movements, helps stimulate microcirculation, promote root oxygenation and release accumulated tension. It is the perfect moment to relax, prepare the scalp for targeted treatments and take a proper break for yourself.",
       },
     ],
   },
