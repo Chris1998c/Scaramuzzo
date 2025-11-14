@@ -17,7 +17,7 @@ export default function ErbePage() {
         Dopo la posa, risciacquare con shampoo delicato e applicare conditioner.
       </p>
       <a
-        href="/pdf/guida-erbe.pdf"
+        href="/Spiegazione erbe.pdf"
         className="inline-block mt-6 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition"
         target="_blank"
       >

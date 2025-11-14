@@ -7,7 +7,13 @@ const nextConfig = {
   // Se vuoi, possiamo rimetterlo in futuro con la nuova sintassi.
 
   images: {
+    formats: ["image/avif", "image/webp"],
     domains: ['scaramuzzo.vercel.app', 'scaramuzzo.green'],
+  },
+  
+  experimental: {
+    optimizeCss: true,
+    optimizeImages: true,
   },
 
   // ✅ IGNORA errori TypeScript in build (solo tipi, non runtime)

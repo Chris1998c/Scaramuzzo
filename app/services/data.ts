@@ -42,7 +42,7 @@ Ogni percorso viene scelto dopo una consulenza personalizzata, in base allo stat
         alias: "hairstyling",
         name: "Acconciature",
         description: "Styling per ogni occasione",
-        image: "/Acconciatura.jpg",
+        image: "/Acconcitura-Georgia.jpg",
         imageAlt: "Acconciature",
         detailedDescription:
           "Dalle onde morbide ai raccolti strutturati dall’effetto naturale, creiamo acconciature pensate per matrimoni, eventi, shooting o semplicemente per farti sentire al meglio. Lavoriamo sempre in armonia con il viso, l’abito e lo stile personale, privilegiando volumi morbidi, texture leggere e una tenuta confortevole, mai rigida.",
@@ -62,7 +62,7 @@ Ogni percorso viene scelto dopo una consulenza personalizzata, in base allo stat
         alias: "scalp-massage",
         name: "Massaggio del Cuoio Capelluto",
         description: "Rilassante massaggio per la salute della cute",
-        image: "/Massaggio.webp",
+        image: "/shampoo-servizio.jpg",
         imageAlt: "Massaggio del Cuoio Capelluto",
         detailedDescription:
           "Al lavatesta trasformiamo lo shampoo in un vero rituale di benessere. Il massaggio del cuoio capelluto, eseguito con movimenti lenti e profondi, aiuta a stimolare la microcircolazione, favorire l’ossigenazione della radice e sciogliere le tensioni accumulate. È il momento ideale per rilassarsi, preparare la cute ai trattamenti specifici e prendersi una pausa solo per sé.",
@@ -102,7 +102,7 @@ Each protocol is chosen after a personalised consultation, based on the conditio
         alias: "acconciature",
         name: "Hairstyling",
         description: "Styling for every occasion",
-        image: "/Acconciatura.jpg",
+        image: "/Acconcitura-Georgia.jpg",
         imageAlt: "Hairstyling",
         detailedDescription:
           "From soft waves to structured yet natural-looking updos, we create hairstyles designed for weddings, events, shootings or simply to make you feel your best. We always work in harmony with face shape, outfit and personality, favouring soft volumes, lightweight textures and a comfortable hold rather than rigid looks.",
@@ -122,7 +122,7 @@ Each protocol is chosen after a personalised consultation, based on the conditio
         alias: "massaggio-del-cuoio-capelluto",
         name: "Scalp Massage",
         description: "Relaxing massage for hair health",
-        image: "/Massaggio.webp",
+        image: "/shampoo-servizio.jpg",
         imageAlt: "Scalp Massage",
         detailedDescription:
           "At the backwash we turn shampoo time into a small wellness ritual. The scalp massage, performed with slow and deep movements, helps stimulate microcirculation, promote root oxygenation and release accumulated tension. It is the perfect moment to relax, prepare the scalp for targeted treatments and take a proper break for yourself.",

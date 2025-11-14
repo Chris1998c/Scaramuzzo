@@ -57,7 +57,7 @@ export default function ServicesClient() {
           name: "Acconciature",
           description:
             "Raccolti, onde e styling per matrimoni, eventi e momenti speciali.",
-          image: "/Acconciatura.jpg",
+          image: "/Acconcitura-Georgia.jpg",
           imageAlt: "Acconciature",
         },
         {
@@ -73,7 +73,7 @@ export default function ServicesClient() {
           name: "Massaggio del Cuoio Capelluto",
           description:
             "Rituale shampoo e massaggio per rilassare la mente e riattivare la circolazione.",
-          image: "/Massaggio.webp",
+          image: "/shampoo-servizio.jpg",
           imageAlt: "Massaggio del Cuoio Capelluto",
         },
       ],
