@@ -110,7 +110,7 @@ export default function ServicesClient() {
           name: "Hairstyling",
           description:
             "Updos, waves and styling for weddings, events and special moments.",
-          image: "/Acconciatura.jpg",
+          image: "/Acconcitura-Georgia.jpg",
           imageAlt: "Hairstyling",
         },
         {

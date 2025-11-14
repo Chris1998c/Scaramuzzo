@@ -18,6 +18,7 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   const [language, setLanguage] = useState<Language>("it");
   const [product, setProduct] = useState<Product | null>(null);
 
+  // Recupero lingua salvata
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language") as Language | null;
     if (storedLanguage === "it" || storedLanguage === "en") {
@@ -25,6 +26,7 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
     }
   }, []);
 
+  // Carico prodotto
   useEffect(() => {
     const current = productTranslations[language].products.find(
       (p) => p.id === id
@@ -49,22 +51,27 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   return (
     <section className="bg-background text-foreground py-16">
       <div className="container mx-auto px-4 max-w-5xl grid gap-10 md:grid-cols-2 items-start">
-        {/* IMMAGINE PRODOTTO */}
+
+        {/* ---------------- IMMAGINE PRODOTTO ---------------- */}
         <div className="w-full">
-          <div className="relative w-full aspect-[3/4] max-w-md mx-auto rounded-xl border border-border bg-secondary/20 shadow-sm">
+          <div className="relative w-full aspect-[3/4] max-w-md mx-auto rounded-xl border border-border bg-secondary/20 shadow-sm overflow-hidden">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-contain p-6"
-              sizes="(max-width: 768px) 80vw, 400px"
               priority
+              sizes="(max-width: 768px) 80vw, 400px"
+              className="p-6"
+              style={{
+                objectFit: "contain",   // NON zooma, NON taglia, rimane perfetta
+              }}
             />
           </div>
         </div>
 
-        {/* TESTO PRODOTTO */}
+        {/* ---------------- DETTAGLI PRODOTTO ---------------- */}
         <div className="w-full">
+
           <h1 className="text-2xl md:text-3xl font-bold mb-3">
             {product.name}
           </h1>
@@ -80,6 +87,7 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
           </p>
 
           <div className="border-t border-border pt-6 space-y-4">
+
             {/* DESCRIZIONE ESTESA */}
             <div>
               <h2 className="text-lg font-semibold mb-2">
@@ -110,19 +118,19 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
                 <summary className="cursor-pointer text-sm md:text-base font-semibold">
                   {isItalian ? "Modo d’uso" : "How to use"}
                 </summary>
-                <p className="mt-3 text-sm md:text-base leading-relaxed whitespace-pre-line">
+                <p className="mt-3 text-sm md:text-base whitespace-pre-line">
                   {product.howToUse}
                 </p>
               </details>
             )}
 
-            {/* PRINCIPI ATTIVI */}
+            {/* ATTIVI */}
             {product.keyActives && (
               <details className="border border-border rounded-lg p-4 bg-background/40">
                 <summary className="cursor-pointer text-sm md:text-base font-semibold">
                   {isItalian ? "Principi attivi" : "Key ingredients"}
                 </summary>
-                <p className="mt-3 text-sm md:text-base leading-relaxed whitespace-pre-line">
+                <p className="mt-3 text-sm md:text-base whitespace-pre-line">
                   {product.keyActives}
                 </p>
               </details>
@@ -134,7 +142,7 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
                 <summary className="cursor-pointer text-sm md:text-base font-semibold">
                   INCI
                 </summary>
-                <p className="mt-3 text-xs md:text-sm font-mono leading-relaxed break-words">
+                <p className="mt-3 text-xs md:text-sm font-mono leading-relaxed break-words whitespace-pre-line">
                   {product.inci}
                 </p>
               </details>

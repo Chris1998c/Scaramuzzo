@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 type Language = "it" | "en";
-
 type Status = "idle" | "sending" | "sent" | "error";
 
 const translations = {
@@ -18,7 +17,7 @@ const translations = {
     send: "Invia",
     sending: "Inviando...",
     success: "Messaggio inviato con successo!",
-    error: "Si è verificato un errore nell'invio del messaggio.",
+    error: "Errore durante l'invio.",
   },
   en: {
     title: "Contact Us",
@@ -28,7 +27,7 @@ const translations = {
     send: "Send",
     sending: "Sending...",
     success: "Message sent successfully!",
-    error: "An error occurred while sending the message.",
+    error: "Error while sending.",
   },
 } as const;
 
@@ -40,7 +39,6 @@ export default function ContactClient() {
   const [status, setStatus] = useState<Status>("idle");
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
     const stored = localStorage.getItem("language") as Language | null;
     if (stored === "it" || stored === "en") {
       setLanguage(stored);
@@ -82,49 +80,16 @@ export default function ContactClient() {
           className="max-w-md mx-auto bg-card shadow-card rounded-lg p-6 space-y-4"
           onSubmit={handleSubmit}
         >
-          <div>
-            <Input
-              placeholder={t.name}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
+          <Input placeholder={t.name} value={name} onChange={(e) => setName(e.target.value)} required />
+          <Input type="email" placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <Textarea rows={5} placeholder={t.message} value={message} onChange={(e) => setMessage(e.target.value)} required />
 
-          <div>
-            <Input
-              type="email"
-              placeholder={t.email}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <Textarea
-              rows={5}
-              placeholder={t.message}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              required
-            />
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={status === "sending"}
-          >
+          <Button type="submit" className="w-full">
             {status === "sending" ? t.sending : t.send}
           </Button>
 
-          {status === "sent" && (
-            <p className="text-green-500 mt-2 text-sm">{t.success}</p>
-          )}
-          {status === "error" && (
-            <p className="text-red-500 mt-2 text-sm">{t.error}</p>
-          )}
+          {status === "sent" && <p className="text-green-500">{t.success}</p>}
+          {status === "error" && <p className="text-red-500">{t.error}</p>}
         </form>
       </div>
     </section>

@@ -4,9 +4,12 @@ import AboutClient from "./AboutClient";
 export const metadata: Metadata = {
   title: "Chi Siamo | Scaramuzzo Hair Natural Beauty",
   description:
-    "La storia del brand Scaramuzzo Hair Natural Beauty: tradizione, natura, innovazione e un team di professionisti tra Calabria e Roma.",
+    "Scaramuzzo Hair Natural Beauty: tradizione, erbe botaniche, ricerca e innovazione tra Calabria e Roma.",
+  alternates: {
+    canonical: "https://www.scaramuzzo.green/about",
+  },
 };
 
-export default function AboutPage() {
+export default function Page() {
   return <AboutClient />;
 }
