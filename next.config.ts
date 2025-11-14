@@ -13,7 +13,6 @@ const nextConfig = {
   
   experimental: {
     optimizeCss: true,
-    optimizeImages: true,
   },
 
   // ✅ IGNORA errori TypeScript in build (solo tipi, non runtime)
