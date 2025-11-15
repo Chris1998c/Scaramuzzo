@@ -102,7 +102,7 @@ export const productTranslations = {
         name: "Shampoo Energizzante – Stimolante",
         description:
           "Formula rinforzante con rosmarino, mentolo e attivi stimolanti.",
-        image: "/sh-energizzante.PNG",
+        image: "/sh-energizzante-nuova.PNG",
         heroTagline: "Freschezza intensa e capelli più forti.",
         detailedDescription:
           "Shampoo progettato per rinforzare la fibra capillare e stimolare la microcircolazione. Rosmarino, mentolo, mentil lattato e condizionanti rinfrescano e rivitalizzano la cute, donando capelli più forti, sani e vigorosi.",
@@ -393,7 +393,7 @@ export const productTranslations = {
         name: "Energizing Stimulating Shampoo",
         description:
           "Strengthening formula with rosemary, menthol and stimulating actives.",
-          image: "/sh-energizzante.PNG",
+          image: "/sh-energizzante-nuova.PNG",
         heroTagline: "Refreshing boost and stronger hair.",
         detailedDescription:
           "A stimulating shampoo designed to strengthen the hair fiber and boost microcirculation. Rosemary, menthol crystals and menthyl lactate refresh and tone the scalp, promoting stronger, healthier and more vigorous hair.",

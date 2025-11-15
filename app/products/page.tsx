@@ -65,7 +65,7 @@ export default function ProductsPage() {
           name: "Shampoo Energizzante – Stimolante",
           description:
             "Rosmarino e mentolo per cute fresca e capelli più forti.",
-          image: "/sh-energizzante.PNG",
+          image: "/sh-energizzante-nuova.PNG",
         },
         {
           id: "shampoo-rigenerante-bergamotto",
@@ -140,7 +140,7 @@ export default function ProductsPage() {
           id: "shampoo-energizzante",
           name: "Energizing Stimulating Shampoo",
           description: "Rosemary and menthol for stronger, refreshed hair.",
-          image: "/sh-energizzante.PNG",
+          image: "/sh-energizzante-nuova.PNG",
         },
         {
           id: "shampoo-rigenerante-bergamotto",
