@@ -76,8 +76,7 @@ export default function ProductsPage() {
         {
           id: "maschera-riflessante-henne",
           name: "Maschera Riflessante all’Henné",
-          description:
-            "Impacco illuminante per esaltare i riflessi naturali.",
+          description: "Impacco illuminante per esaltare i riflessi naturali.",
           image: "/mask-hennè-nuovo.png",
         },
         {
@@ -209,15 +208,9 @@ export default function ProductsPage() {
     },
   };
 
-  const shampooProducts = t.products.filter((p) =>
-    p.id.startsWith("shampoo-")
-  );
-  const maskProducts = t.products.filter((p) =>
-    p.id.startsWith("maschera-")
-  );
-  const stylingProducts = t.products.filter((p) =>
-    p.id.startsWith("styling-")
-  );
+  const shampooProducts = t.products.filter((p) => p.id.startsWith("shampoo-"));
+  const maskProducts = t.products.filter((p) => p.id.startsWith("maschera-"));
+  const stylingProducts = t.products.filter((p) => p.id.startsWith("styling-"));
   const treatmentProducts = t.products.filter((p) =>
     ["crema", "lozione"].some((kw) => p.id.includes(kw))
   );
@@ -257,18 +250,16 @@ export default function ProductsPage() {
           className="cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 bg-card/80 border border-border/60 rounded-2xl"
           onClick={() => handleProductClick(product.id)}
         >
-          <div className="relative w-full h-64 sm:h-72 md:h-80">
+          <div className="relative w-full h-80 sm:h-96 md:h-[420px]">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-contain rounded-t-2xl p-6"
+              className="object-contain rounded-t-2xl p-2"
             />
           </div>
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl">
-              {product.name}
-            </CardTitle>
+            <CardTitle className="text-lg md:text-xl">{product.name}</CardTitle>
           </CardHeader>
           <CardContent>
             <CardDescription className="text-sm md:text-base">
