@@ -24,7 +24,7 @@ export const productTranslations = {
         name: "Shampoo Riflessante con Estratto di Hennè",
         description:
           "Shampoo ristrutturante con puro estratto di hennè per riflessi luminosi.",
-        image: "/shampoo-hennè-nuovo.png",
+        image: "/shampoo-hennè-nuovo.webp",
         heroTagline: "Riflessi intensi, luce naturale e fibra più forte.",
         detailedDescription:
           "Lo Shampoo Riflessante con Estratto di Hennè mantiene vivi e luminosi i riflessi ottenuti con hennè ed erbe botaniche. L’estratto di Lawsonia inermis, ricco di zuccheri naturali, rinforza la fibra, aumenta la brillantezza e dona corpo ai capelli spenti o fini.",
@@ -50,7 +50,7 @@ export const productTranslations = {
         name: "Shampoo Emolliente",
         description:
           "Detersione delicata per cute sensibile e capelli secchi o fragili.",
-        image: "/shampoo-emo-nuovo.png",
+        image: "/shampoo-emo-nuovo.webp",
         heroTagline: "Morbidezza immediata, sollievo per cute sensibile.",
         detailedDescription:
           "Lo Shampoo Emolliente deterge delicatamente la cute sensibile e i capelli secchi o fragili. Estratti di avena e camomilla calmano e idratano, mentre i condizionanti naturali rendono il capello morbido, elastico e facile da districare senza appesantire.",
@@ -76,7 +76,7 @@ export const productTranslations = {
         name: "Shampoo Purificante Seboregolatore",
         description:
           "Formula purificante con estratti vegetali per cute grassa.",
-        image: "/shampoo-purificante-nuovo.png",
+        image: "/shampoo-purificante-nuovo.webp",
         heroTagline: "Cute fresca, leggera e riequilibrata.",
         detailedDescription:
           "Detergente purificante per capelli normali o grassi. Gli estratti di bergamotto, ortica, malva e liquirizia aiutano a ridurre il sebo e purificano la cute da impurità e residui. Lascia una sensazione di freschezza e leggerezza già dal primo utilizzo.",
@@ -102,7 +102,7 @@ export const productTranslations = {
         name: "Shampoo Energizzante – Stimolante",
         description:
           "Formula rinforzante con rosmarino, mentolo e attivi stimolanti.",
-        image: "/sh-energizzante-nuovo.png",
+        image: "/sh-energizzante-nuovo.webp",
         heroTagline: "Freschezza intensa e capelli più forti.",
         detailedDescription:
           "Shampoo progettato per rinforzare la fibra capillare e stimolare la microcircolazione. Rosmarino, mentolo, mentil lattato e condizionanti rinfrescano e rivitalizzano la cute, donando capelli più forti, sani e vigorosi.",
@@ -128,7 +128,7 @@ export const productTranslations = {
         name: "Shampoo Ristrutturante al Bergamotto",
         description:
           "Detersione delicata e nutriente per capelli sensibilizzati.",
-        image: "/shampoo-ristrutturante-nuovo.png",
+        image: "/shampoo-ristrutturante-nuovo.webp",
         heroTagline: "Morbidezza, luce e rigenerazione profonda.",
         detailedDescription:
           "Formula rigenerante con olio di bergamotto, ideale per capelli sensibilizzati da trattamenti chimici. Nutre, ammorbidisce e dona luminosità, senza risultare aggressivo sulla cute.",
@@ -152,7 +152,7 @@ export const productTranslations = {
         id: "maschera-riflessante-henne",
         name: "Maschera Riflessante con Estratto di Hennè",
         description: "Impacco riflessante con hennè puro per luce e vitalità.",
-        image: "/mask-hennè-nuovo.png",
+        image: "/mask-hennè-nuovo.webp",
         heroTagline: "Riflessi spettacolari e fibra ristrutturata.",
         detailedDescription:
           "La Maschera Riflessante con Estratto di Hennè mantiene e potenzia i toni dell’hennè, ristrutturando la fibra grazie agli zuccheri naturali della Lawsonia. Dona morbidezza, luminosità e vitalità alle lunghezze.",
@@ -178,7 +178,7 @@ export const productTranslations = {
         name: "Maschera Nutriente all’Olio d’Oliva",
         description:
           "Impacco nutriente e idratante con olio d’oliva e mandorla.",
-        image: "/mask-nutri-nuovo.png",
+        image: "/mask-nutri-nuovo.webp",
         heroTagline: "Elasticità, morbidezza e idratazione profonda.",
         detailedDescription:
           "La Maschera Nutriente all’Olio d’Oliva dona idratazione profonda e nutrimento grazie agli acidi grassi dell’olio d’oliva. L’olio di mandorla e il pantenolo migliorano elasticità, setosità e struttura del capello.",
@@ -204,7 +204,7 @@ export const productTranslations = {
         name: "Maschera Ristrutturante con Estratto di Bergamotto",
         description:
           "Impacco ristrutturante per capelli danneggiati e trattati.",
-        image: "/mask-ristrutturante-nuovo.png",
+        image: "/mask-ristrutturante-nuovo.webp",
         heroTagline: "Fibra rigenerata, protezione e luce intensa.",
         detailedDescription:
           "Maschera ad azione ristrutturante intensa che rigenera la fibra capillare danneggiata. L’olio di bergamotto dona brillantezza e protegge, mentre i condizionanti rendono i capelli morbidi e compatti.",
@@ -230,7 +230,7 @@ export const productTranslations = {
         name: "Styling Cream Curl",
         description:
           "Crema modellante idratante per ricci definiti e morbidi.",
-        image: "/styling-nuovo.png",
+        image: "/styling-nuovo.webp",
         heroTagline: "Ricci elastici, definiti e senza effetto rigido.",
         detailedDescription:
           "Crema modellante leggera che definisce il riccio senza appesantire. La base con glicerina, aloe vera e olio di mandorla idrata, controlla il crespo e migliora la forma naturale del capello.",
@@ -256,7 +256,7 @@ export const productTranslations = {
         name: "Crema Idratante Mani con Estratto di Liquirizia",
         description:
           "Crema mani nutriente e uniformante con liquirizia.",
-        image: "/crema-mani-nuovo.png",
+        image: "/crema-mani-nuovo.webp",
         heroTagline: "Mani morbide, setose e più uniformi.",
         detailedDescription:
           "Crema mani ad azione idratante e levigante, arricchita con estratto di liquirizia ad azione uniformante sulle discromie. Nutre in profondità senza ungere e migliora la morbidezza della pelle.",
@@ -282,7 +282,7 @@ export const productTranslations = {
         name: "Lozione Intensiva Anticaduta",
         description:
           "Lozione rinforzante con peptidi vegetali ed estratti stimolanti.",
-        image: "/lozione-nuovo.png",
+        image: "/lozione-nuovo.webp",
         heroTagline: "Cute attiva, radici forti, caduta ridotta.",
         detailedDescription:
           "Lozione cosmetica intensiva ad azione stimolante e rinforzante. Con peptidi bioattivi ed estratti vegetali che favoriscono la microcircolazione cutanea, aiutando a contrastare la caduta e a rinforzare la fibra capillare.",
@@ -315,7 +315,7 @@ export const productTranslations = {
         name: "Reflective Henna Shampoo",
         description:
           "Strengthening shampoo with pure henna extract for bright reflections.",
-       image: "/shampoo-hennè-nuovo.png",
+       image: "/shampoo-hennè-nuovo.webp",
         heroTagline: "Stronger hair, natural shine and vibrant tones.",
         detailedDescription:
           "The Reflective Henna Shampoo enhances and preserves henna-based tones while strengthening the hair fiber. Lawsonia inermis extract, rich in natural sugars, boosts shine, body and vitality, making it ideal for dull or fine hair.",
@@ -341,7 +341,7 @@ export const productTranslations = {
         name: "Soothing Emollient Shampoo",
         description:
           "Gentle cleanser for sensitive scalp and dry, fragile hair.",
-         image: "/shampoo-emo-nuovo.png",
+         image: "/shampoo-emo-nuovo.webp",
         heroTagline: "Immediate softness and comfort for sensitive scalp.",
         detailedDescription:
           "This soothing shampoo gently cleanses sensitive scalps and dry or fragile hair. Oat and chamomile extracts calm the skin while lightweight conditioning agents leave the hair soft, hydrated and easy to detangle.",
@@ -367,7 +367,7 @@ export const productTranslations = {
         name: "Purifying Sebum-Regulating Shampoo",
         description:
           "Purifying formula with botanical extracts for oily scalp.",
-       image: "/shampoo-purificante-nuovo.png",
+       image: "/shampoo-purificante-nuovo.webp",
         heroTagline: "Fresh, balanced and lightweight scalp.",
         detailedDescription:
           "A purifying shampoo for normal to oily hair. Bergamot, nettle, mallow and licorice extracts help reduce excess sebum and cleanse the scalp from impurities while maintaining a fresh, light sensation.",
@@ -393,7 +393,7 @@ export const productTranslations = {
         name: "Energizing Stimulating Shampoo",
         description:
           "Strengthening formula with rosemary, menthol and stimulating actives.",
-          image: "/sh-energizzante-nuovo.png",
+          image: "/sh-energizzante-nuovo.webp",
         heroTagline: "Refreshing boost and stronger hair.",
         detailedDescription:
           "A stimulating shampoo designed to strengthen the hair fiber and boost microcirculation. Rosemary, menthol crystals and menthyl lactate refresh and tone the scalp, promoting stronger, healthier and more vigorous hair.",
@@ -419,7 +419,7 @@ export const productTranslations = {
         name: "Regenerating Bergamot Shampoo",
         description:
           "Nourishing and gentle cleanser for chemically-treated hair.",
-       image: "/shampoo-ristrutturante-nuovo.png",
+       image: "/shampoo-ristrutturante-nuovo.webp",
         heroTagline: "Softness, shine and deep regeneration.",
         detailedDescription:
           "A regenerating formula enriched with bergamot oil. Ideal for hair sensitized by chemical treatments, it nourishes, softens and enhances shine without irritating the scalp.",
@@ -445,7 +445,7 @@ export const productTranslations = {
         name: "Reflective Henna Mask",
         description:
           "Nourishing mask with pure henna extract and plant oils.",
-     image: "/mask-hennè-nuovo.png",
+     image: "/mask-hennè-nuovo.webp",
         heroTagline: "Shine, softness and vibrant reflections.",
         detailedDescription:
           "A nourishing mask enriched with natural henna extract. It restores the hair fiber, boosts shine and enhances both natural and cosmetic reflections.",
@@ -471,7 +471,7 @@ export const productTranslations = {
         name: "Nourishing Olive Mask",
         description:
           "Deep hydrating mask with olive oil and almond extract.",
-         image: "/mask-nutri-nuovo.png",
+         image: "/mask-nutri-nuovo.webp",
         heroTagline: "Elasticity, softness and intense nourishment.",
         detailedDescription:
           "A rich and deeply hydrating mask formulated with olive oil, rich in essential fatty acids and antioxidants. It penetrates the hair fiber, improving elasticity, softness and overall hair health. Almond extract and panthenol enhance smoothness and shine.",
@@ -497,7 +497,7 @@ export const productTranslations = {
         name: "Restructuring Bergamot Mask",
         description:
           "Intensive restructuring mask for damaged or treated hair.",
-       image: "/mask-ristrutturante-nuovo.png",
+       image: "/mask-ristrutturante-nuovo.webp",
         heroTagline: "Regenerated fiber, protection and intense shine.",
         detailedDescription:
           "An intensive restructuring treatment ideal for chemically treated or damaged hair. Bergamot oil enhances shine and provides protection, while conditioning agents strengthen and smooth the hair fiber.",
@@ -523,7 +523,7 @@ export const productTranslations = {
         name: "Styling Cream Curl",
         description:
           "Hydrating curl-defining cream for soft, bouncy curls.",
-        image: "/styling-nuovo.png",
+        image: "/styling-nuovo.webp",
         heroTagline: "Defined curls, natural elasticity and zero frizz.",
         detailedDescription:
           "A lightweight curl cream designed to define, shape and hydrate curls without weighing them down. Formulated with Sepigel, aloe vera, mallow extract, Polyquaternium-7 and almond oil, it controls frizz, enhances curl formation and provides lasting softness.",
@@ -549,7 +549,7 @@ export const productTranslations = {
         name: "Hydrating Hand Cream with Licorice Extract",
         description:
           "Nourishing and brightening hand cream for dry, chapped skin.",
-        image: "/crema-mani-nuovo.png",
+        image: "/crema-mani-nuovo.webp",
         heroTagline: "Soft, smooth and more even-looking hands.",
         detailedDescription:
           "A deeply hydrating and softening hand cream enriched with licorice extract, known for its brightening and soothing properties. It nourishes without greasiness and helps improve the appearance of dry or uneven skin.",
@@ -575,7 +575,7 @@ export const productTranslations = {
         name: "Intensive Anti-Hair Loss Lotion",
         description:
           "Stimulating cosmetic lotion with bioactive peptides and plant extracts.",
-        image: "/lozione-nuovo.png",
+        image: "/lozione-nuovo.webp",
         heroTagline: "Stimulated scalp, stronger roots, reduced fall.",
         detailedDescription:
           "A powerful anti-hair loss lotion formulated with stimulating plant extracts and bioactive peptide complexes derived from hydrolyzed grains and seeds. It improves microcirculation, reinforces the follicle and helps reduce excessive shedding.",

@@ -1,38 +1,31 @@
 import { MetadataRoute } from "next";
+import { productTranslations } from "./products/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.scaramuzzo.green";
 
-  return [
-    {
-      url: `${baseUrl}`,
+  const staticRoutes: MetadataRoute.Sitemap = [
+    "",
+    "/products",
+    "/services",
+    "/erbe",
+    "/contact",
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: path === "" ? 1.0 : 0.8,
+  }));
+
+  // Pagine dinamiche prodotti
+  const productRoutes: MetadataRoute.Sitemap = productTranslations.it.products.map(
+    (p) => ({
+      url: `${baseUrl}/products/${p.id}`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/products`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "weekly" as const,
       priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/erbe`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.7,
-    },
-  ];
+    })
+  );
+
+  return [...staticRoutes, ...productRoutes];
 }

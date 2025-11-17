@@ -1,21 +1,19 @@
-// app/products/[id]/page.tsx
-
 import type { Metadata } from "next";
 import ProductPageClient from "./ProductPageClient";
 import { productTranslations } from "../data";
 
 export type PageProps = {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 };
 
-// 🔥 SEO DINAMICA PER OGNI PRODOTTO
-export function generateMetadata(
+// 🔥 SEO dinamica
+export async function generateMetadata(
   { params }: PageProps
-): Metadata {
+): Promise<Metadata> {
+  const { id } = await params;
+
   const product =
-    productTranslations.it.products.find((p) => p.id === params.id);
+    productTranslations.it.products.find((p) => p.id === id);
 
   if (!product) {
     return {
@@ -33,18 +31,20 @@ export function generateMetadata(
       images: [
         {
           url: product.image,
-          width: 900,
-          height: 900,
+          width: 800,
+          height: 800,
         },
       ],
     },
     alternates: {
-      canonical: `https://www.scaramuzzo.green/products/${params.id}`,
+      canonical: `https://www.scaramuzzo.green/products/${id}`,
     },
   };
 }
 
-// 🔥 RENDER CLIENT-SIDE DELLA PAGINA
-export default function Page({ params }: PageProps) {
-  return <ProductPageClient id={params.id} />;
+// 🔥 Pagina
+export default async function Page({ params }: PageProps) {
+  const { id } = await params;
+
+  return <ProductPageClient id={id} />;
 }

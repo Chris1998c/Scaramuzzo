@@ -18,9 +18,18 @@ const mono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Scaramuzzo | Hair Natural Beauty",
+  metadataBase: new URL("https://www.scaramuzzo.green"),
+  title: {
+    default: "Scaramuzzo | Hair Natural Beauty",
+    template: "%s • Scaramuzzo"
+  },
   description:
     "Scopri i migliori servizi e prodotti per la cura naturale dei capelli.",
+  openGraph: {
+    type: "website",
+    url: "https://www.scaramuzzo.green",
+    siteName: "Scaramuzzo Hair Natural Beauty",
+  }
 };
 
 export default function RootLayout({
