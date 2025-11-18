@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import ServicePageClient from "./ServicePageClient";
 import { serviceTranslations } from "../data";
 
+export const dynamicParams = true;
+
 export const dynamic = "force-static";
 
 // Tipo giusto (SYNC, non async)
