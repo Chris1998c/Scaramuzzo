@@ -1,8 +1,8 @@
 "use client";
 
 import HomeHero from "@/app/components/Home";
-import About from "@/app/about/AboutClient";
-import Contact from "@/app/contact/ContactClient";
+import About from "@/app/components/About";
+import Contact from "@/app/contact/ContactClient"; // ✅ sta in app/contact
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -14,11 +14,14 @@ export default function PageClient() {
 
   useEffect(() => {
     const stored = localStorage.getItem("language") as Language | null;
-    if (stored) setLanguage(stored);
+    if (stored === "it" || stored === "en") {
+      setLanguage(stored);
+    }
   }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* HERO */}
       <HomeHero language={language} />
 
       {/* Sezione breve Chi siamo + CTA */}
@@ -51,8 +54,11 @@ export default function PageClient() {
         </div>
       </section>
 
+      {/* About prende la lingua come prop */}
       <About language={language} />
-      <Contact language={language} />
+
+      {/* Contact usa già il suo stato interno, quindi NIENTE props */}
+      <Contact />
     </div>
   );
 }
