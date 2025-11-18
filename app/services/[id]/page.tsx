@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import ServicePageClient from "./ServicePageClient";
 import { serviceTranslations } from "../data";
 
+export const dynamic = "force-static";
+
+// Tipo giusto (SYNC, non async)
 export type PageProps = {
   params: { id: string };
 };
 
-// 🔥 SEO dinamica
-export function generateMetadata(
-  { params }: PageProps
-): Metadata {
-  const { id } = params;
+// 🔥 SEO DINAMICA — CORRETTA
+export function generateMetadata({ params }: PageProps): Metadata {
+  const id = params.id; // <— Sync, non Promise
 
-  const service =
-    serviceTranslations.it.services.find((s) => s.id === id);
+  const service = serviceTranslations.it.services.find(s => s.id === id);
 
   if (!service) {
     return {
@@ -31,7 +31,8 @@ export function generateMetadata(
   };
 }
 
+// 🔥 PAGE COMPONENT — CORRETTO
 export default function Page({ params }: PageProps) {
-  const { id } = params;
+  const id = params.id; // <— Sync anche qui
   return <ServicePageClient id={id} />;
 }
