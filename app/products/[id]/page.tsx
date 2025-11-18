@@ -21,14 +21,34 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     };
   }
 
+  const absoluteImage = `https://www.scaramuzzo.green${product.image}`;
+
   return {
     title: `${product.name} • Scaramuzzo Hair Natural Beauty`,
     description: product.description,
+
     openGraph: {
+      type: "website", // ← QUI IL FIX
+      url: `https://www.scaramuzzo.green/products/${id}`,
       title: product.name,
       description: product.description,
-      images: [{ url: product.image }],
+      images: [
+        {
+          url: absoluteImage,
+          width: 1200,
+          height: 800,
+          alt: product.name,
+        },
+      ],
     },
+
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description,
+      images: [absoluteImage],
+    },
+
     alternates: {
       canonical: `https://www.scaramuzzo.green/products/${id}`,
     },
@@ -38,6 +58,5 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 // === PAGINA DINAMICA ===
 export default async function Page(props: PageProps) {
   const { id } = await props.params;
-
   return <ProductPageClient id={id} />;
 }
