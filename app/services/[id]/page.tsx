@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
+import ServicePageClient from "./ServicePageClient";
 import { serviceTranslations } from "../data";
-import ServiceDetailClient from "./ServicePageClient";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export type PageProps = {
+  params: { id: string };
+};
+
+// 🔥 SEO dinamica
+export function generateMetadata(
+  { params }: PageProps
+): Metadata {
+  const { id } = params;
+
   const service =
-    serviceTranslations.it.services.find((s) => s.id === params.id) ||
-    serviceTranslations.en.services.find((s) => s.id === params.id);
+    serviceTranslations.it.services.find((s) => s.id === id);
 
   if (!service) {
     return {
@@ -15,25 +23,16 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 
   return {
-    title: `${service.name} | Scaramuzzo Hair Natural Beauty`,
+    title: `${service.name} • Scaramuzzo Hair Natural Beauty`,
     description: service.description,
-    openGraph: {
-      title: service.name,
-      description: service.description,
-      images: [
-        {
-          url: service.image,
-          width: 1200,
-          height: 800,
-        },
-      ],
-    },
     alternates: {
-      canonical: `https://www.scaramuzzo.green/services/${params.id}`,
+      canonical: `https://www.scaramuzzo.green/services/${id}`,
     },
   };
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-  return <ServiceDetailClient id={params.id} />;
+// 🔥 Pagina servizio
+export default function Page({ params }: PageProps) {
+  const { id } = params;
+  return <ServicePageClient id={id} />;
 }
