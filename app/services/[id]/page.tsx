@@ -2,20 +2,23 @@ import type { Metadata } from "next";
 import ServicePageClient from "./ServicePageClient";
 import { serviceTranslations } from "../data";
 
-export const dynamicParams = true;
-
 export const dynamic = "force-static";
 
-// Tipo giusto (SYNC, non async)
-export type PageProps = {
-  params: { id: string };
+// ❗ NON usiamo PageProps generati da Next
+// creiamo un tipo manuale dove `params` è async
+type PageProps = {
+  params: Promise<{ id: string }>;
 };
 
-// 🔥 SEO DINAMICA — CORRETTA
-export function generateMetadata({ params }: PageProps): Metadata {
-  const id = params.id; // <— Sync, non Promise
+// ---------------------------------------------
+// SEO DINAMICA CORRETTA (con await)
+// ---------------------------------------------
+export async function generateMetadata(
+  props: PageProps
+): Promise<Metadata> {
+  const { id } = await props.params; // <-- 🔥 RISOLVE L’ERRORE
 
-  const service = serviceTranslations.it.services.find(s => s.id === id);
+  const service = serviceTranslations.it.services.find((s) => s.id === id);
 
   if (!service) {
     return {
@@ -33,8 +36,11 @@ export function generateMetadata({ params }: PageProps): Metadata {
   };
 }
 
-// 🔥 PAGE COMPONENT — CORRETTO
-export default function Page({ params }: PageProps) {
-  const id = params.id; // <— Sync anche qui
+// ---------------------------------------------
+// PAGE COMPONENT CORRETTO (anche lui async)
+// ---------------------------------------------
+export default async function Page(props: PageProps) {
+  const { id } = await props.params; // <-- 🔥 RISOLVE L’ERRORE
+
   return <ServicePageClient id={id} />;
 }
