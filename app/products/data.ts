@@ -73,7 +73,7 @@ export const productTranslations = {
       // -------------------------------------------------------
       {
         id: "shampoo-purificante-seboregolatore",
-        name: "Shampoo Purificante Seboregolatore",
+        name: "Shampoo Purificante",
         description:
           "Formula purificante con estratti vegetali per cute grassa.",
         image: "/shampoo-purificante-nuovo.webp",
