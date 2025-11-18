@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
-import ProductPageClient from "./ProductPageClient";
+import nextDynamic from "next/dynamic"; // ← nome cambiato per evitare conflitto
 import { productTranslations } from "../data";
 
-export type PageProps = {
+// Mantieni la pagina SERVER component
+export const dynamic = "force-static";
+
+type PageProps = {
   params: { id: string };
 };
 
+// Import dinamico corretto
+const ProductPageClient = nextDynamic(() => import("./ProductPageClient"), {
+  ssr: false,
+});
+
 // SEO dinamica
-export async function generateMetadata(
-  { params }: PageProps
-): Promise<Metadata> {
+export function generateMetadata({ params }: PageProps): Metadata {
   const { id } = params;
 
   const product = productTranslations.it.products.find((p) => p.id === id);
@@ -43,7 +49,5 @@ export async function generateMetadata(
 
 // Pagina
 export default function Page({ params }: PageProps) {
-  const { id } = params;
-
-  return <ProductPageClient id={id} />;
+  return <ProductPageClient id={params.id} />;
 }
