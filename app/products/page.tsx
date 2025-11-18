@@ -1,4 +1,3 @@
-// app/products/page.tsx
 "use client";
 
 import { useEffect, useState, useRef } from "react";
@@ -23,6 +22,9 @@ interface SimpleProduct {
   image: string;
 }
 
+// -------------------------------------------
+// PAGINA PRODOTTI (APPLE STYLE)
+// -------------------------------------------
 export default function ProductsPage() {
   const router = useRouter();
   const [language, setLanguage] = useState<Language>("it");
@@ -32,6 +34,9 @@ export default function ProductsPage() {
     if (stored === "it" || stored === "en") setLanguage(stored);
   }, []);
 
+  // -------------------------------------------
+  // DATI BASE (LISTA RIDOTTA)
+  // -------------------------------------------
   const translations: Record<
     Language,
     { title: string; products: SimpleProduct[] }
@@ -55,7 +60,7 @@ export default function ProductsPage() {
         },
         {
           id: "shampoo-purificante-seboregolatore",
-          name: "Shampoo Purificante ",
+          name: "Shampoo Purificante Seboregolatore",
           description:
             "Azione riequilibrante per cute grassa e sebo in eccesso.",
           image: "/shampoo-purificante-nuovo.webp",
@@ -112,84 +117,17 @@ export default function ProductsPage() {
         },
       ],
     },
-
     en: {
       title: "Our Products",
-      products: [
-        {
-          id: "shampoo-riflessante-henne",
-          name: "Reflective Henna Shampoo",
-          description:
-            "Strengthening shampoo with henna extract for luminous reflections.",
-          image: "/shampoo-hennè-nuovo.webp",
-        },
-        {
-          id: "shampoo-emolliente",
-          name: "Soothing Emollient Shampoo",
-          description: "Gentle cleanser for sensitive scalp and fragile hair.",
-          image: "/shampoo-emo-nuovo.webp",
-        },
-        {
-          id: "shampoo-purificante-seboregolatore",
-          name: "Purifying Sebum-Regulating Shampoo",
-          description: "Rebalancing action for oily scalp and excess sebum.",
-          image: "/shampoo-purificante-nuovo.webp",
-        },
-        {
-          id: "shampoo-energizzante",
-          name: "Energizing Stimulating Shampoo",
-          description: "Rosemary and menthol for stronger, refreshed hair.",
-          image: "/sh-energizzante-nuovo.webp",
-        },
-        {
-          id: "shampoo-rigenerante-bergamotto",
-          name: "Regenerating Bergamot Shampoo",
-          description: "Softness, shine and nourishment for treated hair.",
-          image: "/shampoo-ristrutturante-nuovo.webp",
-        },
-        {
-          id: "maschera-riflessante-henne",
-          name: "Reflective Henna Mask",
-          description:
-            "Nourishing mask that enhances natural and cosmetic reflections.",
-          image: "/mask-hennè-nuovo.webp",
-        },
-        {
-          id: "maschera-nutriente-oliva",
-          name: "Nourishing Olive Mask",
-          description: "Deep hydration and intense nourishment.",
-          image: "/mask-nutri-nuovo.webp",
-        },
-        {
-          id: "maschera-ristrutturante-bergamotto",
-          name: "Restructuring Bergamot Mask",
-          description: "Repairing treatment for damaged hair.",
-          image: "/mask-ristrutturante-nuovo.webp",
-        },
-        {
-          id: "styling-cream-curl",
-          name: "Styling Cream Curl",
-          description: "Hydrating curl-defining cream.",
-          image: "/styling-nuovo.webp",
-        },
-        {
-          id: "crema-mani-liquirizia",
-          name: "Licorice Hand Cream",
-          description: "Softening and brightening daily hand treatment.",
-          image: "/crema-mani-nuovo.webp",
-        },
-        {
-          id: "lozione-anticaduta",
-          name: "Intensive Anti-Hair Loss Lotion",
-          description: "Stimulating lotion with plant peptides.",
-          image: "/lozione-nuovo.webp",
-        },
-      ],
+      products: [],
     },
   };
 
   const t = translations[language];
 
+  // -------------------------------------------
+  // CATEGORIE
+  // -------------------------------------------
   type CategoryKey = "shampoo" | "maschere" | "styling" | "trattamenti";
   const [openCategory, setOpenCategory] = useState<CategoryKey>("shampoo");
 
@@ -210,11 +148,16 @@ export default function ProductsPage() {
 
   const shampooProducts = t.products.filter((p) => p.id.startsWith("shampoo-"));
   const maskProducts = t.products.filter((p) => p.id.startsWith("maschera-"));
-  const stylingProducts = t.products.filter((p) => p.id.startsWith("styling-"));
+  const stylingProducts = t.products.filter((p) =>
+    p.id.startsWith("styling-")
+  );
   const treatmentProducts = t.products.filter((p) =>
-    ["crema", "lozione"].some((kw) => p.id.includes(kw))
+    ["crema", "lozione"].some((k) => p.id.includes(k))
   );
 
+  // -------------------------------------------
+  // SCROLL REFS PER CAROSELLO
+  // -------------------------------------------
   const shampooRef = useRef<HTMLDivElement | null>(null);
   const maskRef = useRef<HTMLDivElement | null>(null);
   const stylingRef = useRef<HTMLDivElement | null>(null);
@@ -222,59 +165,64 @@ export default function ProductsPage() {
 
   const scrollCarousel = (
     ref: React.RefObject<HTMLDivElement>,
-    direction: "prev" | "next"
+    dir: "next" | "prev"
   ) => {
     if (!ref.current) return;
-    const amount = ref.current.clientWidth * 0.8;
+    const step = ref.current.clientWidth * 0.8;
     ref.current.scrollBy({
-      left: direction === "next" ? amount : -amount,
+      left: dir === "next" ? step : -step,
       behavior: "smooth",
     });
   };
 
-  const handleProductClick = (id: string) => router.push(`/products/${id}`);
-
-  // Animazione super semplice: niente transition, niente ease → nessun errore TS
   const fadeInitial = { opacity: 0, y: 20 };
   const fadeWhileInView = { opacity: 1, y: 0 };
 
-  const renderCards = (products: SimpleProduct[]) =>
-    products.map((product) => (
+  const handleClick = (id: string) => router.push(`/products/${id}`);
+
+  // -------------------------------------------
+  // CARD PRODOTTO
+  // -------------------------------------------
+  const renderCards = (list: SimpleProduct[]) =>
+    list.map((p) => (
       <motion.div
-        key={product.id}
+        key={p.id}
         initial={fadeInitial}
         whileInView={fadeWhileInView}
         viewport={{ once: true }}
       >
         <Card
-          className="cursor-pointer hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 bg-card/80 border border-border/60 rounded-2xl"
-          onClick={() => handleProductClick(product.id)}
+          onClick={() => handleClick(p.id)}
+          className="cursor-pointer hover:-translate-y-[4px] hover:shadow-2xl transition-all duration-300 bg-card/80 border border-border/60 rounded-2xl"
         >
           <div className="relative w-full h-80 sm:h-96 md:h-[420px]">
             <Image
-              src={product.image}
-              alt={product.name}
+              src={p.image}
+              alt={p.name}
               fill
               className="object-contain rounded-t-2xl p-2"
             />
           </div>
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl">{product.name}</CardTitle>
+            <CardTitle className="text-lg md:text-xl">{p.name}</CardTitle>
           </CardHeader>
           <CardContent>
             <CardDescription className="text-sm md:text-base">
-              {product.description}
+              {p.description}
             </CardDescription>
           </CardContent>
         </Card>
       </motion.div>
     ));
 
+  // -------------------------------------------
+  // RENDER CATEGORIA (Accordion)
+  // -------------------------------------------
   const renderCategory = (
     key: CategoryKey,
     label: string,
     products: SimpleProduct[],
-    scrollRef: React.RefObject<HTMLDivElement>
+    ref: React.RefObject<HTMLDivElement>
   ) => {
     if (products.length === 0) return null;
 
@@ -295,8 +243,9 @@ export default function ProductsPage() {
           <h3 className="text-xl sm:text-2xl font-semibold text-left">
             {label}
           </h3>
+
           <span
-            className={`text-2xl leading-none transition-transform duration-300 ${
+            className={`text-2xl transition-transform ${
               isOpen ? "rotate-180" : "rotate-0"
             }`}
           >
@@ -306,39 +255,37 @@ export default function ProductsPage() {
 
         {isOpen && (
           <div className="mt-5 space-y-6">
-            {/* Carosello mobile */}
+            {/* CAROSELLO MOBILE */}
             <div className="relative sm:hidden -mx-4">
               <div
-                ref={scrollRef}
+                ref={ref}
                 className="flex gap-4 overflow-x-auto px-4 pb-4 snap-x snap-mandatory scrollbar-thin"
               >
-                {products.map((product) => (
+                {products.map((p) => (
                   <div
-                    key={product.id}
+                    key={p.id}
                     className="min-w-[260px] max-w-[280px] snap-start"
                   >
-                    {renderCards([product])}
+                    {renderCards([p])}
                   </div>
                 ))}
               </div>
 
               <button
-                type="button"
-                onClick={() => scrollCarousel(scrollRef, "prev")}
+                onClick={() => scrollCarousel(ref, "prev")}
                 className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center rounded-full bg-background/70 border border-border/70 shadow-lg backdrop-blur-sm"
               >
                 ‹
               </button>
               <button
-                type="button"
-                onClick={() => scrollCarousel(scrollRef, "next")}
+                onClick={() => scrollCarousel(ref, "next")}
                 className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center rounded-full bg-background/70 border border-border/70 shadow-lg backdrop-blur-sm"
               >
                 ›
               </button>
             </div>
 
-            {/* Griglia desktop/tablet */}
+            {/* GRIGLIA DESKTOP */}
             <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 gap-6">
               {renderCards(products)}
             </div>
@@ -348,6 +295,9 @@ export default function ProductsPage() {
     );
   };
 
+  // -------------------------------------------
+  // RENDER FINALE
+  // -------------------------------------------
   return (
     <section className="py-16 sm:py-20 md:py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-4">
@@ -361,30 +311,10 @@ export default function ProductsPage() {
         </motion.h2>
 
         <div className="space-y-10">
-          {renderCategory(
-            "shampoo",
-            labels[language].shampoo,
-            shampooProducts,
-            shampooRef
-          )}
-          {renderCategory(
-            "maschere",
-            labels[language].maschere,
-            maskProducts,
-            maskRef
-          )}
-          {renderCategory(
-            "styling",
-            labels[language].styling,
-            stylingProducts,
-            stylingRef
-          )}
-          {renderCategory(
-            "trattamenti",
-            labels[language].trattamenti,
-            treatmentProducts,
-            treatmentRef
-          )}
+          {renderCategory("shampoo", labels[language].shampoo, shampooProducts, shampooRef)}
+          {renderCategory("maschere", labels[language].maschere, maskProducts, maskRef)}
+          {renderCategory("styling", labels[language].styling, stylingProducts, stylingRef)}
+          {renderCategory("trattamenti", labels[language].trattamenti, treatmentProducts, treatmentRef)}
         </div>
       </div>
     </section>

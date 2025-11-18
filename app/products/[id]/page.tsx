@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import { productTranslations } from "../data";
-import ClientWrapper from "./client-wrapper";
+import ProductPageClient from "./ProductPageClient";
 
 export const dynamic = "force-static";
 
 type PageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const { id } = params;
+// === SEO DINAMICA ===
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const { id } = await props.params;
+
   const product = productTranslations.it.products.find((p) => p.id === id);
 
   if (!product) {
@@ -23,9 +25,9 @@ export function generateMetadata({ params }: PageProps): Metadata {
     title: `${product.name} • Scaramuzzo Hair Natural Beauty`,
     description: product.description,
     openGraph: {
-      title: `${product.name} • Scaramuzzo Hair Natural Beauty`,
+      title: product.name,
       description: product.description,
-      images: [{ url: product.image, width: 800, height: 800 }],
+      images: [{ url: product.image }],
     },
     alternates: {
       canonical: `https://www.scaramuzzo.green/products/${id}`,
@@ -33,6 +35,9 @@ export function generateMetadata({ params }: PageProps): Metadata {
   };
 }
 
-export default function Page({ params }: PageProps) {
-  return <ClientWrapper id={params.id} />;
+// === PAGINA DINAMICA ===
+export default async function Page(props: PageProps) {
+  const { id } = await props.params;
+
+  return <ProductPageClient id={id} />;
 }

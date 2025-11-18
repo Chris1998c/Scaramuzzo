@@ -7,8 +7,6 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Product, productTranslations } from "../data";
 
-type Language = "it" | "en";
-
 interface ProductPageClientProps {
   id: string;
 }
@@ -20,21 +18,19 @@ const fade = {
 
 const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   const router = useRouter();
-  const [language, setLanguage] = useState<Language>("it");
+  const [language, setLanguage] = useState<"it" | "en">("it");
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    const storedLanguage = localStorage.getItem("language") as Language | null;
-    if (storedLanguage === "it" || storedLanguage === "en") {
-      setLanguage(storedLanguage);
-    }
+    const storedLanguage = localStorage.getItem("language") as "it" | "en" | null;
+    if (storedLanguage) setLanguage(storedLanguage);
   }, []);
 
   useEffect(() => {
-    const current = productTranslations[language].products.find(
+    const result = productTranslations[language].products.find(
       (p) => p.id === id
     );
-    setProduct(current || null);
+    setProduct(result || null);
   }, [id, language]);
 
   const handleBackClick = useCallback(() => {
@@ -54,8 +50,6 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   return (
     <section className="bg-background text-foreground py-20">
       <div className="container mx-auto px-4 max-w-6xl grid md:grid-cols-2 gap-16 items-start">
-
-        {/* ░░░ IMMAGINE STICKY + EFFETTO PREMIUM ░░░ */}
         <motion.div
           initial="hidden"
           animate="show"
@@ -74,31 +68,25 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
           </div>
         </motion.div>
 
-        {/* ░░░ TESTI E CONTENUTI PREMIUM ░░░ */}
         <motion.div
           initial="hidden"
           animate="show"
           variants={fade}
           className="space-y-8"
         >
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
-              {product.name}
-            </h1>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
+            {product.name}
+          </h1>
 
-            {product.heroTagline && (
-              <p className="text-lg text-primary mb-4">
-                {product.heroTagline}
-              </p>
-            )}
+          {product.heroTagline && (
+            <p className="text-lg text-primary mb-4">{product.heroTagline}</p>
+          )}
 
-            <p className="text-base text-muted-foreground leading-relaxed">
-              {product.description}
-            </p>
-          </div>
+          <p className="text-base text-muted-foreground leading-relaxed">
+            {product.description}
+          </p>
 
           <div className="space-y-6 pt-6 border-t border-border/40">
-
             {product.detailedDescription && (
               <div>
                 <h2 className="text-xl font-semibold mb-2">
@@ -116,8 +104,8 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
                   {isItalian ? "Punti di forza" : "Key benefits"}
                 </summary>
                 <ul className="mt-3 list-disc list-inside text-base space-y-1">
-                  {product.benefits.map((b, idx) => (
-                    <li key={idx}>{b}</li>
+                  {product.benefits.map((b, i) => (
+                    <li key={i}>{b}</li>
                   ))}
                 </ul>
               </details>
