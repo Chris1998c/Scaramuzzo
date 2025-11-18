@@ -79,17 +79,74 @@ export default function ContactClient() {
         <form
           className="max-w-md mx-auto bg-card shadow-card rounded-lg p-6 space-y-4"
           onSubmit={handleSubmit}
+          aria-label={t.title}
         >
-          <Input placeholder={t.name} value={name} onChange={(e) => setName(e.target.value)} required />
-          <Input type="email" placeholder={t.email} value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <Textarea rows={5} placeholder={t.message} value={message} onChange={(e) => setMessage(e.target.value)} required />
+          {/* CAMPO NOME */}
+          <div className="space-y-1">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-foreground"
+            >
+              {t.name}
+            </label>
+            <Input
+              id="name"
+              type="text"
+              placeholder={t.name}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
 
+          {/* CAMPO EMAIL */}
+          <div className="space-y-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-foreground"
+            >
+              {t.email}
+            </label>
+            <Input
+              id="email"
+              type="email"
+              placeholder={t.email}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* CAMPO MESSAGGIO */}
+          <div className="space-y-1">
+            <label
+              htmlFor="message"
+              className="block text-sm font-medium text-foreground"
+            >
+              {t.message}
+            </label>
+            <Textarea
+              id="message"
+              rows={5}
+              placeholder={t.message}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* BOTTONE INVIO */}
           <Button type="submit" className="w-full">
             {status === "sending" ? t.sending : t.send}
           </Button>
 
-          {status === "sent" && <p className="text-green-500">{t.success}</p>}
-          {status === "error" && <p className="text-red-500">{t.error}</p>}
+          {/* MESSAGGI DI FEEDBACK */}
+          {status === "sent" && (
+            <p className="text-green-500 text-center">{t.success}</p>
+          )}
+          {status === "error" && (
+            <p className="text-red-500 text-center">{t.error}</p>
+          )}
         </form>
       </div>
     </section>

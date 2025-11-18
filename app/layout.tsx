@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.scaramuzzo.green"),
   title: {
     default: "Scaramuzzo | Hair Natural Beauty",
-    template: "%s • Scaramuzzo"
+    template: "%s • Scaramuzzo",
   },
   description:
     "Scopri i migliori servizi e prodotti per la cura naturale dei capelli.",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://www.scaramuzzo.green",
     siteName: "Scaramuzzo Hair Natural Beauty",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="it" suppressHydrationWarning>
       <head>
-        {/* JSON-LD Multilocation SEO – OTTIMIZZATO */}
+        {/* JSON-LD Multilocation SEO – dati reali e coerenti */}
         <Script
           id="schema-multilocation"
           type="application/ld+json"
@@ -51,125 +51,142 @@ export default function RootLayout({
               "@type": "Organization",
               "name": "Scaramuzzo Hair Natural Beauty",
               "url": "https://www.scaramuzzo.green",
-              "logo": "https://www.scaramuzzo.green/logo.png",
+              "logo":
+                "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
               "sameAs": [
                 "https://www.instagram.com/scaramuzzohairnaturalbeauty/",
-                "https://www.facebook.com/scaramuzzohairnaturalbeauty"
+                "https://www.facebook.com/scaramuzzohairnaturalbeauty",
               ],
               "department": [
-                {
-                  "@type": "HairSalon",
-                  "name": "Scaramuzzo Hair Natural Beauty – Corigliano-Rossano",
-                  "image": "https://www.scaramuzzo.green/logo.png",
-                  "telephone": "+39 0983 889488",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Via Nazionale 70",
-                    "addressLocality": "Corigliano-Rossano",
-                    "addressRegion": "CS",
-                    "postalCode": "87064",
-                    "addressCountry": "IT"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 39.6612,
-                    "longitude": 16.5186
-                  },
-                  "openingHoursSpecification": [{
-                    "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": [
-                      "Tuesday","Wednesday","Thursday","Friday","Saturday"
-                    ],
-                    "opens": "09:00",
-                    "closes": "19:00"
-                  }],
-                  "priceRange": "$$$"
-                },
-                {
-                  "@type": "HairSalon",
-                  "name": "Scaramuzzo Hair Natural Beauty – Castrovillari",
-                  "image": "https://www.scaramuzzo.green/logo.png",
-                  "telephone": "+39 0981 27228",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Corso Giuseppe Garibaldi 13",
-                    "addressLocality": "Castrovillari",
-                    "addressRegion": "CS",
-                    "postalCode": "87012",
-                    "addressCountry": "IT"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 39.816,
-                    "longitude": 16.202
-                  },
-                  "openingHoursSpecification": [{
-                    "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": [
-                      "Monday","Wednesday","Thursday","Friday","Saturday"
-                    ],
-                    "opens": "09:00",
-                    "closes": "19:00"
-                  }],
-                  "priceRange": "$$"
-                },
-                {
-                  "@type": "HairSalon",
-                  "name": "Scaramuzzo Hair Natural Beauty – Cosenza",
-                  "image": "https://www.scaramuzzo.green/logo.png",
-                  "telephone": "+39 0984 74525",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Via Monte San Michele 13",
-                    "addressLocality": "Cosenza",
-                    "addressRegion": "CS",
-                    "postalCode": "87100",
-                    "addressCountry": "IT"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 39.298,
-                    "longitude": 16.2537
-                  },
-                  "openingHoursSpecification": [{
-                    "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": [
-                      "Monday","Wednesday","Thursday","Friday","Saturday"
-                    ],
-                    "opens": "09:00",
-                    "closes": "19:00"
-                  }],
-                  "priceRange": "$$"
-                },
+                // ROMA
                 {
                   "@type": "HairSalon",
                   "name": "Scaramuzzo Hair Natural Beauty – Roma",
-                  "image": "https://www.scaramuzzo.green/logo.png",
-                  "telephone": "+39 06 69318238",
+                  "image":
+                    "https://www.scaramuzzo.green/roma-salone-hero-wide.jpg",
+                  "telephone": "+390669318238",
                   "address": {
                     "@type": "PostalAddress",
                     "streetAddress": "Via del Pellegrino 101",
                     "addressLocality": "Roma",
                     "addressRegion": "RM",
                     "postalCode": "00186",
-                    "addressCountry": "IT"
+                    "addressCountry": "IT",
                   },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 41.8948,
-                    "longitude": 12.4737
+                  "openingHoursSpecification": [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      "dayOfWeek": [
+                        "Monday",
+                        "Tuesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                      ],
+                      "opens": "10:00",
+                      "closes": "20:00",
+                    },
+                  ],
+                  "priceRange": "$$",
+                },
+
+                // CORIGLIANO-ROSSANO
+                {
+                  "@type": "HairSalon",
+                  "name":
+                    "Scaramuzzo Hair Natural Beauty – Corigliano-Rossano",
+                  "image":
+                    "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
+                  "telephone": "+390983889488",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Via Nazionale 70",
+                    "addressLocality": "Corigliano-Rossano",
+                    "addressRegion": "CS",
+                    "postalCode": "87064",
+                    "addressCountry": "IT",
                   },
-                  "openingHoursSpecification": [{
-                    "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": [
-                      "Monday","Tuesday","Thursday","Friday","Saturday"
-                    ],
-                    "opens": "10:00",
-                    "closes": "20:00"
-                  }],
-                  "priceRange": "$$$"
-                }
-              ]
+                  "openingHoursSpecification": [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      "dayOfWeek": [
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                      ],
+                      "opens": "09:00",
+                      "closes": "19:00",
+                    },
+                  ],
+                  "priceRange": "$$",
+                },
+
+                // COSENZA
+                {
+                  "@type": "HairSalon",
+                  "name": "Scaramuzzo Hair Natural Beauty – Cosenza",
+                  "image":
+                    "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
+                  "telephone": "+39098474525",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Via Monte San Michele 13/A",
+                    "addressLocality": "Cosenza",
+                    "addressRegion": "CS",
+                    "postalCode": "87100",
+                    "addressCountry": "IT",
+                  },
+                  "openingHoursSpecification": [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      "dayOfWeek": [
+                        "Monday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                      ],
+                      "opens": "09:00",
+                      "closes": "19:00",
+                    },
+                  ],
+                  "priceRange": "$$",
+                },
+
+                // CASTROVILLARI
+                {
+                  "@type": "HairSalon",
+                  "name": "Scaramuzzo Hair Natural Beauty – Castrovillari",
+                  "image":
+                    "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
+                  "telephone": "+39098127228",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Corso Giuseppe Garibaldi 13",
+                    "addressLocality": "Castrovillari",
+                    "addressRegion": "CS",
+                    "postalCode": "87012",
+                    "addressCountry": "IT",
+                  },
+                  "openingHoursSpecification": [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      "dayOfWeek": [
+                        "Monday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                      ],
+                      "opens": "09:00",
+                      "closes": "19:00",
+                    },
+                  ],
+                  "priceRange": "$$",
+                },
+              ],
             }),
           }}
         />
