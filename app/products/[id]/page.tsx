@@ -3,17 +3,16 @@ import ProductPageClient from "./ProductPageClient";
 import { productTranslations } from "../data";
 
 export type PageProps = {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 };
 
-// 🔥 SEO dinamica
+// SEO dinamica
 export async function generateMetadata(
   { params }: PageProps
 ): Promise<Metadata> {
-  const { id } = await params;
+  const { id } = params;
 
-  const product =
-    productTranslations.it.products.find((p) => p.id === id);
+  const product = productTranslations.it.products.find((p) => p.id === id);
 
   if (!product) {
     return {
@@ -42,9 +41,9 @@ export async function generateMetadata(
   };
 }
 
-// 🔥 Pagina
-export default async function Page({ params }: PageProps) {
-  const { id } = await params;
+// Pagina
+export default function Page({ params }: PageProps) {
+  const { id } = params;
 
   return <ProductPageClient id={id} />;
 }

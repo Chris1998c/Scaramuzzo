@@ -31,7 +31,6 @@ export function generateMetadata(
   };
 }
 
-// 🔥 Pagina servizio
 export default function Page({ params }: PageProps) {
   const { id } = params;
   return <ServicePageClient id={id} />;
