@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Product, productTranslations } from "../data";
+import { useCartStore } from "@/lib/store/cartStore";
 
 interface ProductPageClientProps {
   id: string;
@@ -20,12 +21,22 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   const router = useRouter();
   const [language, setLanguage] = useState<"it" | "en">("it");
   const [product, setProduct] = useState<Product | null>(null);
+  const [added, setAdded] = useState(false);
 
+  // Zustand → addItem
+  const addToCart = useCartStore((s) => s.addToCart);
+const openCart = useCartStore((s) => s.openCart);
+
+  // LINGUA
   useEffect(() => {
-    const storedLanguage = localStorage.getItem("language") as "it" | "en" | null;
+    const storedLanguage = localStorage.getItem("language") as
+      | "it"
+      | "en"
+      | null;
     if (storedLanguage) setLanguage(storedLanguage);
   }, []);
 
+  // CARICA PRODOTTO
   useEffect(() => {
     const result = productTranslations[language].products.find(
       (p) => p.id === id
@@ -33,9 +44,26 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
     setProduct(result || null);
   }, [id, language]);
 
+  // BACK
   const handleBackClick = useCallback(() => {
     router.push("/products");
   }, [router]);
+
+  // AGGIUNGI AL CARRELLO — VERSIONE ZUSTAND
+  const handleAddToCart = () => {
+  if (!product) return;
+
+  addToCart({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    image: product.image,
+  });
+
+  openCart();
+  setAdded(true);
+  setTimeout(() => setAdded(false), 1200);
+};
 
   if (!product) {
     return (
@@ -50,6 +78,8 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   return (
     <section className="bg-background text-foreground py-20">
       <div className="container mx-auto px-4 max-w-6xl grid md:grid-cols-2 gap-16 items-start">
+
+        {/* IMMAGINE */}
         <motion.div
           initial="hidden"
           animate="show"
@@ -68,6 +98,7 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
           </div>
         </motion.div>
 
+        {/* TESTO */}
         <motion.div
           initial="hidden"
           animate="show"
@@ -86,7 +117,14 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
             {product.description}
           </p>
 
+          {/* PREZZO */}
+          <p className="text-2xl font-semibold mt-2">
+            € {product.price.toFixed(2)}
+          </p>
+
+          {/* DETTAGLI */}
           <div className="space-y-6 pt-6 border-t border-border/40">
+
             {product.detailedDescription && (
               <div>
                 <h2 className="text-xl font-semibold mb-2">
@@ -144,6 +182,14 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
               </details>
             )}
           </div>
+
+          {/* BOTTONE */}
+          <button
+            onClick={handleAddToCart}
+            className="w-full bg-black text-white py-4 rounded-xl text-lg font-medium hover:bg-neutral-900 transition"
+          >
+            {added ? "Aggiunto ✔" : "Aggiungi al carrello"}
+          </button>
 
           <Button
             onClick={handleBackClick}

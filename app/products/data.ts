@@ -11,6 +11,7 @@ export interface Product {
   howToUse: string;
   keyActives: string;
   inci: string;
+  price: number; // <— AGGIUNTO
 }
 
 export const productTranslations = {
@@ -22,6 +23,7 @@ export const productTranslations = {
       {
         id: "shampoo-riflessante-henne",
         name: "Shampoo Riflessante con Estratto di Hennè",
+        price: 20,
         description:
           "Shampoo ristrutturante con puro estratto di hennè per riflessi luminosi.",
         image: "/shampoo-hennè-nuovo.webp",
@@ -36,8 +38,7 @@ export const productTranslations = {
         ],
         howToUse:
           "Applicare su cute e lunghezze bagnate, massaggiare, lasciare agire 2–4 minuti, risciacquare.",
-        keyActives:
-          "Estratto di hennè, Polyquaternium-10, condizionanti delicati.",
+        keyActives: "Estratto di hennè, condizionanti delicati.",
         inci:
           "Aqua, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Lawsonia Inermis Extract, Polyquaternium-10, Cetrimonium Chloride, Parfum, Phenoxyethanol, Sodium Chloride.",
       },
@@ -48,6 +49,7 @@ export const productTranslations = {
       {
         id: "shampoo-emolliente",
         name: "Shampoo Emolliente",
+        price: 20,
         description:
           "Detersione delicata per cute sensibile e capelli secchi o fragili.",
         image: "/shampoo-emo-nuovo.webp",
@@ -62,18 +64,18 @@ export const productTranslations = {
         ],
         howToUse:
           "Applicare sui capelli bagnati, massaggiare, lasciare agire 4 minuti e risciacquare.",
-        keyActives:
-          "Estratto di avena, estratto di camomilla, Polyquaternium-10.",
+        keyActives: "Estratto di avena, estratto di camomilla.",
         inci:
           "Aqua, Avena Sativa Extract, Chamomilla Recutita Extract, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Cetrimonium Chloride, Glycerin, Polyquaternium-10, Dimethiconol, Parfum, Phenoxyethanol, Sodium Chloride.",
       },
 
       // -------------------------------------------------------
-      // SHAMPOO 3 — PURIFICANTE SEBOREGOLATORE
+      // SHAMPOO 3 — PURIFICANTE
       // -------------------------------------------------------
       {
         id: "shampoo-purificante-seboregolatore",
         name: "Shampoo Purificante Seboregolatore",
+        price: 20,
         description:
           "Formula purificante con estratti vegetali per cute grassa.",
         image: "/shampoo-purificante-nuovo.webp",
@@ -100,6 +102,7 @@ export const productTranslations = {
       {
         id: "shampoo-energizzante",
         name: "Shampoo Energizzante – Stimolante",
+        price: 20,
         description:
           "Formula rinforzante con rosmarino, mentolo e attivi stimolanti.",
         image: "/sh-energizzante-nuovo.webp",
@@ -115,17 +118,18 @@ export const productTranslations = {
         howToUse:
           "Applicare sui capelli bagnati, massaggiare, lasciare agire 2 minuti, risciacquare.",
         keyActives:
-          "Rosmarino, mentolo, mentil lattato, Polyquaternium-7.",
+          "Rosmarino, mentolo, mentil lattato.",
         inci:
           "Aqua, Rosmarinus Officinalis Extract, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Menthyl Lactate, Polyquaternium-7, Menthol, Parfum, Phenoxyethanol.",
       },
 
       // -------------------------------------------------------
-      // SHAMPOO 5 — RIGENERANTE BERGAMOTTO
+      // SHAMPOO 5 — RISTRUTTURANTE BERGAMOTTO
       // -------------------------------------------------------
       {
         id: "shampoo-rigenerante-bergamotto",
         name: "Shampoo Ristrutturante al Bergamotto",
+        price: 20,
         description:
           "Detersione delicata e nutriente per capelli sensibilizzati.",
         image: "/shampoo-ristrutturante-nuovo.webp",
@@ -140,7 +144,7 @@ export const productTranslations = {
         ],
         howToUse:
           "Applicare sui capelli bagnati, massaggiare, lasciare 4 minuti e risciacquare.",
-        keyActives: "Olio di bergamotto, Polyquaternium-10.",
+        keyActives: "Olio di bergamotto.",
         inci:
           "Aqua, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Polyquaternium-10, Cetrimonium Chloride, Dimethiconol, Parfum, Phenoxyethanol, Sodium Chloride, Citrus Bergamia Oil.",
       },
@@ -151,6 +155,7 @@ export const productTranslations = {
       {
         id: "maschera-riflessante-henne",
         name: "Maschera Riflessante con Estratto di Hennè",
+        price: 23,
         description: "Impacco riflessante con hennè puro per luce e vitalità.",
         image: "/mask-hennè-nuovo.webp",
         heroTagline: "Riflessi spettacolari e fibra ristrutturata.",
@@ -165,17 +170,18 @@ export const productTranslations = {
         howToUse:
           "Applicare su lunghezze e punte dopo lo shampoo, lasciare agire 5 minuti e risciacquare.",
         keyActives:
-          "Estratto di hennè, Polyquaternium-10, olio di mandorla.",
+          "Estratto di hennè, olio di mandorla.",
         inci:
           "Lawsonia Inermis Leaves Extract, Myristyl Alcohol, Cetyl Alcohol, Prunus Amygdalus Dulcis Extract, Polyquaternium-10, Cetrimonium Chloride, Parfum, Phenoxyethanol, Tetra-di-t-Butylhydroxyhydrocinnamate.",
       },
 
       // -------------------------------------------------------
-      // MASCHERA 2 — NUTRIENTE OLIO D’OLIVA
+      // MASCHERA 2 — OLIO D'OLIVA
       // -------------------------------------------------------
       {
         id: "maschera-nutriente-oliva",
         name: "Maschera Nutriente all’Olio d’Oliva",
+        price: 23,
         description:
           "Impacco nutriente e idratante con olio d’oliva e mandorla.",
         image: "/mask-nutri-nuovo.webp",
@@ -197,11 +203,12 @@ export const productTranslations = {
       },
 
       // -------------------------------------------------------
-      // MASCHERA 3 — RISTRUTTURANTE BERGAMOTTO
+      // MASCHERA 3 — BERGAMOTTO
       // -------------------------------------------------------
       {
         id: "maschera-ristrutturante-bergamotto",
         name: "Maschera Ristrutturante con Estratto di Bergamotto",
+        price: 23,
         description:
           "Impacco ristrutturante per capelli danneggiati e trattati.",
         image: "/mask-ristrutturante-nuovo.webp",
@@ -228,6 +235,7 @@ export const productTranslations = {
       {
         id: "styling-cream-curl",
         name: "Styling Cream Curl",
+        price: 25,
         description:
           "Crema modellante idratante per ricci definiti e morbidi.",
         image: "/styling-nuovo.webp",
@@ -242,8 +250,7 @@ export const productTranslations = {
         ],
         howToUse:
           "Applicare su capelli umidi o asciutti, distribuire sulle lunghezze, modellare. Non risciacquare.",
-        keyActives:
-          "Aloe vera, Polyquaternium-7, PVP/VA, olio di mandorla.",
+        keyActives: "Aloe vera, olio di mandorla.",
         inci:
           "Aqua, Sodium Chloride, Alcohol Denat., Glycerin, Propylene Glycol, Aloe Barbadensis Leaf Extract, Malva Sylvestris Extract, PVP/VA Copolymer, Polyquaternium-7, Prunus Amygdalus Dulcis Oil, Polyacrylamide, C13-14 Isoparaffin, Laureth-7, Phenoxyethanol, Parfum.",
       },
@@ -254,6 +261,7 @@ export const productTranslations = {
       {
         id: "crema-mani-liquirizia",
         name: "Crema Idratante Mani con Estratto di Liquirizia",
+        price: 15,
         description:
           "Crema mani nutriente e uniformante con liquirizia.",
         image: "/crema-mani-nuovo.webp",
@@ -280,6 +288,7 @@ export const productTranslations = {
       {
         id: "lozione-anticaduta",
         name: "Lozione Intensiva Anticaduta",
+        price: 40,
         description:
           "Lozione rinforzante con peptidi vegetali ed estratti stimolanti.",
         image: "/lozione-nuovo.webp",
@@ -302,20 +311,19 @@ export const productTranslations = {
     ],
   },
 
-  // ======================================================
-  // VERSIONE INGLESE (EN)
-  // ======================================================
+  // ---------------------
+  //    VERSIONE EN
+  // ---------------------
   en: {
     products: [
-      // -------------------------------------------------------
-      // SHAMPOO 1 — HENNA REFLECTIVE SHAMPOO
       // -------------------------------------------------------
       {
         id: "shampoo-riflessante-henne",
         name: "Reflective Henna Shampoo",
+        price: 20,
         description:
           "Strengthening shampoo with pure henna extract for bright reflections.",
-       image: "/shampoo-hennè-nuovo.webp",
+        image: "/shampoo-hennè-nuovo.webp",
         heroTagline: "Stronger hair, natural shine and vibrant tones.",
         detailedDescription:
           "The Reflective Henna Shampoo enhances and preserves henna-based tones while strengthening the hair fiber. Lawsonia inermis extract, rich in natural sugars, boosts shine, body and vitality, making it ideal for dull or fine hair.",
@@ -327,22 +335,21 @@ export const productTranslations = {
         ],
         howToUse:
           "Apply to wet scalp and lengths, massage gently, leave on 2–4 minutes and rinse.",
-        keyActives:
-          "Henna extract, Polyquaternium-10, gentle conditioning agents.",
+        keyActives: "Henna extract, gentle conditioning agents.",
         inci:
           "Aqua, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Lawsonia Inermis Extract, Polyquaternium-10, Cetrimonium Chloride, Parfum, Phenoxyethanol, Sodium Chloride.",
       },
 
       // -------------------------------------------------------
-      // SHAMPOO 2 — EMOLLIENTE
-      // -------------------------------------------------------
       {
         id: "shampoo-emolliente",
         name: "Soothing Emollient Shampoo",
+        price: 20,
         description:
           "Gentle cleanser for sensitive scalp and dry, fragile hair.",
-         image: "/shampoo-emo-nuovo.webp",
-        heroTagline: "Immediate softness and comfort for sensitive scalp.",
+        image: "/shampoo-emo-nuovo.webp",
+        heroTagline:
+          "Immediate softness and comfort for sensitive scalp.",
         detailedDescription:
           "This soothing shampoo gently cleanses sensitive scalps and dry or fragile hair. Oat and chamomile extracts calm the skin while lightweight conditioning agents leave the hair soft, hydrated and easy to detangle.",
         benefits: [
@@ -353,22 +360,21 @@ export const productTranslations = {
         ],
         howToUse:
           "Apply to wet hair, massage, leave on for 4 minutes and rinse.",
-        keyActives:
-          "Oat extract, chamomile extract, Polyquaternium-10.",
+        keyActives: "Oat extract, chamomile extract.",
         inci:
           "Aqua, Avena Sativa Extract, Chamomilla Recutita Extract, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Cetrimonium Chloride, Glycerin, Polyquaternium-10, Dimethiconol, Parfum, Phenoxyethanol, Sodium Chloride.",
       },
 
       // -------------------------------------------------------
-      // SHAMPOO 3 — PURIFYING SEBUM-REGULATING
-      // -------------------------------------------------------
       {
         id: "shampoo-purificante-seboregolatore",
         name: "Purifying Sebum-Regulating Shampoo",
+        price: 20,
         description:
           "Purifying formula with botanical extracts for oily scalp.",
-       image: "/shampoo-purificante-nuovo.webp",
-        heroTagline: "Fresh, balanced and lightweight scalp.",
+        image: "/shampoo-purificante-nuovo.webp",
+        heroTagline:
+          "Fresh, balanced and lightweight scalp.",
         detailedDescription:
           "A purifying shampoo for normal to oily hair. Bergamot, nettle, mallow and licorice extracts help reduce excess sebum and cleanse the scalp from impurities while maintaining a fresh, light sensation.",
         benefits: [
@@ -379,21 +385,19 @@ export const productTranslations = {
         ],
         howToUse:
           "Apply to wet hair, massage, leave on for 2 minutes and rinse.",
-        keyActives:
-          "Bergamot, nettle, mallow, licorice extracts.",
+        keyActives: "Bergamot, nettle, mallow, licorice extracts.",
         inci:
           "Aqua, Citrus Bergamia Extract, Urtica Dioica Extract, Malva Sylvestris Extract, Glycyrrhiza Glabra Extract, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Polyquaternium-10, Cetrimonium Chloride, Parfum, Phenoxyethanol, Sodium Chloride.",
       },
 
       // -------------------------------------------------------
-      // SHAMPOO 4 — ENERGIZING
-      // -------------------------------------------------------
       {
         id: "shampoo-energizzante",
         name: "Energizing Stimulating Shampoo",
+        price: 20,
         description:
           "Strengthening formula with rosemary, menthol and stimulating actives.",
-          image: "/sh-energizzante-nuovo.webp",
+        image: "/sh-energizzante-nuovo.webp",
         heroTagline: "Refreshing boost and stronger hair.",
         detailedDescription:
           "A stimulating shampoo designed to strengthen the hair fiber and boost microcirculation. Rosemary, menthol crystals and menthyl lactate refresh and tone the scalp, promoting stronger, healthier and more vigorous hair.",
@@ -406,20 +410,19 @@ export const productTranslations = {
         howToUse:
           "Apply to wet hair, massage, leave on 2 minutes and rinse.",
         keyActives:
-          "Rosemary extract, menthol, menthyl lactate, Polyquaternium-7.",
+          "Rosemary extract, menthol, menthyl lactate.",
         inci:
           "Aqua, Rosmarinus Officinalis Extract, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Menthyl Lactate, Polyquaternium-7, Menthol, Parfum, Phenoxyethanol.",
       },
 
       // -------------------------------------------------------
-      // SHAMPOO 5 — REGENERATING BERGAMOT
-      // -------------------------------------------------------
       {
         id: "shampoo-rigenerante-bergamotto",
         name: "Regenerating Bergamot Shampoo",
+        price: 20,
         description:
           "Nourishing and gentle cleanser for chemically-treated hair.",
-       image: "/shampoo-ristrutturante-nuovo.webp",
+        image: "/shampoo-ristrutturante-nuovo.webp",
         heroTagline: "Softness, shine and deep regeneration.",
         detailedDescription:
           "A regenerating formula enriched with bergamot oil. Ideal for hair sensitized by chemical treatments, it nourishes, softens and enhances shine without irritating the scalp.",
@@ -431,22 +434,21 @@ export const productTranslations = {
         ],
         howToUse:
           "Apply to wet hair, massage, leave on 4 minutes and rinse.",
-        keyActives:
-          "Bergamot oil, Polyquaternium-10.",
+        keyActives: "Bergamot oil.",
         inci:
           "Aqua, Sodium Coceth Sulfate, Cocamidopropyl Betaine, Polyquaternium-10, Cetrimonium Chloride, Dimethiconol, Parfum, Phenoxyethanol, Sodium Chloride, Citrus Bergamia Oil.",
       },
 
       // -------------------------------------------------------
-      // MASK 1 — HENNA REFLECTIVE
-      // -------------------------------------------------------
       {
         id: "maschera-riflessante-henne",
         name: "Reflective Henna Mask",
+        price: 23,
         description:
           "Nourishing mask with pure henna extract and plant oils.",
-     image: "/mask-hennè-nuovo.webp",
-        heroTagline: "Shine, softness and vibrant reflections.",
+        image: "/mask-hennè-nuovo.webp",
+        heroTagline:
+          "Shine, softness and vibrant reflections.",
         detailedDescription:
           "A nourishing mask enriched with natural henna extract. It restores the hair fiber, boosts shine and enhances both natural and cosmetic reflections.",
         benefits: [
@@ -464,15 +466,15 @@ export const productTranslations = {
       },
 
       // -------------------------------------------------------
-      // MASK 2 — NOURISHING OLIVE MASK
-      // -------------------------------------------------------
       {
         id: "maschera-nutriente-oliva",
         name: "Nourishing Olive Mask",
+        price: 23,
         description:
           "Deep hydrating mask with olive oil and almond extract.",
-         image: "/mask-nutri-nuovo.webp",
-        heroTagline: "Elasticity, softness and intense nourishment.",
+        image: "/mask-nutri-nuovo.webp",
+        heroTagline:
+          "Elasticity, softness and intense nourishment.",
         detailedDescription:
           "A rich and deeply hydrating mask formulated with olive oil, rich in essential fatty acids and antioxidants. It penetrates the hair fiber, improving elasticity, softness and overall hair health. Almond extract and panthenol enhance smoothness and shine.",
         benefits: [
@@ -490,15 +492,15 @@ export const productTranslations = {
       },
 
       // -------------------------------------------------------
-      // MASK 3 — RESTRUCTURING BERGAMOT MASK
-      // -------------------------------------------------------
       {
         id: "maschera-ristrutturante-bergamotto",
         name: "Restructuring Bergamot Mask",
+        price: 23,
         description:
           "Intensive restructuring mask for damaged or treated hair.",
-       image: "/mask-ristrutturante-nuovo.webp",
-        heroTagline: "Regenerated fiber, protection and intense shine.",
+        image: "/mask-ristrutturante-nuovo.webp",
+        heroTagline:
+          "Regenerated fiber, protection and intense shine.",
         detailedDescription:
           "An intensive restructuring treatment ideal for chemically treated or damaged hair. Bergamot oil enhances shine and provides protection, while conditioning agents strengthen and smooth the hair fiber.",
         benefits: [
@@ -508,7 +510,7 @@ export const productTranslations = {
           "Ideal after chemical treatments.",
         ],
         howToUse:
-          "Apply to mid-lengths and ends. Leave on for 5 minutes and rinse.",
+          "Apply to mid-lengths and ends. Leave on 5 minutes and rinse.",
         keyActives:
           "Bergamot oil, almond extract, film-forming conditioners.",
         inci:
@@ -516,17 +518,17 @@ export const productTranslations = {
       },
 
       // -------------------------------------------------------
-      // STYLING — CURL CREAM
-      // -------------------------------------------------------
       {
         id: "styling-cream-curl",
         name: "Styling Cream Curl",
+        price: 25,
         description:
           "Hydrating curl-defining cream for soft, bouncy curls.",
         image: "/styling-nuovo.webp",
-        heroTagline: "Defined curls, natural elasticity and zero frizz.",
+        heroTagline:
+          "Defined curls, natural elasticity and zero frizz.",
         detailedDescription:
-          "A lightweight curl cream designed to define, shape and hydrate curls without weighing them down. Formulated with Sepigel, aloe vera, mallow extract, Polyquaternium-7 and almond oil, it controls frizz, enhances curl formation and provides lasting softness.",
+          "A lightweight curl cream designed to define, shape and hydrate curls without weighing them down. Formulated with Sepigel, aloe vera, mallow extract and almond oil, it controls frizz, enhances curl formation and provides lasting softness.",
         benefits: [
           "Enhances curl definition.",
           "Reduces frizz with lasting hydration.",
@@ -536,17 +538,16 @@ export const productTranslations = {
         howToUse:
           "Apply to damp or dry hair, distribute evenly through lengths and style. Do not rinse.",
         keyActives:
-          "Aloe vera, mallow extract, Polyquaternium-7, PVP/VA copolymer, almond oil.",
+          "Aloe vera, mallow extract, almond oil.",
         inci:
           "Aqua, Sodium Chloride, Alcohol Denat., Glycerin, Propylene Glycol, Aloe Barbadensis Leaf Extract, Malva Sylvestris Extract, PVP/VA Copolymer, Polyquaternium-7, Prunus Amygdalus Dulcis Oil, Polyacrylamide, C13-14 Isoparaffin, Laureth-7, Phenoxyethanol, Parfum.",
       },
 
       // -------------------------------------------------------
-      // HAND CREAM — LICORICE
-      // -------------------------------------------------------
       {
         id: "crema-mani-liquirizia",
         name: "Hydrating Hand Cream with Licorice Extract",
+        price: 15,
         description:
           "Nourishing and brightening hand cream for dry, chapped skin.",
         image: "/crema-mani-nuovo.webp",
@@ -568,15 +569,15 @@ export const productTranslations = {
       },
 
       // -------------------------------------------------------
-      // ANTI-HAIR LOSS LOTION — EN
-      // -------------------------------------------------------
       {
         id: "lozione-anticaduta",
         name: "Intensive Anti-Hair Loss Lotion",
+        price: 40,
         description:
           "Stimulating cosmetic lotion with bioactive peptides and plant extracts.",
         image: "/lozione-nuovo.webp",
-        heroTagline: "Stimulated scalp, stronger roots, reduced fall.",
+        heroTagline:
+          "Stimulated scalp, stronger roots, reduced fall.",
         detailedDescription:
           "A powerful anti-hair loss lotion formulated with stimulating plant extracts and bioactive peptide complexes derived from hydrolyzed grains and seeds. It improves microcirculation, reinforces the follicle and helps reduce excessive shedding.",
         benefits: [
