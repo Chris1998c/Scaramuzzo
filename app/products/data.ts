@@ -22,11 +22,11 @@ export const productTranslations = {
       // -------------------------------------------------------
       {
         id: "shampoo-riflessante-henne",
-        name: "Shampoo Riflessante con Estratto di Hennè",
+        name: "Shampoo Riflessante con Estratto di Henne",
         price: 20,
         description:
           "Shampoo ristrutturante con puro estratto di hennè per riflessi luminosi.",
-        image: "/shampoo-hennè-nuovo.webp",
+        image: "/shampoo-henne-nuovo.webp",
         heroTagline: "Riflessi intensi, luce naturale e fibra più forte.",
         detailedDescription:
           "Lo Shampoo Riflessante con Estratto di Hennè mantiene vivi e luminosi i riflessi ottenuti con hennè ed erbe botaniche. L’estratto di Lawsonia inermis, ricco di zuccheri naturali, rinforza la fibra, aumenta la brillantezza e dona corpo ai capelli spenti o fini.",
@@ -157,7 +157,7 @@ export const productTranslations = {
         name: "Maschera Riflessante con Estratto di Hennè",
         price: 23,
         description: "Impacco riflessante con hennè puro per luce e vitalità.",
-        image: "/mask-hennè-nuovo.webp",
+        image: "/mask-henne-nuovo.webp",
         heroTagline: "Riflessi spettacolari e fibra ristrutturata.",
         detailedDescription:
           "La Maschera Riflessante con Estratto di Hennè mantiene e potenzia i toni dell’hennè, ristrutturando la fibra grazie agli zuccheri naturali della Lawsonia. Dona morbidezza, luminosità e vitalità alle lunghezze.",
@@ -323,7 +323,7 @@ export const productTranslations = {
         price: 20,
         description:
           "Strengthening shampoo with pure henna extract for bright reflections.",
-        image: "/shampoo-hennè-nuovo.webp",
+        image: "/shampoo-henne-nuovo.webp",
         heroTagline: "Stronger hair, natural shine and vibrant tones.",
         detailedDescription:
           "The Reflective Henna Shampoo enhances and preserves henna-based tones while strengthening the hair fiber. Lawsonia inermis extract, rich in natural sugars, boosts shine, body and vitality, making it ideal for dull or fine hair.",
@@ -446,7 +446,7 @@ export const productTranslations = {
         price: 23,
         description:
           "Nourishing mask with pure henna extract and plant oils.",
-        image: "/mask-hennè-nuovo.webp",
+        image: "/mask-henne-nuovo.webp",
         heroTagline:
           "Shine, softness and vibrant reflections.",
         detailedDescription:
