@@ -13,7 +13,7 @@ export async function startStripeCheckout(cart: CartItem[]): Promise<void> {
   }
 
   try {
-    const response = await fetch("/api/checkout/stripe", {
+    const response = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ cart }),
