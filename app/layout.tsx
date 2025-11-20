@@ -17,18 +17,41 @@ const mono = localFont({
   weight: "100 900",
 });
 
+// 🧠 SEO + OG + TWITTER premium
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.scaramuzzo.green"),
+
   title: {
     default: "Scaramuzzo | Hair Natural Beauty",
     template: "%s • Scaramuzzo",
   },
+
   description:
-    "Scopri i migliori servizi e prodotti per la cura naturale dei capelli.",
+    "Scaramuzzo Hair Natural Beauty — prodotti premium, servizi professionali e trattamenti avanzati per la cura naturale dei capelli.",
+
   openGraph: {
     type: "website",
     url: "https://www.scaramuzzo.green",
+    title: "Scaramuzzo Hair Natural Beauty",
+    description:
+      "Scopri i nostri prodotti professionali, trattamenti naturali e servizi dedicati alla salute dei capelli.",
     siteName: "Scaramuzzo Hair Natural Beauty",
+    images: [
+      {
+        url: "/og-default.webp",
+        width: 1200,
+        height: 630,
+        alt: "Scaramuzzo Hair Natural Beauty",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Scaramuzzo Hair Natural Beauty",
+    description:
+      "Prodotti professionali e trattamenti naturali per i capelli.",
+    images: ["/og-default.webp"],
   },
 };
 
@@ -40,7 +63,7 @@ export default function RootLayout({
   return (
     <html lang="it" suppressHydrationWarning>
       <head>
-        {/* JSON-LD Multilocation SEO – dati reali e coerenti */}
+        {/* JSON-LD Multilocation SEO – mantiene il tuo */}
         <Script
           id="schema-multilocation"
           type="application/ld+json"

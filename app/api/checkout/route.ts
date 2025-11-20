@@ -2,7 +2,18 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import type { CartItem } from "@/lib/store/cartStore";
 
+export const runtime = "nodejs";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+// Tipo per metadata del webhook
+type OrderItem = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+};
 
 export async function POST(request: Request) {
   try {
@@ -21,8 +32,19 @@ export async function POST(request: Request) {
       0
     );
 
-    // 🔥 SPEDIZIONE: GRATIS sopra 49€
+    // --- SPEDIZIONE: GRATIS sopra 49€ ---
     const shippingCost = subtotal >= 49 ? 0 : 7;
+
+    // --- COSTRUZIONE ITEMS PER METADATA ---
+    const metadataItems: OrderItem[] = cart.map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.qty,
+      image: item.image.startsWith("http")
+        ? item.image
+        : `${process.env.NEXT_PUBLIC_SITE_URL}${item.image}`,
+    }));
 
     // --- LINE ITEMS PRODOTTI ---
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
@@ -49,7 +71,9 @@ export async function POST(request: Request) {
           currency: "eur",
           product_data: {
             name: "Spedizione",
-            images: [`${process.env.NEXT_PUBLIC_SITE_URL}/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp`],
+            images: [
+              `${process.env.NEXT_PUBLIC_SITE_URL}/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp`
+            ],
           },
           unit_amount: shippingCost * 100,
         },
@@ -67,6 +91,14 @@ export async function POST(request: Request) {
       shipping_address_collection: {
         allowed_countries: ["IT", "FR", "DE", "ES", "PT", "BE", "NL", "AT"],
       },
+
+      // *** METADATA ESSENZIALI ***
+      metadata: {
+        items: JSON.stringify(metadataItems),
+        shippingCost: shippingCost.toString(),
+        subtotal: subtotal.toString(),
+      },
+
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart`,
     });

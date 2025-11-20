@@ -25,6 +25,9 @@ export default function Footer() {
       products: "Prodotti",
       herbs: "Erbe & Botanica",
       contact: "Contatti",
+      privacy: "Privacy Policy",
+      cookie: "Cookie Policy",
+      terms: "Termini & Condizioni",
       openingHoursRoma:
         "Orari: chiuso mercoledì e domenica · lun-mar-gio-ven-sab 10:00-20:00",
       openingHoursCorigliano:
@@ -47,6 +50,9 @@ export default function Footer() {
       products: "Products",
       herbs: "Herbs & Botanicals",
       contact: "Contact",
+      privacy: "Privacy Policy",
+      cookie: "Cookie Policy",
+      terms: "Terms & Conditions",
       openingHoursRoma:
         "Hours: closed Wednesday & Sunday · Mon-Tue-Thu-Fri-Sat 10:00-20:00",
       openingHoursCorigliano:
@@ -163,6 +169,24 @@ export default function Footer() {
                   {t.contact}
                 </Link>
               </li>
+
+              {/* 🔥 AGGIUNTA LEGALE */}
+              <li>
+                <Link href="/privacy" className="hover:underline">
+                  {t.privacy}
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookie" className="hover:underline">
+                  {t.cookie}
+                </Link>
+              </li>
+              <li>
+                <Link href="/termini" className="hover:underline">
+                  {t.terms}
+                </Link>
+              </li>
+
               <li>
                 <a
                   href="https://www.instagram.com/scaramuzzohairnaturalbeauty/"

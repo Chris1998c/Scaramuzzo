@@ -4,21 +4,20 @@ export default function robots(): MetadataRoute.Robots {
   const base = "https://www.scaramuzzo.green";
 
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: [
-          "/checkout",
-          "/checkout/*",
-          "/cart",
-          "/api/*",
-          "/404",
-          "/500"
-        ],
-      },
-    ],
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: [
+        "/checkout",
+        "/checkout/*",
+        "/cart",
+        "/api/*",
+        "/404",
+        "/500",
+        "/checkout/success",
+        "/checkout/cancel",
+      ],
+    },
     sitemap: `${base}/sitemap.xml`,
-    host: base,
   };
 }

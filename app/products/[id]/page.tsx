@@ -26,9 +26,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   return {
     title: `${product.name} • Scaramuzzo Hair Natural Beauty`,
     description: product.description,
-
     openGraph: {
-      type: "website", // ← QUI IL FIX
+      type: "website",
       url: `https://www.scaramuzzo.green/products/${id}`,
       title: product.name,
       description: product.description,
@@ -41,22 +40,67 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
         },
       ],
     },
-
     twitter: {
       card: "summary_large_image",
       title: product.name,
       description: product.description,
       images: [absoluteImage],
     },
-
     alternates: {
       canonical: `https://www.scaramuzzo.green/products/${id}`,
     },
   };
 }
 
-// === PAGINA DINAMICA ===
+// ==========================================
+// ✔️ PAGINA DINAMICA + SCHEMA.ORG PRODUCT
+// ==========================================
 export default async function Page(props: PageProps) {
   const { id } = await props.params;
-  return <ProductPageClient id={id} />;
+
+  const product =
+    productTranslations.it.products.find((p) => p.id === id) ||
+    productTranslations.en.products.find((p) => p.id === id);
+
+  // ⚠️ Se non trovato
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Prodotto non trovato.
+      </div>
+    );
+  }
+
+  // ✅ JSON-LD dinamico Schema.org
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: `https://www.scaramuzzo.green${product.image}`,
+    description: product.description,
+    brand: {
+      "@type": "Brand",
+      name: "Scaramuzzo Hair Natural Beauty",
+    },
+    sku: product.id,
+    offers: {
+      "@type": "Offer",
+      url: `https://www.scaramuzzo.green/products/${product.id}`,
+      priceCurrency: "EUR",
+      price: product.price,
+      availability: "https://schema.org/InStock",
+    },
+  };
+
+  return (
+    <>
+      {/* JSON-LD per SEO reale */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <ProductPageClient id={id} />
+    </>
+  );
 }
