@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import type { CartItem } from "@/lib/store/cartStore";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: Request) {
   try {
@@ -15,13 +15,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // --- CALCOLI ---
-    const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
-    const shippingCost = subtotal >= 39 ? 0 : 7;
+    // --- CALCOLO SUBTOTALE ---
+    const subtotal = cart.reduce(
+      (acc, item) => acc + item.price * item.qty,
+      0
+    );
 
-    // --- LINE ITEMS ---
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = cart.map(
-      (item) => ({
+    // 🔥 SPEDIZIONE: GRATIS sopra 49€
+    const shippingCost = subtotal >= 49 ? 0 : 7;
+
+    // --- LINE ITEMS PRODOTTI ---
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
+      cart.map((item) => ({
         price_data: {
           currency: "eur",
           product_data: {
@@ -29,25 +34,22 @@ export async function POST(request: Request) {
             images: [
               item.image.startsWith("http")
                 ? item.image
-                : `${process.env.NEXT_PUBLIC_SITE_URL}${item.image}`,
+                : `${process.env.NEXT_PUBLIC_SITE_URL}${item.image}`
             ],
           },
           unit_amount: Math.round(item.price * 100),
         },
         quantity: item.qty,
-      })
-    );
+      }));
 
-    // --- SPEDIZIONE ---
+    // --- LINE ITEM SPEDIZIONE ---
     if (shippingCost > 0) {
       lineItems.push({
         price_data: {
           currency: "eur",
           product_data: {
             name: "Spedizione",
-            images: [
-              `${process.env.NEXT_PUBLIC_SITE_URL}/logo.webp` // <— IMMAGINE BRAND PREMIUM
-            ],
+            images: [`${process.env.NEXT_PUBLIC_SITE_URL}/logo.webp`],
           },
           unit_amount: shippingCost * 100,
         },
@@ -55,25 +57,27 @@ export async function POST(request: Request) {
       });
     }
 
-    // --- SESSIONE STRIPE ---
+    // --- CREA SESSIONE STRIPE ---
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
       line_items: lineItems,
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/success`,
+      allow_promotion_codes: true,
+      billing_address_collection: "required",
+      shipping_address_collection: {
+        allowed_countries: ["IT", "FR", "DE", "ES", "PT", "BE", "NL", "AT"],
+      },
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart`,
     });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    console.error("Stripe error:", error);
+    console.error("🔥 Stripe Checkout ERROR:", error);
 
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Errore durante la creazione del checkout",
+        error: error instanceof Error ? error.message : "Errore checkout Stripe",
       },
       { status: 500 }
     );

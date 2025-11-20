@@ -38,7 +38,7 @@ export const useCartStore = create<CartState>()(
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
 
-      // AGGIUNTA AL CARRELLO
+      // ➕ AGGIUNGI AL CARRELLO
       addToCart: (item) => {
         const items = get().items;
         const existing = items.find((i) => i.id === item.id);
@@ -52,13 +52,13 @@ export const useCartStore = create<CartState>()(
         set({ items: updated, isOpen: true });
       },
 
-      // RIMUOVI
+      // 🗑 RIMUOVI
       removeFromCart: (id) =>
         set({
           items: get().items.filter((i) => i.id !== id),
         }),
 
-      // +1
+      // ➕ +1
       increaseQty: (id) =>
         set({
           items: get().items.map((i) =>
@@ -66,7 +66,7 @@ export const useCartStore = create<CartState>()(
           ),
         }),
 
-      // -1
+      // ➖ -1
       decreaseQty: (id) =>
         set({
           items: get().items
@@ -80,27 +80,34 @@ export const useCartStore = create<CartState>()(
 
       // 📌 SUBTOTALE
       getSubtotal: () =>
-        get().items.reduce((acc, item) => acc + item.price * item.qty, 0),
+        get().items.reduce(
+          (acc, item) => acc + item.price * item.qty,
+          0
+        ),
 
-      // 📌 SPEDIZIONE
+      // 📌 SPEDIZIONE: 7€ sotto 49€, gratis sopra
       getShipping: () => {
-        const subtotal = get()
-          .items.reduce((acc, item) => acc + item.price * item.qty, 0);
+        const subtotal = get().items.reduce(
+          (acc, item) => acc + item.price * item.qty,
+          0
+        );
 
-        return subtotal >= 39 ? 0 : 7;
+        return subtotal >= 49 ? 0 : 7;
       },
 
-      // 📌 TOTALE
+      // 📌 TOTALE FINALE
       getTotal: () => {
-        const subtotal = get()
-          .items.reduce((acc, item) => acc + item.price * item.qty, 0);
-
-        const shipping = subtotal >= 39 ? 0 : 7;
+        const subtotal = get().items.reduce(
+          (acc, item) => acc + item.price * item.qty,
+          0
+        );
+        const shipping = subtotal >= 49 ? 0 : 7;
 
         return subtotal + shipping;
       },
     }),
-
-    { name: "scaramuzzo-cart" }
+    {
+      name: "scaramuzzo-cart",
+    }
   )
 );

@@ -1,20 +1,21 @@
-import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { NextResponse } from "next/server";
 
-export const runtime = "edge";
+// ❗ IL WEBHOOK DEVE ESSERE NODE, NON EDGE
+export const runtime = "nodejs";
 
+// Stripe inizializzato SENZA apiVersion (usa quella del tuo account)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   const sig = req.headers.get("stripe-signature");
 
   if (!sig) {
-    return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+    return NextResponse.json({ error: "Missing Stripe Signature" }, { status: 400 });
   }
 
   const body = await req.text();
 
-  // Tipo sicuro per errore Stripe
   let event: Stripe.Event;
 
   try {
@@ -24,29 +25,29 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (error) {
-    const err = error as Error; // 👈 Nessun ANY
+    const err = error as Error;
     return NextResponse.json(
-      { error: `Webhook error: ${err.message}` },
+      { error: `Webhook Error: ${err.message}` },
       { status: 400 }
     );
   }
 
-  // Gestione eventi
+  // EVENTI SUPPORTATI
   switch (event.type) {
     case "checkout.session.completed":
-      console.log("💳 PAYMENT COMPLETED:", event.data.object.id);
+      console.log("💳 Checkout completato:", event.data.object.id);
       break;
 
     case "payment_intent.succeeded":
-      console.log("✅ Payment intent success:", event.data.object.id);
+      console.log("✅ Pagamento OK:", event.data.object.id);
       break;
 
     case "payment_intent.payment_failed":
-      console.log("❌ Payment failed:", event.data.object.id);
+      console.log("❌ Pagamento fallito:", event.data.object.id);
       break;
 
     default:
-      console.log("Unhandled event:", event.type);
+      console.log("ℹ️ Evento non gestito:", event.type);
   }
 
   return NextResponse.json({ received: true });

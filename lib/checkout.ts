@@ -1,12 +1,10 @@
 "use client";
 
-import { CartItem } from "@/lib/store/cartStore";
+import type { CartItem } from "@/lib/store/cartStore";
 
 /**
- * Avvia il checkout Stripe in modalità PREMIUM:
- * - gestione errori elegante
- * - redirect sicuro
- * - tipizzazione forte
+ * Checkout PREMIUM compatibile iPhone / Safari / Android / PC
+ * Usa window.location.assign() per evitare blocchi su mobile.
  */
 export async function startStripeCheckout(cart: CartItem[]): Promise<void> {
   if (!cart || cart.length === 0) {
@@ -15,17 +13,9 @@ export async function startStripeCheckout(cart: CartItem[]): Promise<void> {
   }
 
   try {
-    // UI loading event
-    const loadingEvent = new CustomEvent("checkout-loading", {
-      detail: true,
-    });
-    window.dispatchEvent(loadingEvent);
-
     const response = await fetch("/api/checkout/stripe", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ cart }),
     });
 
@@ -36,28 +26,13 @@ export async function startStripeCheckout(cart: CartItem[]): Promise<void> {
     const data: { url?: string; error?: string } = await response.json();
 
     if (data.error) throw new Error(data.error);
-    if (!data.url) throw new Error("Stripe URL non ricevuta");
+    if (!data.url) throw new Error("URL checkout Stripe mancante.");
 
-    // 🔥 Redirect premium con piccola animazione
-    document.body.classList.add("cursor-wait", "opacity-70");
-    setTimeout(() => {
-      window.location.href = data.url!;
-    }, 150);
+    // 🔥 REDIRECT IPHONE SAFE
+    window.location.assign(data.url);
 
   } catch (err) {
     console.error("Checkout error:", err);
-
-    // Evento → puoi ascoltarlo con un toast bello
-    const errorEvent = new CustomEvent("checkout-error", {
-      detail: err instanceof Error ? err.message : "Errore sconosciuto",
-    });
-    window.dispatchEvent(errorEvent);
-  } finally {
-    const loadingEvent = new CustomEvent("checkout-loading", {
-      detail: false,
-    });
-    window.dispatchEvent(loadingEvent);
-
-    document.body.classList.remove("cursor-wait", "opacity-70");
+    alert("Errore durante il pagamento, riprova più tardi.");
   }
 }
