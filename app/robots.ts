@@ -1,15 +1,24 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://www.scaramuzzo.green";
+  const base = "https://www.scaramuzzo.green";
 
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
+        disallow: [
+          "/checkout",
+          "/checkout/*",
+          "/cart",
+          "/api/*",
+          "/404",
+          "/500"
+        ],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${base}/sitemap.xml`,
+    host: base,
   };
 }

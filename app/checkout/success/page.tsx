@@ -1,7 +1,20 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Pagamento completato • Scaramuzzo Hair Natural Beauty",
+  description: "Il tuo pagamento è stato completato correttamente.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  alternates: {
+    canonical: "https://www.scaramuzzo.green/checkout/success",
+  },
+};
 
 function SuccessContent() {
   const params = useSearchParams();

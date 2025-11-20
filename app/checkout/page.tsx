@@ -1,9 +1,23 @@
-"use client";
+"use client";   // <-- DEVE ESSERE LA PRIMA RIGA DEL FILE
 
+import type { Metadata } from "next";
 import { useCartStore } from "@/lib/store/cartStore";
 import { startStripeCheckout } from "@/lib/checkout";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
+// --- METADATA (SERVER) --- //
+export const metadata: Metadata = {
+  title: "Checkout • Scaramuzzo Hair Natural Beauty",
+  description: "Riepilogo ordine e pagamento sicuro con Stripe.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  alternates: {
+    canonical: "https://www.scaramuzzo.green/checkout",
+  },
+};
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -14,12 +28,9 @@ export default function CheckoutPage() {
     <div className="max-w-4xl mx-auto px-6 py-16 text-neutral-100">
       <h1 className="text-4xl font-bold mb-12">Riepilogo ordine</h1>
 
-      {/* SE VUOTO */}
       {items.length === 0 && (
         <div className="text-center py-24">
-          <p className="text-lg text-neutral-400 mb-6">
-            Il carrello è vuoto.
-          </p>
+          <p className="text-lg text-neutral-400 mb-6">Il carrello è vuoto.</p>
           <button
             onClick={() => router.push("/products")}
             className="bg-white text-black px-7 py-3 rounded-xl font-medium hover:bg-neutral-200 transition"
@@ -29,7 +40,6 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      {/* LISTA PRODOTTI */}
       {items.length > 0 && (
         <div className="space-y-10">
           {items.map((item) => (
@@ -57,7 +67,6 @@ export default function CheckoutPage() {
             </div>
           ))}
 
-          {/* TOTALE */}
           <div className="pt-10 border-t border-neutral-800">
             <div className="flex justify-between text-2xl font-semibold mb-8">
               <span>Totale</span>

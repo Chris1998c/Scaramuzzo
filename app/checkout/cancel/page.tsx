@@ -1,7 +1,20 @@
 "use client";
 
+import type { Metadata } from "next";
 import { XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Pagamento annullato • Scaramuzzo Hair Natural Beauty",
+  description: "Il pagamento è stato annullato. Nessun addebito è stato effettuato.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+  alternates: {
+    canonical: "https://www.scaramuzzo.green/checkout/cancel",
+  },
+};
 
 export default function CheckoutCancelPage() {
   const router = useRouter();
@@ -9,6 +22,7 @@ export default function CheckoutCancelPage() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
       <div className="max-w-xl w-full bg-[#1b0d08] border border-neutral-800 rounded-3xl shadow-2xl p-8 text-center space-y-6">
+        
         <div className="flex justify-center">
           <div className="h-16 w-16 rounded-full bg-red-500/10 flex items-center justify-center">
             <XCircle className="h-10 w-10 text-red-400" />
@@ -18,7 +32,7 @@ export default function CheckoutCancelPage() {
         <h1 className="text-3xl font-semibold">Pagamento annullato</h1>
 
         <p className="text-neutral-300 text-sm md:text-base">
-          Non è stato effettuato alcun addebito. Puoi rivedere il tuo carrello
+          Nessun addebito è stato effettuato. Puoi rivedere il tuo carrello
           o riprovare il pagamento quando vuoi.
         </p>
 
@@ -37,6 +51,7 @@ export default function CheckoutCancelPage() {
             Vai ai prodotti
           </button>
         </div>
+
       </div>
     </div>
   );

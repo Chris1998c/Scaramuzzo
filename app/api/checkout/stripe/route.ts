@@ -49,7 +49,7 @@ export async function POST(request: Request) {
           currency: "eur",
           product_data: {
             name: "Spedizione",
-            images: [`${process.env.NEXT_PUBLIC_SITE_URL}/logo.webp`],
+            images: [`${process.env.NEXT_PUBLIC_SITE_URL}/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp`],
           },
           unit_amount: shippingCost * 100,
         },

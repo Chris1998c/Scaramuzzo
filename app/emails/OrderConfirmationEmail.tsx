@@ -54,7 +54,7 @@ export default function OrderConfirmationEmail({
         >
           {/* LOGO */}
           <Img
-            src="https://www.scaramuzzo.green/logo.png"
+            src="https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp"
             alt="Scaramuzzo Logo"
             width="130"
             style={{

@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://www.scaramuzzo.green
-
-# Sitemaps
-Sitemap: https://www.scaramuzzo.green/sitemap.xml
