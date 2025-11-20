@@ -1,23 +1,9 @@
-"use client";   // <-- DEVE ESSERE LA PRIMA RIGA DEL FILE
+"use client";
 
-import type { Metadata } from "next";
 import { useCartStore } from "@/lib/store/cartStore";
 import { startStripeCheckout } from "@/lib/checkout";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
-// --- METADATA (SERVER) --- //
-export const metadata: Metadata = {
-  title: "Checkout • Scaramuzzo Hair Natural Beauty",
-  description: "Riepilogo ordine e pagamento sicuro con Stripe.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-  alternates: {
-    canonical: "https://www.scaramuzzo.green/checkout",
-  },
-};
 
 export default function CheckoutPage() {
   const router = useRouter();
