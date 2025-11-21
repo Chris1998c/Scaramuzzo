@@ -1,3 +1,23 @@
+
+export const metadata = {
+  title: "Privacy Policy • Scaramuzzo Hair Natural Beauty",
+  description:
+    "Informativa sulla privacy di Scaramuzzo Studio SRL. Scopri come gestiamo, proteggiamo e utilizziamo i dati personali degli utenti su scaramuzzo.green.",
+  alternates: {
+    canonical: "https://www.scaramuzzo.green/privacy",
+  },
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "Privacy Policy • Scaramuzzo Hair Natural Beauty",
+    description:
+      "Informativa completa sul trattamento dati personali da parte di Scaramuzzo Studio SRL.",
+    url: "https://www.scaramuzzo.green/privacy",
+    images: ["/og-default.webp"],
+    locale: "it_IT",
+    type: "website",
+  },
+};
+
 export default function PrivacyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 text-white">

@@ -1,3 +1,22 @@
+export const metadata = {
+  title: "Termini e Condizioni • Scaramuzzo Hair Natural Beauty",
+  description:
+    "Termini e condizioni ufficiali di vendita del sito Scaramuzzo Hair Natural Beauty. Informazioni su ordini, pagamenti, spedizioni e diritto di recesso.",
+  alternates: {
+    canonical: "https://www.scaramuzzo.green/termini",
+  },
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "Termini e Condizioni • Scaramuzzo Hair Natural Beauty",
+    description:
+      "Consulta i termini e condizioni ufficiali del sito Scaramuzzo Hair Natural Beauty.",
+    url: "https://www.scaramuzzo.green/termini",
+    images: ["/og-default.webp"],
+    locale: "it_IT",
+    type: "website",
+  },
+};
+
 export default function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 text-white">

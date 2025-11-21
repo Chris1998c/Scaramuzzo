@@ -1,3 +1,23 @@
+export const metadata = {
+  title: "Cookie Policy • Scaramuzzo Hair Natural Beauty",
+  description:
+    "Cookie Policy ufficiale di Scaramuzzo Hair Natural Beauty. Informazioni su cookie tecnici, analitici e di marketing utilizzati sul sito www.scaramuzzo.green.",
+  alternates: {
+    canonical: "https://www.scaramuzzo.green/cookie",
+  },
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "Cookie Policy • Scaramuzzo Hair Natural Beauty",
+    description:
+      "Scopri come Scaramuzzo utilizza cookie tecnici, analitici e di marketing.",
+    url: "https://www.scaramuzzo.green/cookie",
+    siteName: "Scaramuzzo Hair Natural Beauty",
+    images: ["/og-default.webp"],
+    locale: "it_IT",
+    type: "website",
+  },
+};
+
 export default function CookiePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 text-white">

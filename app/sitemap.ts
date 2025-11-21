@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://www.scaramuzzo.green";
   const now = new Date();
 
-  // Pagine statiche
+  // Pagine statiche principali
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: `${base}/`,
@@ -49,6 +49,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.6,
+    },
+
+    // PAGINE LEGALI AGGIUNTE
+    {
+      url: `${base}/privacy`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${base}/cookie`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${base}/termini`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.5,
     },
   ];
 

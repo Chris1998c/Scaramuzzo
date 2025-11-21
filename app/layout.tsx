@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "./components/site/Navbar";
 import Footer from "./components/site/Footer";
+import CookieBanner from "./components/site/CookieBanner";
 import Script from "next/script";
 
 const inter = localFont({
@@ -29,6 +30,16 @@ export const metadata: Metadata = {
   description:
     "Scaramuzzo Hair Natural Beauty — prodotti premium, servizi professionali e trattamenti avanzati per la cura naturale dei capelli.",
 
+  keywords: [
+    "Scaramuzzo",
+    "hair natural beauty",
+    "prodotti capelli professionali",
+    "parrucchiere Roma",
+    "parrucchiere Cosenza",
+    "parrucchiere Corigliano",
+    "erbe tintorie",
+    "cura dei capelli naturale",
+  ],
   openGraph: {
     type: "website",
     url: "https://www.scaramuzzo.green",
@@ -49,8 +60,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Scaramuzzo Hair Natural Beauty",
-    description:
-      "Prodotti professionali e trattamenti naturali per i capelli.",
+    description: "Prodotti professionali e trattamenti naturali per i capelli.",
     images: ["/og-default.webp"],
   },
 };
@@ -63,6 +73,22 @@ export default function RootLayout({
   return (
     <html lang="it" suppressHydrationWarning>
       <head>
+        {/* GA4 */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-S0VBCLMV14"
+        />
+
+        <Script id="ga4-init">
+          {`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-S0VBCLMV14', {
+        page_path: window.location.pathname,
+      });
+    `}
+        </Script>
         {/* JSON-LD Multilocation SEO – mantiene il tuo */}
         <Script
           id="schema-multilocation"
@@ -72,142 +98,140 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "Scaramuzzo Hair Natural Beauty",
-              "url": "https://www.scaramuzzo.green",
-              "logo":
-                "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
-              "sameAs": [
+              name: "Scaramuzzo Hair Natural Beauty",
+              url: "https://www.scaramuzzo.green",
+              logo: "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
+              sameAs: [
                 "https://www.instagram.com/scaramuzzohairnaturalbeauty/",
                 "https://www.facebook.com/scaramuzzohairnaturalbeauty",
               ],
-              "department": [
+              department: [
                 // ROMA
                 {
                   "@type": "HairSalon",
-                  "name": "Scaramuzzo Hair Natural Beauty – Roma",
-                  "image":
+                  name: "Scaramuzzo Hair Natural Beauty – Roma",
+                  image:
                     "https://www.scaramuzzo.green/roma-salone-hero-wide.webp",
-                  "telephone": "+390669318238",
-                  "address": {
+                  telephone: "+390669318238",
+                  address: {
                     "@type": "PostalAddress",
-                    "streetAddress": "Via del Pellegrino 101",
-                    "addressLocality": "Roma",
-                    "addressRegion": "RM",
-                    "postalCode": "00186",
-                    "addressCountry": "IT",
+                    streetAddress: "Via del Pellegrino 101",
+                    addressLocality: "Roma",
+                    addressRegion: "RM",
+                    postalCode: "00186",
+                    addressCountry: "IT",
                   },
-                  "openingHoursSpecification": [
+                  openingHoursSpecification: [
                     {
                       "@type": "OpeningHoursSpecification",
-                      "dayOfWeek": [
+                      dayOfWeek: [
                         "Monday",
                         "Tuesday",
                         "Thursday",
                         "Friday",
                         "Saturday",
                       ],
-                      "opens": "10:00",
-                      "closes": "20:00",
+                      opens: "10:00",
+                      closes: "20:00",
                     },
                   ],
-                  "priceRange": "$$",
+                  priceRange: "$$",
                 },
 
                 // CORIGLIANO-ROSSANO
                 {
                   "@type": "HairSalon",
-                  "name":
-                    "Scaramuzzo Hair Natural Beauty – Corigliano-Rossano",
-                  "image":
+                  name: "Scaramuzzo Hair Natural Beauty – Corigliano-Rossano",
+                  image:
                     "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
-                  "telephone": "+390983889488",
-                  "address": {
+                  telephone: "+390983889488",
+                  address: {
                     "@type": "PostalAddress",
-                    "streetAddress": "Via Nazionale 70",
-                    "addressLocality": "Corigliano-Rossano",
-                    "addressRegion": "CS",
-                    "postalCode": "87064",
-                    "addressCountry": "IT",
+                    streetAddress: "Via Nazionale 70",
+                    addressLocality: "Corigliano-Rossano",
+                    addressRegion: "CS",
+                    postalCode: "87064",
+                    addressCountry: "IT",
                   },
-                  "openingHoursSpecification": [
+                  openingHoursSpecification: [
                     {
                       "@type": "OpeningHoursSpecification",
-                      "dayOfWeek": [
+                      dayOfWeek: [
                         "Tuesday",
                         "Wednesday",
                         "Thursday",
                         "Friday",
                         "Saturday",
                       ],
-                      "opens": "09:00",
-                      "closes": "19:00",
+                      opens: "09:00",
+                      closes: "19:00",
                     },
                   ],
-                  "priceRange": "$$",
+                  priceRange: "$$",
                 },
 
                 // COSENZA
                 {
                   "@type": "HairSalon",
-                  "name": "Scaramuzzo Hair Natural Beauty – Cosenza",
-                  "image":
+                  name: "Scaramuzzo Hair Natural Beauty – Cosenza",
+                  image:
                     "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
-                  "telephone": "+39098474525",
-                  "address": {
+                  telephone: "+39098474525",
+                  address: {
                     "@type": "PostalAddress",
-                    "streetAddress": "Via Monte San Michele 13/A",
-                    "addressLocality": "Cosenza",
-                    "addressRegion": "CS",
-                    "postalCode": "87100",
-                    "addressCountry": "IT",
+                    streetAddress: "Via Monte San Michele 13/A",
+                    addressLocality: "Cosenza",
+                    addressRegion: "CS",
+                    postalCode: "87100",
+                    addressCountry: "IT",
                   },
-                  "openingHoursSpecification": [
+                  openingHoursSpecification: [
                     {
                       "@type": "OpeningHoursSpecification",
-                      "dayOfWeek": [
+                      dayOfWeek: [
                         "Monday",
                         "Wednesday",
                         "Thursday",
                         "Friday",
                         "Saturday",
                       ],
-                      "opens": "09:00",
-                      "closes": "19:00",
+                      opens: "09:00",
+                      closes: "19:00",
                     },
                   ],
-                  "priceRange": "$$",
+                  priceRange: "$$",
                 },
 
                 // CASTROVILLARI
                 {
                   "@type": "HairSalon",
-                  "name": "Scaramuzzo Hair Natural Beauty – Castrovillari",
-                  "image":
+                  name: "Scaramuzzo Hair Natural Beauty – Castrovillari",
+                  image:
                     "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
-                  "telephone": "+39098127228",
-                  "address": {
+                  telephone: "+39098127228",
+                  address: {
                     "@type": "PostalAddress",
-                    "streetAddress": "Corso Giuseppe Garibaldi 13",
-                    "addressLocality": "Castrovillari",
-                    "addressRegion": "CS",
-                    "postalCode": "87012",
-                    "addressCountry": "IT",
+                    streetAddress: "Corso Giuseppe Garibaldi 13",
+                    addressLocality: "Castrovillari",
+                    addressRegion: "CS",
+                    postalCode: "87012",
+                    addressCountry: "IT",
                   },
-                  "openingHoursSpecification": [
+                  openingHoursSpecification: [
                     {
                       "@type": "OpeningHoursSpecification",
-                      "dayOfWeek": [
+                      dayOfWeek: [
                         "Monday",
                         "Wednesday",
                         "Thursday",
                         "Friday",
                         "Saturday",
                       ],
-                      "opens": "09:00",
-                      "closes": "19:00",
+                      opens: "09:00",
+                      closes: "19:00",
                     },
                   ],
-                  "priceRange": "$$",
+                  priceRange: "$$",
                 },
               ],
             }),
@@ -219,6 +243,7 @@ export default function RootLayout({
         className={`${inter.variable} ${mono.variable} bg-background text-foreground antialiased min-h-screen`}
       >
         <Navbar />
+        <CookieBanner />
         <main className="py-8">{children}</main>
         <Footer />
       </body>
