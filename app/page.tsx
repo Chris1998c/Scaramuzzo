@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageClient from "./PageClient";
 
 // 🌟 URL ASSOLUTA DELL’IMMAGINE OG CHE COMPARE SU WHATSAPP / INSTAGRAM
-const ogImage = "https://www.scaramuzzo.green/roma-salone-hero-wide.jpg";
+const ogImage = "https://www.scaramuzzo.green/roma-salone-hero-wide.webp";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.scaramuzzo.green"),

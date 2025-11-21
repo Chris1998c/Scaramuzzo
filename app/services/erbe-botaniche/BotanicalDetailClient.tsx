@@ -21,14 +21,14 @@ const botanicalItems = {
       name: "Erbe Riflessanti – Nutri",
       description:
         "Miscela di cereali ed erbe botaniche dalla Calabria, formulata per nutrire i capelli e donare riflessi morbidi e naturali. Avena, riso, orzo, farro, liquirizia, foglie di mandarino e camomilla per capelli più forti, setosi e lucenti.",
-      image: "/Nutri.jpg",
+      image: "/Nutri.webp",
     },
     {
       id: "miscela-2",
       name: "Erbe Riflessanti – Rosso",
       description:
         "Henné puro da Lawsonia inermis, ideale per riflessi rossi intensi e luminosi.",
-      image: "/Rosso.jpg",
+      image: "/Rosso.webp",
     },
     {
       id: "miscela-3",
@@ -58,14 +58,14 @@ const botanicalItems = {
       name: "Reflective Herbs – Nutri",
       description:
         "Herbal and cereal blend from Calabria, designed to nourish hair and give soft, natural highlights.",
-      image: "/Nutri.jpg",
+      image: "/Nutri.webp",
     },
     {
       id: "miscela-2",
       name: "Reflective Herbs – Red",
       description:
         "Pure Lawsonia inermis henna for intense, bright red tones.",
-      image: "/Rosso.jpg",
+      image: "/Rosso.webp",
     },
     {
       id: "miscela-3",

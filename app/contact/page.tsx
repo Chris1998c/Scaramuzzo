@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ContactClient from "./ContactClient";
 
-const ogImage = "https://www.scaramuzzo.green/roma-salone-hero-wide.jpg";
+const ogImage = "https://www.scaramuzzo.green/roma-salone-hero-wide.webp";
 
 export const metadata: Metadata = {
   title: "Contatti | Scaramuzzo Hair Natural Beauty",

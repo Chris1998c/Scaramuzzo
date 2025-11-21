@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import BotanicalDetailClient from "./BotanicalDetailClient";
 
-const ogImage = "https://www.scaramuzzo.green/ERBE.jpg";
+const ogImage = "https://www.scaramuzzo.green/ERBE.webp";
 
 export const metadata: Metadata = {
   title: "Colorazione con Erbe Botaniche | Scaramuzzo",

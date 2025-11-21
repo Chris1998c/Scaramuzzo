@@ -16,7 +16,7 @@ export const serviceTranslations = {
         alias: "haircut",
         name: "Taglio di Capelli",
         description: "Taglio personalizzato per uomo e donna",
-        image: "/TaglioNew.jpg",
+        image: "/TaglioNew.webp",
         imageAlt: "Taglio di Capelli",
         detailedDescription:
           "Il nostro taglio nasce sempre da una consulenza attenta: analizziamo forma del viso, movimento naturale dei capelli e abitudini quotidiane per creare una linea pulita, contemporanea e facile da gestire anche a casa. Lavoriamo con forbici e, quando serve, rasoio, per dare leggerezza, volume o definizione rispettando la struttura naturale del capello.",
@@ -26,7 +26,7 @@ export const serviceTranslations = {
         alias: "treatments",
         name: "Trattamenti",
         description: "Trattamenti per capelli danneggiati e cure specifiche",
-        image: "/trattamento.jpg",
+        image: "/trattamento.webp",
         imageAlt: "Trattamenti",
         detailedDescription: `I trattamenti Scaramuzzo uniscono attivi professionali e formulazioni delicate per ricostruire, idratare e proteggere la fibra del capello senza appesantirla.
 
@@ -42,7 +42,7 @@ Ogni percorso viene scelto dopo una consulenza personalizzata, in base allo stat
         alias: "hairstyling",
         name: "Acconciature",
         description: "Styling per ogni occasione",
-        image: "/Acconcitura-Georgia.jpg",
+        image: "/Acconcitura-Georgia.webp",
         imageAlt: "Acconciature",
         detailedDescription:
           "Dalle onde morbide ai raccolti strutturati dall’effetto naturale, creiamo acconciature pensate per matrimoni, eventi, shooting o semplicemente per farti sentire al meglio. Lavoriamo sempre in armonia con il viso, l’abito e lo stile personale, privilegiando volumi morbidi, texture leggere e una tenuta confortevole, mai rigida.",
@@ -62,7 +62,7 @@ Ogni percorso viene scelto dopo una consulenza personalizzata, in base allo stat
         alias: "scalp-massage",
         name: "Massaggio del Cuoio Capelluto",
         description: "Rilassante massaggio per la salute della cute",
-        image: "/shampoo-servizio.jpg",
+        image: "/shampoo-servizio.webp",
         imageAlt: "Massaggio del Cuoio Capelluto",
         detailedDescription:
           "Al lavatesta trasformiamo lo shampoo in un vero rituale di benessere. Il massaggio del cuoio capelluto, eseguito con movimenti lenti e profondi, aiuta a stimolare la microcircolazione, favorire l’ossigenazione della radice e sciogliere le tensioni accumulate. È il momento ideale per rilassarsi, preparare la cute ai trattamenti specifici e prendersi una pausa solo per sé.",
@@ -76,7 +76,7 @@ Ogni percorso viene scelto dopo una consulenza personalizzata, in base allo stat
         alias: "taglio-di-capelli",
         name: "Haircut",
         description: "Personalized haircut for men and women",
-        image: "/TaglioNew.jpg",
+        image: "/TaglioNew.webp",
         imageAlt: "Haircut",
         detailedDescription:
           "Our haircut service always starts with a careful consultation: we analyse face shape, natural hair movement and your daily routine to create a clean, contemporary cut that is easy to manage at home. We work with scissors and, when needed, razor techniques to add lightness, volume or definition while respecting the natural texture of the hair.",
@@ -86,7 +86,7 @@ Ogni percorso viene scelto dopo una consulenza personalizzata, in base allo stat
         alias: "trattamenti",
         name: "Treatments",
         description: "Treatments for damaged hair and specific care",
-        image: "/trattamento.jpg",
+        image: "/trattamento.webp",
         imageAlt: "Treatments",
         detailedDescription: `Scaramuzzo treatments combine professional actives and gentle formulas to rebuild, hydrate and protect the hair fiber without weighing it down.
 
@@ -102,7 +102,7 @@ Each protocol is chosen after a personalised consultation, based on the conditio
         alias: "acconciature",
         name: "Hairstyling",
         description: "Styling for every occasion",
-        image: "/Acconcitura-Georgia.jpg",
+        image: "/Acconcitura-Georgia.webp",
         imageAlt: "Hairstyling",
         detailedDescription:
           "From soft waves to structured yet natural-looking updos, we create hairstyles designed for weddings, events, shootings or simply to make you feel your best. We always work in harmony with face shape, outfit and personality, favouring soft volumes, lightweight textures and a comfortable hold rather than rigid looks.",
@@ -122,7 +122,7 @@ Each protocol is chosen after a personalised consultation, based on the conditio
         alias: "massaggio-del-cuoio-capelluto",
         name: "Scalp Massage",
         description: "Relaxing massage for hair health",
-        image: "/shampoo-servizio.jpg",
+        image: "/shampoo-servizio.webp",
         imageAlt: "Scalp Massage",
         detailedDescription:
           "At the backwash we turn shampoo time into a small wellness ritual. The scalp massage, performed with slow and deep movements, helps stimulate microcirculation, promote root oxygenation and release accumulated tension. It is the perfect moment to relax, prepare the scalp for targeted treatments and take a proper break for yourself.",

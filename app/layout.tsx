@@ -75,7 +75,7 @@ export default function RootLayout({
               "name": "Scaramuzzo Hair Natural Beauty",
               "url": "https://www.scaramuzzo.green",
               "logo":
-                "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
+                "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
               "sameAs": [
                 "https://www.instagram.com/scaramuzzohairnaturalbeauty/",
                 "https://www.facebook.com/scaramuzzohairnaturalbeauty",
@@ -86,7 +86,7 @@ export default function RootLayout({
                   "@type": "HairSalon",
                   "name": "Scaramuzzo Hair Natural Beauty – Roma",
                   "image":
-                    "https://www.scaramuzzo.green/roma-salone-hero-wide.jpg",
+                    "https://www.scaramuzzo.green/roma-salone-hero-wide.webp",
                   "telephone": "+390669318238",
                   "address": {
                     "@type": "PostalAddress",
@@ -119,7 +119,7 @@ export default function RootLayout({
                   "name":
                     "Scaramuzzo Hair Natural Beauty – Corigliano-Rossano",
                   "image":
-                    "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
+                    "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
                   "telephone": "+390983889488",
                   "address": {
                     "@type": "PostalAddress",
@@ -151,7 +151,7 @@ export default function RootLayout({
                   "@type": "HairSalon",
                   "name": "Scaramuzzo Hair Natural Beauty – Cosenza",
                   "image":
-                    "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
+                    "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
                   "telephone": "+39098474525",
                   "address": {
                     "@type": "PostalAddress",
@@ -183,7 +183,7 @@ export default function RootLayout({
                   "@type": "HairSalon",
                   "name": "Scaramuzzo Hair Natural Beauty – Castrovillari",
                   "image":
-                    "https://www.scaramuzzo.green/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png",
+                    "https://www.scaramuzzo.green/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp",
                   "telephone": "+39098127228",
                   "address": {
                     "@type": "PostalAddress",

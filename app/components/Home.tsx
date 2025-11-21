@@ -22,7 +22,7 @@ const Home: FC<HomeProps> = ({ language }) => {
   return (
     <section className="relative h-[60vh] md:h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
       <Image
-        src="/roma-salone-hero-wide.jpg"
+        src="/roma-salone-hero-wide.webp"
         alt="Scaramuzzo Salon"
         fill
         className="object-cover brightness-[0.35]"

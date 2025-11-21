@@ -21,10 +21,22 @@ type Language = "it" | "en";
 const navItems = [
   { href: "/", key: "home", label: { it: "Home", en: "Home" } },
   { href: "/about", key: "about", label: { it: "Chi Siamo", en: "About Us" } },
-  { href: "/services", key: "services", label: { it: "Servizi", en: "Services" } },
-  { href: "/products", key: "products", label: { it: "Prodotti", en: "Products" } },
+  {
+    href: "/services",
+    key: "services",
+    label: { it: "Servizi", en: "Services" },
+  },
+  {
+    href: "/products",
+    key: "products",
+    label: { it: "Prodotti", en: "Products" },
+  },
   { href: "/erbe", key: "erbe", label: { it: "Erbe", en: "Herbs" } },
-  { href: "/contact", key: "contact", label: { it: "Contatti", en: "Contact" } },
+  {
+    href: "/contact",
+    key: "contact",
+    label: { it: "Contatti", en: "Contact" },
+  },
 ];
 
 export default function Navbar() {
@@ -34,7 +46,10 @@ export default function Navbar() {
 
   // Carica tema/lang
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const storedTheme = localStorage.getItem("theme") as
+      | "light"
+      | "dark"
+      | null;
     const storedLang = localStorage.getItem("language") as Language | null;
 
     if (storedTheme) setTheme(storedTheme);
@@ -59,17 +74,18 @@ export default function Navbar() {
 
       <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-[#2b1409]/90 backdrop-blur-xl shadow-md">
         <div className="container flex h-16 items-center justify-between px-4 md:px-8">
-
           {/* LOGO */}
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/Scaramuzzo-Hair-Natural-Beauty-Video-01-Immagine-Sovrapposta-removebg-preview.png"
-              alt="Scaramuzzo Logo"
-              width={80}
-              height={50}
-              className="object-contain"
-              priority
-            />
+            <div className="relative w-20 h-12">
+              <Image
+                src="/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp"
+                alt="Scaramuzzo Logo"
+                fill
+                sizes="(max-width: 768px) 120px, 160px"
+                className="object-contain"
+                priority
+              />
+            </div>
           </Link>
 
           {/* NAV DESKTOP */}
@@ -88,7 +104,6 @@ export default function Navbar() {
 
           {/* ICONS */}
           <div className="flex items-center gap-3">
-
             {/* CARRELLO */}
             <CartButton />
 
@@ -146,7 +161,6 @@ export default function Navbar() {
         {/* NAV MOBILE */}
         {isMenuOpen && (
           <nav className="md:hidden flex flex-col items-center bg-[#2b1409]/95 backdrop-blur-xl p-4 space-y-3 border-t border-neutral-800">
-
             {/* Carrello mobile */}
             <CartButton />
 

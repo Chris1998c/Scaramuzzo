@@ -33,7 +33,7 @@ export default function ServicesClient() {
           name: "Taglio di Capelli",
           description:
             "Consulenza e taglio su misura per valorizzare viso e texture naturale.",
-          image: "/TaglioNew.jpg",
+          image: "/TaglioNew.webp",
           imageAlt: "Taglio di Capelli",
         },
         {
@@ -41,7 +41,7 @@ export default function ServicesClient() {
           name: "Colorazione con Erbe Botaniche",
           description:
             "Colorazioni naturali con miscele di erbe e cereali dalla nostra terra.",
-          image: "/ERBE.jpg",
+          image: "/ERBE.webp",
           imageAlt: "Colorazione con erbe botaniche",
         },
         {
@@ -49,7 +49,7 @@ export default function ServicesClient() {
           name: "Trattamenti",
           description:
             "Percorsi di ricostruzione, idratazione e Bond Repair studiati su misura.",
-          image: "/trattamento.jpg",
+          image: "/trattamento.webp",
           imageAlt: "Trattamenti",
         },
         {
@@ -57,7 +57,7 @@ export default function ServicesClient() {
           name: "Acconciature",
           description:
             "Raccolti, onde e styling per matrimoni, eventi e momenti speciali.",
-          image: "/Acconcitura-Georgia.jpg",
+          image: "/Acconcitura-Georgia.webp",
           imageAlt: "Acconciature",
         },
         {
@@ -73,7 +73,7 @@ export default function ServicesClient() {
           name: "Massaggio del Cuoio Capelluto",
           description:
             "Rituale shampoo e massaggio per rilassare la mente e riattivare la circolazione.",
-          image: "/shampoo-servizio.jpg",
+          image: "/shampoo-servizio.webp",
           imageAlt: "Massaggio del Cuoio Capelluto",
         },
       ],
@@ -86,7 +86,7 @@ export default function ServicesClient() {
           name: "Haircut",
           description:
             "Tailor-made haircut to enhance face shape and natural hair texture.",
-          image: "/TaglioNew.jpg",
+          image: "/TaglioNew.webp",
           imageAlt: "Haircut",
         },
         {
@@ -94,7 +94,7 @@ export default function ServicesClient() {
           name: "Botanical Hair Coloring",
           description:
             "Natural color services with herbal and cereal blends from our land.",
-          image: "/ERBE.jpg",
+          image: "/ERBE.webp",
           imageAlt: "Botanical Hair Coloring",
         },
         {
@@ -102,7 +102,7 @@ export default function ServicesClient() {
           name: "Treatments",
           description:
             "Rebuilding, hydrating and Bond Repair rituals designed for your hair.",
-          image: "/trattamento.jpg",
+          image: "/trattamento.webp",
           imageAlt: "Treatments",
         },
         {
@@ -110,7 +110,7 @@ export default function ServicesClient() {
           name: "Hairstyling",
           description:
             "Updos, waves and styling for weddings, events and special moments.",
-          image: "/Acconcitura-Georgia.jpg",
+          image: "/Acconcitura-Georgia.webp",
           imageAlt: "Hairstyling",
         },
         {

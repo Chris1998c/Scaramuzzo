@@ -15,7 +15,7 @@ export const metadata: Metadata = {
       "Taglio, trattamenti, acconciature, schiariture Sanlai e colorazioni naturali con erbe botaniche.",
     images: [
       {
-        url: "/TaglioNew.jpg",
+        url: "/TaglioNew.webp",
         width: 1200,
         height: 800,
       },
