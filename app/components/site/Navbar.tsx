@@ -20,18 +20,22 @@ type Language = "it" | "en";
 
 const navItems = [
   { href: "/", key: "home", label: { it: "Home", en: "Home" } },
-  { href: "/about", key: "about", label: { it: "Chi Siamo", en: "About Us" } },
-  {
-    href: "/services",
-    key: "services",
-    label: { it: "Servizi", en: "Services" },
-  },
   {
     href: "/products",
     key: "products",
     label: { it: "Prodotti", en: "Products" },
   },
-  { href: "/erbe", key: "erbe", label: { it: "Erbe", en: "Herbs" } },
+  {
+    href: "/erbe",
+    key: "custom",
+    label: { it: "Prodotti Personalizzati", en: "Personalized Products" },
+  },
+  {
+    href: "/services",
+    key: "services",
+    label: { it: "Servizi", en: "Services" },
+  },
+  { href: "/about", key: "about", label: { it: "Chi Siamo", en: "About Us" } },
   {
     href: "/contact",
     key: "contact",
@@ -89,13 +93,13 @@ export default function Navbar() {
           </Link>
 
           {/* NAV DESKTOP */}
-          <nav className="hidden md:flex items-center space-x-4 text-base">
+          <nav className="hidden md:flex items-center gap-0.5 lg:gap-1">
             {navItems.map((item) => (
               <Button
                 key={item.key}
                 asChild
                 variant="ghost"
-                className="font-semibold text-lg text-neutral-100 hover:text-white hover:bg-white/5 transition"
+                className="font-medium text-sm lg:text-base text-neutral-200 hover:text-white hover:bg-white/5 transition px-2.5 lg:px-3"
               >
                 <Link href={item.href}>{item.label[language]}</Link>
               </Button>
