@@ -36,6 +36,7 @@ export default function ContactClient() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot anti-bot
   const [status, setStatus] = useState<Status>("idle");
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function ContactClient() {
       const res = await fetch("/api/sendMail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, website }),
       });
 
       if (res.ok) {
@@ -63,6 +64,7 @@ export default function ContactClient() {
         setName("");
         setEmail("");
         setMessage("");
+        setWebsite("");
       } else {
         setStatus("error");
       }
@@ -132,6 +134,23 @@ export default function ContactClient() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
+            />
+          </div>
+
+          {/* HONEYPOT ANTI-BOT (invisibile agli umani, non rompe la UI) */}
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", left: "-9999px", top: "-9999px" }}
+          >
+            <label htmlFor="website">Website</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
             />
           </div>
 

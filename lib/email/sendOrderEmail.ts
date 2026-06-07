@@ -25,7 +25,8 @@ export async function sendOrderEmail({
 }) {
   try {
     const response = await resend.emails.send({
-      from: "Scaramuzzo <scaramuzzohnb@gmail.com>",
+      from: "Scaramuzzo Green <noreply@scaramuzzo.green>",
+      replyTo: "scaramuzzohnb@gmail.com",
       to: customerEmail,
       subject: `Il tuo ordine ${orderId} è stato confermato`,
       react: OrderConfirmationEmail({

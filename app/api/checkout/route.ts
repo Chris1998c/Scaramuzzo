@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
-import type { CartItem } from "@/lib/store/cartStore";
+import { productTranslations } from "@/app/products/data";
 
 export const runtime = "nodejs";
 
@@ -15,20 +15,81 @@ type OrderItem = {
   image: string;
 };
 
+// Quantità massima ragionevole per singolo articolo
+const MAX_QTY = 20;
+
+// Catalogo server-side: unica fonte di verità per prezzo/nome/immagine
+const catalog = productTranslations.it.products;
+
 export async function POST(request: Request) {
   try {
-    const { cart }: { cart: CartItem[] } = await request.json();
+    // ⚠️ Dal client accettiamo SOLO id e qty: tutto il resto è ricostruito lato server.
+    const { cart }: { cart: Array<{ id?: unknown; qty?: unknown }> } =
+      await request.json();
 
-    if (!cart || cart.length === 0) {
+    if (!Array.isArray(cart) || cart.length === 0) {
       return NextResponse.json(
         { error: "Carrello vuoto o non valido" },
         { status: 400 }
       );
     }
 
-    // --- CALCOLO SUBTOTALE ---
-    const subtotal = cart.reduce(
-      (acc, item) => acc + item.price * item.qty,
+    // --- ITEMS VALIDATI E RICOSTRUITI DAL SERVER ---
+    const trustedItems: OrderItem[] = [];
+
+    for (const rawItem of cart) {
+      const id = rawItem?.id;
+      const qty = rawItem?.qty;
+
+      // Validazione id
+      if (typeof id !== "string" || id.length === 0) {
+        return NextResponse.json(
+          { error: "Articolo non valido nel carrello." },
+          { status: 400 }
+        );
+      }
+
+      // Validazione qty: intero, minimo 1, massimo MAX_QTY
+      if (
+        typeof qty !== "number" ||
+        !Number.isInteger(qty) ||
+        qty < 1 ||
+        qty > MAX_QTY
+      ) {
+        return NextResponse.json(
+          {
+            error: `Quantità non valida per "${id}". Consentito: intero da 1 a ${MAX_QTY}.`,
+          },
+          { status: 400 }
+        );
+      }
+
+      // Prodotto reale dal catalogo server-side
+      const product = catalog.find((p) => p.id === id);
+
+      if (!product) {
+        return NextResponse.json(
+          { error: `Prodotto non trovato: "${id}".` },
+          { status: 400 }
+        );
+      }
+
+      const absoluteImage = product.image.startsWith("http")
+        ? product.image
+        : `${process.env.NEXT_PUBLIC_SITE_URL}${product.image}`;
+
+      trustedItems.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: qty,
+        image: absoluteImage,
+      });
+    }
+
+    // --- CALCOLO SUBTOTALE (su prezzi server-side) ---
+    const subtotal = trustedItems.reduce(
+      (acc, item) => acc + item.price * item.quantity,
       0
     );
 
@@ -36,32 +97,20 @@ export async function POST(request: Request) {
     const shippingCost = subtotal >= 49 ? 0 : 7;
 
     // --- COSTRUZIONE ITEMS PER METADATA ---
-    const metadataItems: OrderItem[] = cart.map((item) => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity: item.qty,
-      image: item.image.startsWith("http")
-        ? item.image
-        : `${process.env.NEXT_PUBLIC_SITE_URL}${item.image}`,
-    }));
+    const metadataItems: OrderItem[] = trustedItems;
 
     // --- LINE ITEMS PRODOTTI ---
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
-      cart.map((item) => ({
+      trustedItems.map((item) => ({
         price_data: {
           currency: "eur",
           product_data: {
             name: item.name,
-            images: [
-              item.image.startsWith("http")
-                ? item.image
-                : `${process.env.NEXT_PUBLIC_SITE_URL}${item.image}`
-            ],
+            images: [item.image],
           },
           unit_amount: Math.round(item.price * 100),
         },
-        quantity: item.qty,
+        quantity: item.quantity,
       }));
 
     // --- LINE ITEM SPEDIZIONE ---
@@ -99,7 +148,7 @@ export async function POST(request: Request) {
         subtotal: subtotal.toString(),
       },
 
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart`,
     });
 

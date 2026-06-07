@@ -1,8 +1,6 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { sendOrderEmail } from "@/lib/email/sendOrderEmail";
-import fs from "fs";
-import path from "path";
 
 export const runtime = "nodejs";
 
@@ -39,6 +37,12 @@ export async function POST(req: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
+    // 🔁 IDEMPOTENZA: se già processato, non reinviare le email
+    if (session.metadata?.emailed === "1") {
+      console.log("↩️ Ordine già processato, skip email:", session.id);
+      return NextResponse.json({ received: true });
+    }
+
     const orderId = session.id;
     const customerEmail = session.customer_details?.email || "";
 
@@ -59,49 +63,18 @@ export async function POST(req: Request) {
     console.log("📦 Nuovo ordine completato:", orderId);
 
     // ---------------------------------------------------
-    // 💾 SALVATAGGIO ORDINE IN JSON (Vercel-compatible)
+    // 📧 EMAIL AL CLIENTE (solo se l'email è presente)
     // ---------------------------------------------------
-    try {
-      const ordersDir = "/tmp/orders";
-
-      if (!fs.existsSync(ordersDir)) {
-        fs.mkdirSync(ordersDir, { recursive: true });
-      }
-
-      const orderData = {
+    if (customerEmail) {
+      await sendOrderEmail({
         orderId,
-        date: new Date().toISOString(),
         customerEmail,
-        subtotal,
-        shippingCost,
         total,
         items,
-        address: session.customer_details,
-        shipping: session.customer_details,
-      };
-
-      const filePath = path.join(ordersDir, `${orderId}.json`);
-
-      fs.writeFileSync(
-        filePath,
-        JSON.stringify(orderData, null, 2),
-        "utf-8"
-      );
-
-      console.log("💾 Ordine salvato in:", filePath);
-    } catch (err) {
-      console.error("❌ Errore salvataggio JSON:", err);
+      });
+    } else {
+      console.warn("⚠️ Email cliente mancante: invio solo email staff.");
     }
-
-    // ---------------------------------------------------
-    // 📧 EMAIL AL CLIENTE
-    // ---------------------------------------------------
-    await sendOrderEmail({
-      orderId,
-      customerEmail,
-      total,
-      items,
-    });
 
     // ---------------------------------------------------
     // 📧 EMAIL A TE (STAFF SCARAMUZZO)
@@ -113,7 +86,21 @@ export async function POST(req: Request) {
       items,
     });
 
-    console.log("📨 Email cliente + staff inviate");
+    console.log("📨 Email inviate");
+
+    // ---------------------------------------------------
+    // ✅ MARCA COME PROCESSATO (preserva i metadata esistenti)
+    // ---------------------------------------------------
+    try {
+      await stripe.checkout.sessions.update(session.id, {
+        metadata: {
+          ...session.metadata,
+          emailed: "1",
+        },
+      });
+    } catch (err) {
+      console.error("❌ Errore aggiornamento metadata sessione:", err);
+    }
   }
 
   return NextResponse.json({ received: true });
