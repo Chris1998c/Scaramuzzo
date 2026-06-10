@@ -45,6 +45,11 @@ const copy = {
     consultText:
       "Parla direttamente con Carmen e ricevi una consulenza personalizzata per i tuoi capelli.",
     consultCta: "Scrivici su WhatsApp",
+    bceKicker: "Esperienza professionale",
+    bceTitle: "Scaramuzzo Botanical Color Experience",
+    bceText:
+      "Vuoi una valutazione approfondita del tuo profilo colore, dei capelli bianchi, della porosità e dello storico tecnico?",
+    bceCta: "Inizia l’esperienza",
     finalTitle: "Pronto a iniziare il tuo percorso?",
     finalText: "Costruisci il tuo profilo e ricevi una routine pensata per te.",
     finalCta: "Inizia il quiz",
@@ -81,6 +86,11 @@ const copy = {
     consultText:
       "Talk directly with Carmen and get a personalized consultation for your hair.",
     consultCta: "Message us on WhatsApp",
+    bceKicker: "Professional experience",
+    bceTitle: "Scaramuzzo Botanical Color Experience",
+    bceText:
+      "Want an in-depth assessment of your color profile, grey hair, porosity and technical history?",
+    bceCta: "Start the experience",
     finalTitle: "Ready to start your journey?",
     finalText: "Build your profile and receive a routine designed for you.",
     finalCta: "Start the quiz",
@@ -204,6 +214,24 @@ export default function ErbeClient() {
               <MessageCircle className="h-5 w-5" />
               {t.consultCta}
             </a>
+          </div>
+        </ProductSection>
+
+        {/* ===================== BOTANICAL COLOR EXPERIENCE ===================== */}
+        <ProductSection kicker={t.bceKicker} title={t.bceTitle}>
+          <div className="flex flex-col items-start gap-6 rounded-3xl border border-accent/30 bg-gradient-to-br from-card to-card/40 p-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4">
+              <Sparkles className="mt-1 h-6 w-6 shrink-0 text-accent" />
+              <p className="max-w-xl text-base leading-relaxed text-muted-foreground">
+                {t.bceText}
+              </p>
+            </div>
+            <Link
+              href="/diagnosi-botanica"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
+            >
+              {t.bceCta}
+            </Link>
           </div>
         </ProductSection>
 
