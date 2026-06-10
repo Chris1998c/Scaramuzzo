@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Check, RotateCcw, ShoppingBag, MessageCircle } from "lucide-react";
+import { Check, RotateCcw, ShoppingBag, MessageCircle, Sparkles } from "lucide-react";
 import { useCartStore } from "@/lib/store/cartStore";
 import {
   recommend,
+  customFormula,
   type Lang,
   type Capello,
   type Cute,
@@ -108,16 +109,35 @@ const T = {
     why: "Perché lo consigliamo",
     add: "Aggiungi",
     added: "Aggiunto ✔",
-    addAll: "Aggiungi tutto al carrello",
-    savedTitle: "Configurazione pronta",
-    savedText:
-      "Abbiamo selezionato i prodotti del catalogo più adatti al tuo profilo.",
+    // Percorso A
+    pathATag: "Percorso A — Disponibile subito",
+    pathATitle: "Routine disponibile subito",
+    pathAText:
+      "Prodotti già pronti dalla nostra linea, selezionati in base al tuo profilo.",
+    addRoutine: "Aggiungi tutta la routine al carrello",
+    // Percorso B
+    pathBTag: "Percorso B — Su misura",
+    pathBQuestion: "Vuoi qualcosa di ancora più personalizzato?",
+    pathBName: "Formula Personalizzata Scaramuzzo",
+    pathBText:
+      "Creiamo una formula su misura partendo dal tuo profilo. Un nostro consulente definirà con te la soluzione ideale.",
+    profileLabel: "Profilo",
+    configLabel: "Configurazione consigliata",
+    baseSuggested: "Base suggerita",
+    productCategory: "Categoria prodotto",
+    mainNeed: "Esigenza principale",
+    requestCustom: "Richiedi Formula Personalizzata",
     waCta: "Invia la configurazione a Carmen",
     waGreeting: "Ciao Carmen,",
     waIntro: "ho completato il quiz Prodotti Personalizzati.",
     waProfile: "Profilo:",
     waRoutine: "Routine suggerita:",
     waClosing: "Vorrei un tuo parere professionale.",
+    waCustomIntro:
+      "vorrei richiedere una Formula Personalizzata Scaramuzzo.",
+    waConfig: "Configurazione consigliata:",
+    waCustomClosing:
+      "Potete crearmi una formula su misura in base a questo profilo?",
     hairLabel: "Capelli",
     scalpLabel: "Cute",
     goalLabel: "Obiettivo",
@@ -138,16 +158,34 @@ const T = {
     why: "Why we recommend it",
     add: "Add",
     added: "Added ✔",
-    addAll: "Add everything to cart",
-    savedTitle: "Configuration ready",
-    savedText:
-      "We selected the catalog products best suited to your profile.",
+    // Path A
+    pathATag: "Path A — Available now",
+    pathATitle: "Routine available now",
+    pathAText:
+      "Ready-made products from our line, selected based on your profile.",
+    addRoutine: "Add the whole routine to cart",
+    // Path B
+    pathBTag: "Path B — Made to measure",
+    pathBQuestion: "Want something even more personalized?",
+    pathBName: "Scaramuzzo Custom Formula",
+    pathBText:
+      "We create a made-to-measure formula starting from your profile. One of our advisors will define the ideal solution with you.",
+    profileLabel: "Profile",
+    configLabel: "Recommended configuration",
+    baseSuggested: "Suggested base",
+    productCategory: "Product category",
+    mainNeed: "Main need",
+    requestCustom: "Request Custom Formula",
     waCta: "Send your configuration to Carmen",
     waGreeting: "Hi Carmen,",
     waIntro: "I completed the Personalized Products quiz.",
     waProfile: "Profile:",
     waRoutine: "Suggested routine:",
     waClosing: "I'd like your professional opinion.",
+    waCustomIntro: "I'd like to request a Scaramuzzo Custom Formula.",
+    waConfig: "Recommended configuration:",
+    waCustomClosing:
+      "Could you create a made-to-measure formula based on this profile?",
     hairLabel: "Hair",
     scalpLabel: "Scalp",
     goalLabel: "Goal",
@@ -190,24 +228,29 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     return opt ? opt[language] : "";
   };
 
-  const recos: Reco[] =
+  const completeAnswers =
     showResults &&
     answers.capello &&
     answers.cute &&
     answers.obiettivo &&
     answers.profumo &&
     answers.intensita
-      ? recommend(
-          {
-            capello: answers.capello,
-            cute: answers.cute,
-            obiettivo: answers.obiettivo,
-            profumo: answers.profumo,
-            intensita: answers.intensita,
-          },
-          language
-        )
-      : [];
+      ? {
+          capello: answers.capello,
+          cute: answers.cute,
+          obiettivo: answers.obiettivo,
+          profumo: answers.profumo,
+          intensita: answers.intensita,
+        }
+      : null;
+
+  const recos: Reco[] = completeAnswers
+    ? recommend(completeAnswers, language)
+    : [];
+
+  const formula = completeAnswers
+    ? customFormula(completeAnswers, language)
+    : null;
 
   const addOne = (r: Reco) => {
     addToCart({
@@ -260,6 +303,36 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     )}`;
   };
 
+  const waHrefCustom = () => {
+    const lines = [
+      t.waGreeting,
+      "",
+      t.waCustomIntro,
+      "",
+      t.waProfile,
+      "",
+      `• ${t.hairLabel}: ${labelFor("capello")}`,
+      `• ${t.scalpLabel}: ${labelFor("cute")}`,
+      `• ${t.goalLabel}: ${labelFor("obiettivo")}`,
+      `• ${t.fragrance}: ${labelFor("profumo")}`,
+      `• ${t.intensity}: ${labelFor("intensita")}`,
+    ];
+    if (formula) {
+      lines.push(
+        "",
+        t.waConfig,
+        "",
+        `• ${t.baseSuggested}: ${formula.baseSuggested}`,
+        `• ${t.productCategory}: ${formula.productCategory}`,
+        `• ${t.mainNeed}: ${formula.mainNeed}`
+      );
+    }
+    lines.push("", t.waCustomClosing);
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      lines.join("\n")
+    )}`;
+  };
+
   // ---------------- RISULTATI ----------------
   if (showResults) {
     return (
@@ -303,7 +376,20 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
           </dl>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* ===================== PERCORSO A ===================== */}
+        <div className="mt-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+            {t.pathATag}
+          </p>
+          <h4 className="mt-2 text-xl font-semibold sm:text-2xl">
+            {t.pathATitle}
+          </h4>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {t.pathAText}
+          </p>
+        </div>
+
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {recos.map((r) => {
             const isAdded = addedIds.includes(r.productId);
             return (
@@ -375,31 +461,118 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
           })}
         </div>
 
-        {/* AZIONI FINALI */}
-        <div className="mt-10 rounded-3xl border border-accent/30 bg-gradient-to-br from-card to-card/40 p-8">
-          <h4 className="text-xl font-semibold">{t.savedTitle}</h4>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            {t.savedText}
-          </p>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <button
-              onClick={addAll}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
-            >
-              <ShoppingBag className="h-5 w-5" />
-              {t.addAll}
-            </button>
+        {/* CTA PERCORSO A */}
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <button
+            onClick={addAll}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
+          >
+            <ShoppingBag className="h-5 w-5" />
+            {t.addRoutine}
+          </button>
+          <a
+            href={waHref()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-border/60 px-7 py-3.5 text-base font-semibold transition hover:border-accent/50 hover:bg-card/60"
+          >
+            <MessageCircle className="h-5 w-5" />
+            {t.waCta}
+          </a>
+        </div>
+
+        {/* ===================== PERCORSO B — FORMULA PERSONALIZZATA ===================== */}
+        {formula && (
+          <div className="mt-14 overflow-hidden rounded-3xl border border-accent/30 bg-gradient-to-br from-card to-card/40 p-8 sm:p-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+              {t.pathBTag}
+            </p>
+            <h4 className="mt-3 text-xl font-semibold sm:text-2xl">
+              {t.pathBQuestion}
+            </h4>
+
+            <div className="mt-6 flex items-center gap-3">
+              <Sparkles className="h-6 w-6 shrink-0 text-accent" />
+              <p className="text-lg font-semibold tracking-wide">
+                {t.pathBName}
+              </p>
+            </div>
+
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              {t.pathBText}
+            </p>
+
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+              {/* PROFILO */}
+              <div className="rounded-2xl border border-border/40 bg-background/30 p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  {t.profileLabel}
+                </p>
+                <dl className="mt-4 space-y-2 text-sm">
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">{t.hairLabel}</dt>
+                    <dd className="font-medium">{labelFor("capello")}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">{t.scalpLabel}</dt>
+                    <dd className="font-medium">{labelFor("cute")}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">{t.goalLabel}</dt>
+                    <dd className="font-medium">{labelFor("obiettivo")}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">{t.fragrance}</dt>
+                    <dd className="font-medium">{labelFor("profumo")}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">{t.intensity}</dt>
+                    <dd className="font-medium">{labelFor("intensita")}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              {/* CONFIGURAZIONE CONSIGLIATA */}
+              <div className="rounded-2xl border border-border/40 bg-background/30 p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                  {t.configLabel}
+                </p>
+                <dl className="mt-4 space-y-2 text-sm">
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">
+                      {t.baseSuggested}
+                    </dt>
+                    <dd className="font-medium">{formula.baseSuggested}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">
+                      {t.productCategory}
+                    </dt>
+                    <dd className="text-right font-medium">
+                      {formula.productCategory}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <dt className="text-muted-foreground">{t.mainNeed}</dt>
+                    <dd className="font-medium capitalize">
+                      {formula.mainNeed}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+
             <a
-              href={waHref()}
+              href={waHrefCustom()}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-border/60 px-7 py-3.5 text-base font-semibold transition hover:border-accent/50 hover:bg-card/60"
+              className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
             >
-              <MessageCircle className="h-5 w-5" />
-              {t.waCta}
+              <Sparkles className="h-5 w-5" />
+              {t.requestCustom}
             </a>
           </div>
-        </div>
+        )}
       </div>
     );
   }

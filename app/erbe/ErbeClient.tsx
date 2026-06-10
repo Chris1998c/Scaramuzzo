@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { MessageCircle, FileDown, Sparkles } from "lucide-react";
+import { MessageCircle, Sparkles } from "lucide-react";
 import ProductSection from "@/components/product/ProductSection";
 import InfoCards from "@/components/product/InfoCards";
 import QuizConfigurator from "./QuizConfigurator";
 
 type Lang = "it" | "en";
 
-// ⚠️ PLACEHOLDER: sostituire con il numero WhatsApp reale (formato internazionale, solo cifre).
+// Numero WhatsApp ufficiale (formato internazionale, solo cifre).
 const WHATSAPP_NUMBER = "393470914731";
 
 const copy = {
@@ -38,18 +38,13 @@ const copy = {
       { n: "03", title: "Routine", text: "Ricevi shampoo, maschera e trattamento su misura." },
       { n: "04", title: "Carrello", text: "Aggiungi tutto al carrello o invia la configurazione." },
     ],
-    quizKicker: "Percorso A — Quiz automatico",
+    quizKicker: "Configuratore guidato",
     quizTitle: "Configura la tua routine",
-    consultKicker: "Percorso B — Consulenza",
+    consultKicker: "Consulenza diretta",
     consultTitle: "Hai esigenze particolari?",
     consultText:
       "Parla direttamente con Carmen e ricevi una consulenza personalizzata per i tuoi capelli.",
     consultCta: "Scrivici su WhatsApp",
-    guideKicker: "Approfondimento",
-    guideTitle: "Guida alle miscele vegetali",
-    guideText:
-      "Scarica la guida pratica all’uso delle nostre miscele botaniche: preparazione, tempi di posa e consigli.",
-    guideCta: "Scarica la guida in PDF",
     finalTitle: "Pronto a iniziare il tuo percorso?",
     finalText: "Costruisci il tuo profilo e ricevi una routine pensata per te.",
     finalCta: "Inizia il quiz",
@@ -79,18 +74,13 @@ const copy = {
       { n: "03", title: "Routine", text: "Get a tailored shampoo, mask and treatment." },
       { n: "04", title: "Cart", text: "Add everything to cart or send your configuration." },
     ],
-    quizKicker: "Path A — Automatic quiz",
+    quizKicker: "Guided configurator",
     quizTitle: "Configure your routine",
-    consultKicker: "Path B — Consultation",
+    consultKicker: "Direct consultation",
     consultTitle: "Have special needs?",
     consultText:
       "Talk directly with Carmen and get a personalized consultation for your hair.",
     consultCta: "Message us on WhatsApp",
-    guideKicker: "In depth",
-    guideTitle: "Guide to botanical blends",
-    guideText:
-      "Download the practical guide to using our botanical blends: preparation, processing times and tips.",
-    guideCta: "Download the PDF guide",
     finalTitle: "Ready to start your journey?",
     finalText: "Build your profile and receive a routine designed for you.",
     finalCta: "Start the quiz",
@@ -213,24 +203,6 @@ export default function ErbeClient() {
             >
               <MessageCircle className="h-5 w-5" />
               {t.consultCta}
-            </a>
-          </div>
-        </ProductSection>
-
-        {/* ===================== GUIDA PDF (secondaria) ===================== */}
-        <ProductSection kicker={t.guideKicker} title={t.guideTitle}>
-          <div className="max-w-3xl">
-            <p className="text-base leading-relaxed text-muted-foreground">
-              {t.guideText}
-            </p>
-            <a
-              href="/Spiegazione erbe.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-border/60 px-6 py-3 text-sm font-semibold text-foreground transition hover:border-accent/50 hover:bg-card/60"
-            >
-              <FileDown className="h-4 w-4" />
-              {t.guideCta}
             </a>
           </div>
         </ProductSection>

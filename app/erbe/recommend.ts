@@ -142,6 +142,62 @@ function thirdReason(kind: Reco["kind"], lang: Lang): string {
     : "Styling product recommended to define and control curls.";
 }
 
+/**
+ * Percorso B — Formula Personalizzata.
+ * Restituisce SOLO descrittori di configurazione di alto livello derivati dalle
+ * risposte del quiz. Nessun ingrediente / estratto / INCI: solo categoria,
+ * base consigliata ed esigenza principale.
+ */
+export interface CustomFormula {
+  baseSuggested: string;
+  productCategory: string;
+  mainNeed: string;
+}
+
+const BASE_BY_CUTE: Record<Lang, Record<Cute, string>> = {
+  it: {
+    grassa: "Base purificante",
+    secca: "Base nutriente",
+    sensibile: "Base delicata",
+    normale: "Base equilibrata",
+  },
+  en: {
+    grassa: "Purifying base",
+    secca: "Nourishing base",
+    sensibile: "Gentle base",
+    normale: "Balanced base",
+  },
+};
+
+const CATEGORY_BY_GOAL: Record<Lang, Record<Obiettivo, string>> = {
+  it: {
+    idratazione: "Shampoo + Maschera idratante",
+    nutrizione: "Shampoo + Maschera nutriente",
+    purificazione: "Shampoo purificante + Maschera",
+    volume: "Shampoo volumizzante + Maschera",
+    lucentezza: "Shampoo + Maschera illuminante",
+    "definizione-ricci": "Detersione + Styling ricci",
+    anticaduta: "Shampoo + Trattamento anticaduta",
+  },
+  en: {
+    idratazione: "Shampoo + Hydrating mask",
+    nutrizione: "Shampoo + Nourishing mask",
+    purificazione: "Purifying shampoo + Mask",
+    volume: "Volumizing shampoo + Mask",
+    lucentezza: "Shampoo + Illuminating mask",
+    "definizione-ricci": "Cleansing + Curl styling",
+    anticaduta: "Shampoo + Anti-hair-loss treatment",
+  },
+};
+
+export function customFormula(a: QuizAnswers, lang: Lang): CustomFormula {
+  return {
+    baseSuggested: BASE_BY_CUTE[lang][a.cute],
+    productCategory: CATEGORY_BY_GOAL[lang][a.obiettivo],
+    mainNeed: GOAL_LABEL[lang][a.obiettivo],
+  };
+}
+
 export function recommend(a: QuizAnswers, lang: Lang): Reco[] {
   const recos: Reco[] = [];
 
