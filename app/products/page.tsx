@@ -1,29 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Product } from "./data";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCartStore } from "@/lib/store/cartStore";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 
 // 🔥 import prodotti REALI da data.ts
 import { productTranslations } from "./data";
-
-type Language = "it" | "en";
 
 export default function ProductsPage() {
   const router = useRouter();
   const addToCart = useCartStore((s) => s.addToCart);
   const openCart = useCartStore((s) => s.openCart);
 
-  const [language, setLanguage] = useState<Language>("it");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Language | null;
-    if (stored) setLanguage(stored);
-  }, []);
+  const { language } = useLanguage();
 
   const t = productTranslations[language];
   const products = t.products;

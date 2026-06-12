@@ -1,18 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-type Language = "it" | "en";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const [language, setLanguage] = useState<Language>("it");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Language | null;
-    if (stored === "it" || stored === "en") setLanguage(stored);
-  }, []);
+  const { language } = useLanguage();
 
   const t = {
     it: {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Service, serviceTranslations } from "@/app/services/data";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 
 interface Props {
   id: string;
@@ -14,16 +15,8 @@ type Language = "it" | "en";
 
 const ServicePageClient: FC<Props> = ({ id }) => {
   const router = useRouter();
-  const [language, setLanguage] = useState<Language>("it");
+  const { language } = useLanguage();
   const [service, setService] = useState<Service | null>(null);
-
-  // Leggo la lingua da localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Language | null;
-    if (stored === "it" || stored === "en") {
-      setLanguage(stored);
-    }
-  }, []);
 
   // Recupero il servizio dalla traduzione corretta
   useEffect(() => {

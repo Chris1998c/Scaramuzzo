@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import { MessageCircle, Sparkles } from "lucide-react";
 import ProductSection from "@/components/product/ProductSection";
 import InfoCards from "@/components/product/InfoCards";
 import QuizConfigurator from "./QuizConfigurator";
 
-type Lang = "it" | "en";
 
 // Numero WhatsApp ufficiale (formato internazionale, solo cifre).
 const WHATSAPP_NUMBER = "393470914731";
@@ -99,12 +98,7 @@ const copy = {
 } as const;
 
 export default function ErbeClient() {
-  const [language, setLanguage] = useState<Lang>("it");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Lang | null;
-    if (stored === "it" || stored === "en") setLanguage(stored);
-  }, []);
+  const { language } = useLanguage();
 
   const t = copy[language];
   const waPlain = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(

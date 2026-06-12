@@ -1,13 +1,11 @@
 "use client";
 
 import HomeHero from "@/app/components/Home";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import { Store, CalendarDays, UserCheck, Leaf, MapPin, ArrowRight } from "lucide-react";
 import InfoCards from "@/components/product/InfoCards";
-
-type Language = "it" | "en";
 
 const copy = {
   it: {
@@ -157,14 +155,7 @@ const copy = {
 };
 
 export default function PageClient() {
-  const [language, setLanguage] = useState<Language>("it");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Language | null;
-    if (stored === "it" || stored === "en") {
-      setLanguage(stored);
-    }
-  }, []);
+  const { language } = useLanguage();
 
   const t = copy[language];
 

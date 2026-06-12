@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/site/Navbar";
 import Footer from "./components/site/Footer";
 import CookieBanner from "./components/site/CookieBanner";
+import { LanguageProvider } from "./components/site/LanguageProvider";
 import Script from "next/script";
 
 const inter = localFont({
@@ -73,6 +74,13 @@ export default function RootLayout({
   return (
     <html lang="it" suppressHydrationWarning>
       <head>
+        {/* Tema pre-paint: applica la classe prima dell'hydration per evitare il flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=document.documentElement;d.classList.remove('light','dark');d.classList.add(t==='light'?'light':'dark');}catch(e){}})();`,
+          }}
+        />
+
         {/* GA4 */}
         <Script
           async
@@ -242,10 +250,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${mono.variable} bg-background text-foreground antialiased min-h-screen`}
       >
-        <Navbar />
-        <CookieBanner />
-        <main className="py-8">{children}</main>
-        <Footer />
+        <LanguageProvider>
+          <Navbar />
+          <CookieBanner />
+          <main className="py-8">{children}</main>
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

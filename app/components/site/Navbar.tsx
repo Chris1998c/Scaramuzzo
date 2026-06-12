@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Moon, Sun, Languages, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +16,6 @@ import {
 // 🔥 NUOVO CARRELLO
 import CartButton from "@/components/cart/CartButton";
 import CartDrawer from "@/components/cart/CartDrawer";
-
-type Language = "it" | "en";
 
 const navItems = [
   { href: "/", key: "home", label: { it: "Home", en: "Home" } },
@@ -45,19 +44,16 @@ const navItems = [
 
 export default function Navbar() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const [language, setLanguage] = useState<Language>("it");
+  const { language, setLanguage } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Carica tema/lang
+  // Carica tema (lo script pre-paint nel layout ha già applicato la classe).
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme") as
       | "light"
       | "dark"
       | null;
-    const storedLang = localStorage.getItem("language") as Language | null;
-
     if (storedTheme) setTheme(storedTheme);
-    if (storedLang) setLanguage(storedLang);
   }, []);
 
   // Applica tema
@@ -67,10 +63,6 @@ export default function Navbar() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  useEffect(() => {
-    localStorage.setItem("language", language);
-  }, [language]);
-
   return (
     <>
       {/* 🔥 Carrello montato a livello navbar per essere globale */}
@@ -79,17 +71,24 @@ export default function Navbar() {
       <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-[#2b1409]/90 backdrop-blur-xl shadow-md">
         <div className="container flex h-16 items-center justify-between px-4 md:px-8">
           {/* LOGO */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative w-20 h-12">
+          <Link
+            href="/"
+            aria-label="Scaramuzzo — Home"
+            className="flex items-center gap-3"
+          >
+            <div className="relative h-12 w-24 shrink-0 sm:h-14 sm:w-28">
               <Image
                 src="/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp"
-                alt="Scaramuzzo Logo"
+                alt="Scaramuzzo Hair Natural Beauty"
                 fill
-                sizes="(max-width: 768px) 120px, 160px"
-                className="object-contain"
+                sizes="(max-width: 640px) 96px, 112px"
+                className="object-contain object-left"
                 priority
               />
             </div>
+            <span className="hidden text-lg font-semibold tracking-wide text-neutral-100 sm:inline-block">
+              Scaramuzzo
+            </span>
           </Link>
 
           {/* NAV DESKTOP */}

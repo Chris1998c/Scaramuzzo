@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import { MapPin } from "lucide-react";
 import ProductSection from "@/components/product/ProductSection";
 import InfoCards from "@/components/product/InfoCards";
 
-type Lang = "it" | "en";
 
 const copy = {
   it: {
@@ -112,12 +111,7 @@ const copy = {
 };
 
 export default function AboutClient() {
-  const [language, setLanguage] = useState<Lang>("it");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Lang | null;
-    if (stored === "it" || stored === "en") setLanguage(stored);
-  }, []);
+  const { language } = useLanguage();
 
   const t = copy[language];
 

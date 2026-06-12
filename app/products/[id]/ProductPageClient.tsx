@@ -10,6 +10,7 @@ import { useCartStore } from "@/lib/store/cartStore";
 import ProductSection from "@/components/product/ProductSection";
 import FeatureList from "@/components/product/FeatureList";
 import Steps from "@/components/product/Steps";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import InfoCards from "@/components/product/InfoCards";
 import Faq from "@/components/product/Faq";
 import RelatedProducts from "@/components/product/RelatedProducts";
@@ -18,7 +19,6 @@ interface ProductPageClientProps {
   id: string;
 }
 
-type Lang = "it" | "en";
 type Category = "shampoo" | "mask" | "styling" | "treatment" | "other";
 
 const fade = {
@@ -140,19 +140,13 @@ const toSteps = (text: string): string[] =>
 
 const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   const router = useRouter();
-  const [language, setLanguage] = useState<Lang>("it");
+  const { language } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [added, setAdded] = useState(false);
 
   // Zustand → addItem
   const addToCart = useCartStore((s) => s.addToCart);
   const openCart = useCartStore((s) => s.openCart);
-
-  // LINGUA
-  useEffect(() => {
-    const storedLanguage = localStorage.getItem("language") as Lang | null;
-    if (storedLanguage) setLanguage(storedLanguage);
-  }, []);
 
   // CARICA PRODOTTO
   useEffect(() => {

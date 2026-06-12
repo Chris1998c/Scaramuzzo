@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 
-type Language = "it" | "en";
 type Status = "idle" | "sending" | "sent" | "error";
 
 const translations = {
@@ -32,19 +32,12 @@ const translations = {
 } as const;
 
 export default function ContactClient() {
-  const [language, setLanguage] = useState<Language>("it");
+  const { language } = useLanguage();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [website, setWebsite] = useState(""); // honeypot anti-bot
   const [status, setStatus] = useState<Status>("idle");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Language | null;
-    if (stored === "it" || stored === "en") {
-      setLanguage(stored);
-    }
-  }, []);
 
   const t = translations[language];
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import {
   Check,
   RotateCcw,
@@ -572,7 +573,7 @@ function crmLockStorageKey(fingerprint: string): string {
 }
 
 export default function DiagnosiClient() {
-  const [language, setLanguage] = useState<Lang>("it");
+  const { language } = useLanguage();
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
@@ -590,11 +591,6 @@ export default function DiagnosiClient() {
     customerPhone.replace(/\D/g, "").length >= 8 &&
     /^[+\d][\d\s().-]*$/.test(customerPhone.trim()) &&
     ageRange.length > 0;
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Lang | null;
-    if (stored === "it" || stored === "en") setLanguage(stored);
-  }, []);
 
   useEffect(() => {
     if (!showResults) return;

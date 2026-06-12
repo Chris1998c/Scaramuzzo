@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import {
   Card,
   CardContent,
@@ -11,18 +11,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-type Language = "it" | "en";
-
 export default function ServicesClient() {
   const router = useRouter();
-  const [language, setLanguage] = useState<Language>("it");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Language | null;
-    if (stored === "it" || stored === "en") {
-      setLanguage(stored);
-    }
-  }, []);
+  const { language } = useLanguage();
 
   const translations = {
     it: {

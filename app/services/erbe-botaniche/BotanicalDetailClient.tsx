@@ -1,6 +1,7 @@
 "use client";
 
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback } from "react";
+import { useLanguage } from "@/app/components/site/LanguageProvider";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-type Language = "it" | "en";
 
 const botanicalItems = {
   it: [
@@ -93,12 +93,7 @@ const botanicalItems = {
 
 const BotanicalDetailClient: FC = () => {
   const router = useRouter();
-  const [language, setLanguage] = useState<Language>("it");
-
-  useEffect(() => {
-    const stored = localStorage.getItem("language") as Language | null;
-    if (stored === "it" || stored === "en") setLanguage(stored);
-  }, []);
+  const { language } = useLanguage();
 
   const t = botanicalItems[language];
 
