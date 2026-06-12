@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Check, RotateCcw, ShoppingBag, MessageCircle, Sparkles } from "lucide-react";
 import { useCartStore } from "@/lib/store/cartStore";
@@ -14,6 +14,7 @@ import {
   type Profumo,
   type Intensita,
   type Reco,
+  type RecommendResult,
 } from "./recommend";
 
 type Answers = {
@@ -127,12 +128,22 @@ const T = {
     productCategory: "Categoria prodotto",
     mainNeed: "Esigenza principale",
     requestCustom: "Richiedi Formula Personalizzata",
-    waCta: "Invia la configurazione a Carmen",
-    waGreeting: "Ciao Carmen,",
+    waCta: "Continua su WhatsApp",
+    waGreeting: "Buongiorno,",
     waIntro: "ho completato il quiz Prodotti Personalizzati.",
     waProfile: "Profilo:",
     waRoutine: "Routine suggerita:",
     waClosing: "Vorrei un tuo parere professionale.",
+    refLabel: "Riferimento consulenza",
+    refUnavailable: "Riferimento non disponibile",
+    waRef: "Riferimento consulenza",
+    customOnlyTitle: "Prodotto personalizzato su misura",
+    customOnlyText:
+      "Il profilo indicato richiede una valutazione personalizzata prima di consigliare una routine pronta.",
+    customReasonLabel: "Motivo della personalizzazione",
+    customWaClosing:
+      "Vorrei un prodotto personalizzato adatto al mio profilo.",
+    customWaCta: "Continua su WhatsApp",
     waCustomIntro:
       "vorrei richiedere una Formula Personalizzata Scaramuzzo.",
     waConfig: "Configurazione consigliata:",
@@ -176,12 +187,22 @@ const T = {
     productCategory: "Product category",
     mainNeed: "Main need",
     requestCustom: "Request Custom Formula",
-    waCta: "Send your configuration to Carmen",
-    waGreeting: "Hi Carmen,",
+    waCta: "Continue on WhatsApp",
+    waGreeting: "Hello,",
     waIntro: "I completed the Personalized Products quiz.",
     waProfile: "Profile:",
     waRoutine: "Suggested routine:",
     waClosing: "I'd like your professional opinion.",
+    refLabel: "Consultation reference",
+    refUnavailable: "Reference unavailable",
+    waRef: "Consultation reference",
+    customOnlyTitle: "Made-to-measure personalized product",
+    customOnlyText:
+      "Your profile requires a personalized assessment before we recommend a ready-made routine.",
+    customReasonLabel: "Reason for personalization",
+    customWaClosing:
+      "I'd like a personalized product suited to my profile.",
+    customWaCta: "Continue on WhatsApp",
     waCustomIntro: "I'd like to request a Scaramuzzo Custom Formula.",
     waConfig: "Recommended configuration:",
     waCustomClosing:
@@ -192,11 +213,38 @@ const T = {
   },
 };
 
+type CompleteAnswers = {
+  capello: Capello;
+  cute: Cute;
+  obiettivo: Obiettivo;
+  profumo: Profumo;
+  intensita: Intensita;
+};
+
+type CrmSource = "quiz_routine" | "quiz_custom";
+
+function answersFingerprint(answers: CompleteAnswers): string {
+  return JSON.stringify(answers);
+}
+
+function crmRefStorageKey(source: CrmSource, fingerprint: string): string {
+  return `pp-crm-ref-${source}-${fingerprint}`;
+}
+
+function crmLockStorageKey(source: CrmSource, fingerprint: string): string {
+  return `pp-crm-lock-${source}-${fingerprint}`;
+}
+
 export default function QuizConfigurator({ language, whatsappNumber }: Props) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [showResults, setShowResults] = useState(false);
   const [addedIds, setAddedIds] = useState<string[]>([]);
+  const [publicRef, setPublicRef] = useState<string | null>(null);
+  const [publicRefCustom, setPublicRefCustom] = useState<string | null>(null);
+  const [refUnavailable, setRefUnavailable] = useState(false);
+  const savedRoutineRef = useRef<string | null>(null);
+  const savedCustomRef = useRef<string | null>(null);
 
   const addToCart = useCartStore((s) => s.addToCart);
   const openCart = useCartStore((s) => s.openCart);
@@ -220,6 +268,11 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     setStep(0);
     setShowResults(false);
     setAddedIds([]);
+    setPublicRef(null);
+    setPublicRefCustom(null);
+    setRefUnavailable(false);
+    savedRoutineRef.current = null;
+    savedCustomRef.current = null;
   };
 
   const labelFor = (key: StepKey): string => {
@@ -228,7 +281,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     return opt ? opt[language] : "";
   };
 
-  const completeAnswers =
+  const completeAnswers: CompleteAnswers | null =
     showResults &&
     answers.capello &&
     answers.cute &&
@@ -244,13 +297,196 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
         }
       : null;
 
-  const recos: Reco[] = completeAnswers
+  const recommendResult: RecommendResult | null = completeAnswers
     ? recommend(completeAnswers, language)
-    : [];
-
-  const formula = completeAnswers
-    ? customFormula(completeAnswers, language)
     : null;
+
+  const recos = recommendResult?.recommendedProducts ?? [];
+  const customOnly = recommendResult?.customOnly ?? false;
+  const customReason = recommendResult?.customReason ?? "";
+  const customProductLabel = recommendResult?.customProductLabel ?? "";
+
+  const formula =
+    completeAnswers && !customOnly
+      ? customFormula(completeAnswers, language)
+      : null;
+
+  const buildCrmPayload = () => {
+    if (!completeAnswers) return null;
+    return {
+      answers: { ...completeAnswers },
+      recommendedProducts: recos.map((r) => ({
+        kind: r.kind,
+        productId: r.productId,
+        productName: r.productName,
+        price: r.price,
+      })),
+      customFormula: formula
+        ? {
+            baseSuggested: formula.baseSuggested,
+            productCategory: formula.productCategory,
+            mainNeed: formula.mainNeed,
+          }
+        : null,
+      customOnly,
+      customReason: customOnly ? customReason : "",
+      customProductLabel: customOnly ? customProductLabel : "",
+    };
+  };
+
+  useEffect(() => {
+    if (!showResults || !completeAnswers || customOnly) return;
+
+    const source: CrmSource = "quiz_routine";
+    const fingerprint = answersFingerprint(completeAnswers);
+    const refKey = crmRefStorageKey(source, fingerprint);
+    const lockKey = crmLockStorageKey(source, fingerprint);
+
+    const cachedRef = sessionStorage.getItem(refKey);
+    if (cachedRef) {
+      setPublicRef(cachedRef);
+      setRefUnavailable(false);
+      savedRoutineRef.current = fingerprint;
+      return;
+    }
+
+    if (savedRoutineRef.current === fingerprint) return;
+    if (sessionStorage.getItem(lockKey) === "pending") return;
+
+    const payload = buildCrmPayload();
+    if (!payload) return;
+
+    sessionStorage.setItem(lockKey, "pending");
+    savedRoutineRef.current = fingerprint;
+
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const res = await fetch("/api/consultations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "personalizzati",
+            source,
+            language,
+            payload,
+          }),
+        });
+
+        if (cancelled) return;
+
+        if (res.ok) {
+          const data = (await res.json()) as { publicRef?: string };
+          if (data.publicRef) {
+            sessionStorage.setItem(refKey, data.publicRef);
+            sessionStorage.setItem(lockKey, "done");
+            setPublicRef(data.publicRef);
+            setRefUnavailable(false);
+          } else {
+            sessionStorage.removeItem(lockKey);
+            setRefUnavailable(true);
+          }
+        } else {
+          sessionStorage.removeItem(lockKey);
+          savedRoutineRef.current = null;
+          setRefUnavailable(true);
+        }
+      } catch {
+        if (!cancelled) {
+          sessionStorage.removeItem(lockKey);
+          savedRoutineRef.current = null;
+          setRefUnavailable(true);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- recos/formula derivati da completeAnswers
+  }, [showResults, completeAnswers, language, customOnly]);
+
+  useEffect(() => {
+    if (!showResults || !completeAnswers) return;
+    if (!customOnly && !formula) return;
+
+    const source: CrmSource = "quiz_custom";
+    const fingerprint = answersFingerprint(completeAnswers);
+    const refKey = crmRefStorageKey(source, fingerprint);
+    const lockKey = crmLockStorageKey(source, fingerprint);
+
+    const cachedRef = sessionStorage.getItem(refKey);
+    if (cachedRef) {
+      if (customOnly) {
+        setPublicRef(cachedRef);
+        setRefUnavailable(false);
+      } else {
+        setPublicRefCustom(cachedRef);
+      }
+      savedCustomRef.current = fingerprint;
+      return;
+    }
+
+    if (savedCustomRef.current === fingerprint) return;
+    if (sessionStorage.getItem(lockKey) === "pending") return;
+
+    const payload = buildCrmPayload();
+    if (!payload) return;
+
+    sessionStorage.setItem(lockKey, "pending");
+    savedCustomRef.current = fingerprint;
+
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const res = await fetch("/api/consultations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "personalizzati",
+            source,
+            language,
+            payload,
+          }),
+        });
+
+        if (cancelled) return;
+
+        if (res.ok) {
+          const data = (await res.json()) as { publicRef?: string };
+          if (data.publicRef) {
+            sessionStorage.setItem(refKey, data.publicRef);
+            sessionStorage.setItem(lockKey, "done");
+            if (customOnly) {
+              setPublicRef(data.publicRef);
+              setRefUnavailable(false);
+            } else {
+              setPublicRefCustom(data.publicRef);
+            }
+          } else if (customOnly) {
+            setRefUnavailable(true);
+          }
+        } else {
+          sessionStorage.removeItem(lockKey);
+          savedCustomRef.current = null;
+          if (customOnly) setRefUnavailable(true);
+        }
+      } catch {
+        if (!cancelled) {
+          sessionStorage.removeItem(lockKey);
+          savedCustomRef.current = null;
+          if (customOnly) setRefUnavailable(true);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- recos/formula derivati da completeAnswers
+  }, [showResults, completeAnswers, formula, language, customOnly]);
 
   const addOne = (r: Reco) => {
     addToCart({
@@ -278,12 +514,13 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     openCart();
   };
 
-  const waHref = () => {
+  const waHref = (ref: string | null) => {
     const lines = [
       t.waGreeting,
       "",
       t.waIntro,
       "",
+      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
       t.waProfile,
       "",
       `• ${t.hairLabel}: ${labelFor("capello")}`,
@@ -303,12 +540,37 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     )}`;
   };
 
-  const waHrefCustom = () => {
+  const waHrefCustomOnly = (ref: string | null) => {
+    const lines = [
+      t.waGreeting,
+      "",
+      t.waIntro,
+      "",
+      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
+      t.waProfile,
+      "",
+      `• ${t.hairLabel}: ${labelFor("capello")}`,
+      `• ${t.scalpLabel}: ${labelFor("cute")}`,
+      `• ${t.goalLabel}: ${labelFor("obiettivo")}`,
+      `• ${t.fragrance}: ${labelFor("profumo")}`,
+      `• ${t.intensity}: ${labelFor("intensita")}`,
+      "",
+      customReason,
+      "",
+      t.customWaClosing,
+    ];
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      lines.join("\n")
+    )}`;
+  };
+
+  const waHrefCustom = (ref: string | null) => {
     const lines = [
       t.waGreeting,
       "",
       t.waCustomIntro,
       "",
+      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
       t.waProfile,
       "",
       `• ${t.hairLabel}: ${labelFor("capello")}`,
@@ -349,6 +611,14 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               {t.resultsIntro}
             </p>
+            {(publicRef || refUnavailable) && (
+              <p className="mt-3 text-sm text-muted-foreground">
+                {t.refLabel}:{" "}
+                {publicRef ?? (
+                  <span className="italic">{t.refUnavailable}</span>
+                )}
+              </p>
+            )}
           </div>
           <button
             onClick={reset}
@@ -360,22 +630,88 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
         </div>
 
         {/* Profilo olfattivo — una sola volta, non per prodotto */}
-        <div className="mt-8 rounded-2xl border border-border/40 bg-card/30 px-5 py-4 sm:px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-            {t.profileTitle}
-          </p>
-          <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
-            <div className="flex gap-2">
-              <dt className="text-muted-foreground">{t.fragrance}:</dt>
-              <dd className="font-medium">{labelFor("profumo")}</dd>
-            </div>
-            <div className="flex gap-2">
-              <dt className="text-muted-foreground">{t.intensity}:</dt>
-              <dd className="font-medium">{labelFor("intensita")}</dd>
-            </div>
-          </dl>
-        </div>
+        {!customOnly && (
+          <div className="mt-8 rounded-2xl border border-border/40 bg-card/30 px-5 py-4 sm:px-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+              {t.profileTitle}
+            </p>
+            <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+              <div className="flex gap-2">
+                <dt className="text-muted-foreground">{t.fragrance}:</dt>
+                <dd className="font-medium">{labelFor("profumo")}</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="text-muted-foreground">{t.intensity}:</dt>
+                <dd className="font-medium">{labelFor("intensita")}</dd>
+              </div>
+            </dl>
+          </div>
+        )}
 
+        {customOnly ? (
+          /* ===================== FALLBACK PERSONALIZZATO ===================== */
+          <div className="mt-10 overflow-hidden rounded-3xl border border-accent/30 bg-gradient-to-br from-card to-card/40 p-8 sm:p-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+              {customProductLabel}
+            </p>
+            <h4 className="mt-3 text-xl font-semibold sm:text-2xl">
+              {t.customOnlyTitle}
+            </h4>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              {t.customOnlyText}
+            </p>
+
+            <div className="mt-8 rounded-2xl border border-border/40 bg-background/30 p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                {t.profileLabel}
+              </p>
+              <dl className="mt-4 space-y-2 text-sm">
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.hairLabel}</dt>
+                  <dd className="font-medium">{labelFor("capello")}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.scalpLabel}</dt>
+                  <dd className="font-medium">{labelFor("cute")}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.goalLabel}</dt>
+                  <dd className="font-medium">{labelFor("obiettivo")}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.fragrance}</dt>
+                  <dd className="font-medium">{labelFor("profumo")}</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.intensity}</dt>
+                  <dd className="font-medium">{labelFor("intensita")}</dd>
+                </div>
+              </dl>
+            </div>
+
+            {customReason && (
+              <div className="mt-6 rounded-2xl border border-border/40 bg-background/30 p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                  {t.customReasonLabel}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {customReason}
+                </p>
+              </div>
+            )}
+
+            <a
+              href={waHrefCustomOnly(publicRef)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
+            >
+              <MessageCircle className="h-5 w-5" />
+              {t.customWaCta}
+            </a>
+          </div>
+        ) : (
+          <>
         {/* ===================== PERCORSO A ===================== */}
         <div className="mt-12">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
@@ -471,7 +807,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
             {t.addRoutine}
           </button>
           <a
-            href={waHref()}
+            href={waHref(publicRef)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-border/60 px-7 py-3.5 text-base font-semibold transition hover:border-accent/50 hover:bg-card/60"
@@ -563,7 +899,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
             </div>
 
             <a
-              href={waHrefCustom()}
+              href={waHrefCustom(publicRefCustom ?? publicRef)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
@@ -572,6 +908,8 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
               {t.requestCustom}
             </a>
           </div>
+        )}
+          </>
         )}
       </div>
     );

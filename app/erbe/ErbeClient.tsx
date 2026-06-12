@@ -43,7 +43,7 @@ const copy = {
     consultKicker: "Consulenza diretta",
     consultTitle: "Hai esigenze particolari?",
     consultText:
-      "Parla direttamente con Carmen e ricevi una consulenza personalizzata per i tuoi capelli.",
+      "Parla con il Team Scaramuzzo e ricevi una consulenza professionale personalizzata per i tuoi capelli.",
     consultCta: "Scrivici su WhatsApp",
     bceKicker: "Esperienza professionale",
     bceTitle: "Scaramuzzo Botanical Color Experience",
@@ -84,7 +84,7 @@ const copy = {
     consultKicker: "Direct consultation",
     consultTitle: "Have special needs?",
     consultText:
-      "Talk directly with Carmen and get a personalized consultation for your hair.",
+      "Talk with the Scaramuzzo team and receive a professional personalized consultation for your hair.",
     consultCta: "Message us on WhatsApp",
     bceKicker: "Professional experience",
     bceTitle: "Scaramuzzo Botanical Color Experience",

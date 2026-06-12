@@ -198,7 +198,102 @@ export function customFormula(a: QuizAnswers, lang: Lang): CustomFormula {
   };
 }
 
-export function recommend(a: QuizAnswers, lang: Lang): Reco[] {
+export interface RecommendResult {
+  recommendedProducts: Reco[];
+  customOnly: boolean;
+  customReason: string;
+  customProductLabel: string;
+}
+
+function evaluateCustomOnly(
+  a: QuizAnswers,
+  lang: Lang
+): Pick<RecommendResult, "customOnly" | "customReason" | "customProductLabel"> | null {
+  const isIT = lang === "it";
+  const reasons: string[] = [];
+
+  if (a.cute === "sensibile" && a.obiettivo === "anticaduta") {
+    reasons.push(
+      isIT
+        ? "Cute sensibile con obiettivo anticaduta richiede una valutazione personalizzata."
+        : "Sensitive scalp with an anti-hair-loss goal requires a personalized assessment."
+    );
+  }
+
+  if (
+    a.cute === "grassa" &&
+    a.capello === "molto-ricci" &&
+    a.obiettivo === "definizione-ricci"
+  ) {
+    reasons.push(
+      isIT
+        ? "Cute grassa, capelli molto ricci e definizione ricci richiedono un equilibrio su misura non coperto da una routine standard."
+        : "Oily scalp, very curly hair and curl definition need a tailored balance not covered by a standard routine."
+    );
+  }
+
+  if (a.capello === "molto-ricci" && a.cute === "sensibile") {
+    reasons.push(
+      isIT
+        ? "Capelli molto ricci con cute sensibile richiedono un approccio delicato e personalizzato."
+        : "Very curly hair with a sensitive scalp requires a gentle, personalized approach."
+    );
+  }
+
+  if (a.obiettivo === "anticaduta" && a.intensita === "intensa") {
+    reasons.push(
+      isIT
+        ? "Obiettivo anticaduta con profumazione intensa richiede una formula studiata su misura."
+        : "Anti-hair-loss goal with intense fragrance requires a made-to-measure formula."
+    );
+  }
+
+  if (a.cute === "sensibile" && a.obiettivo === "definizione-ricci") {
+    reasons.push(
+      isIT
+        ? "Cute sensibile con obiettivo definizione ricci richiede prodotti calibrati professionalmente."
+        : "Sensitive scalp with curl definition goal requires professionally calibrated products."
+    );
+  }
+
+  if (a.cute === "secca" && a.obiettivo === "purificazione") {
+    reasons.push(
+      isIT
+        ? "Cute secca con obiettivo purificazione richiede una valutazione per non stressare capello e cute."
+        : "Dry scalp with a purification goal requires assessment to avoid stressing hair and scalp."
+    );
+  }
+
+  if (a.capello === "molto-ricci" && a.obiettivo === "anticaduta") {
+    reasons.push(
+      isIT
+        ? "Capelli molto ricci con obiettivo anticaduta richiedono un percorso personalizzato."
+        : "Very curly hair with an anti-hair-loss goal requires a personalized journey."
+    );
+  }
+
+  if (reasons.length === 0) return null;
+
+  const customProductLabel = isIT
+    ? "Routine personalizzata Scaramuzzo"
+    : "Scaramuzzo personalized routine";
+
+  return {
+    customOnly: true,
+    customReason: reasons.join(" "),
+    customProductLabel,
+  };
+}
+
+export function recommend(a: QuizAnswers, lang: Lang): RecommendResult {
+  const custom = evaluateCustomOnly(a, lang);
+  if (custom) {
+    return {
+      recommendedProducts: [],
+      ...custom,
+    };
+  }
+
   const recos: Reco[] = [];
 
   const shProd = getProduct(shampooPick(a), lang);
@@ -246,5 +341,10 @@ export function recommend(a: QuizAnswers, lang: Lang): Reco[] {
     }
   }
 
-  return recos;
+  return {
+    recommendedProducts: recos,
+    customOnly: false,
+    customReason: "",
+    customProductLabel: "",
+  };
 }

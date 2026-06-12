@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import {
   Check,
@@ -290,9 +290,12 @@ const T = {
     consultText:
       "Invia le foto e ricevi la tua valutazione botanica personalizzata.",
     consultCta: "Continua su WhatsApp",
+    refLabel: "Riferimento consulenza",
+    refUnavailable: "Riferimento non disponibile",
     // whatsapp
-    waGreeting: "Ciao Carmen,",
+    waGreeting: "Buongiorno,",
     waIntro: "ho completato la Botanical Color Experience sul sito.",
+    waRef: "Riferimento consulenza",
     waProfile: "Profilo:",
     waObjective: "Obiettivo:",
     waComplexity: "Livello di complessità:",
@@ -369,8 +372,11 @@ const T = {
     consultText:
       "Send your photos and receive your personalized botanical assessment.",
     consultCta: "Continue on WhatsApp",
-    waGreeting: "Hi Carmen,",
+    refLabel: "Consultation reference",
+    refUnavailable: "Reference unavailable",
+    waGreeting: "Hello,",
     waIntro: "I completed the Botanical Color Experience on the website.",
+    waRef: "Consultation reference",
     waProfile: "Profile:",
     waObjective: "Objective:",
     waComplexity: "Complexity level:",
@@ -505,17 +511,116 @@ function buildNotes(a: Answers, lang: Lang): string[] {
   return notes.slice(0, 3);
 }
 
+function answersFingerprint(answers: Answers): string {
+  return JSON.stringify(answers);
+}
+
+function crmRefStorageKey(fingerprint: string): string {
+  return `bce-crm-ref-${fingerprint}`;
+}
+
+function crmLockStorageKey(fingerprint: string): string {
+  return `bce-crm-lock-${fingerprint}`;
+}
+
 export default function DiagnosiClient() {
   const [language, setLanguage] = useState<Lang>("it");
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [showResults, setShowResults] = useState(false);
+  const [publicRef, setPublicRef] = useState<string | null>(null);
+  const [refUnavailable, setRefUnavailable] = useState(false);
+  const savedFingerprintRef = useRef<string | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("language") as Lang | null;
     if (stored === "it" || stored === "en") setLanguage(stored);
   }, []);
+
+  useEffect(() => {
+    if (!showResults) return;
+
+    const fingerprint = answersFingerprint(answers);
+    const refKey = crmRefStorageKey(fingerprint);
+    const lockKey = crmLockStorageKey(fingerprint);
+
+    const cachedRef = sessionStorage.getItem(refKey);
+    if (cachedRef) {
+      setPublicRef(cachedRef);
+      setRefUnavailable(false);
+      savedFingerprintRef.current = fingerprint;
+      return;
+    }
+
+    if (savedFingerprintRef.current === fingerprint) return;
+
+    const lock = sessionStorage.getItem(lockKey);
+    if (lock === "pending") return;
+
+    sessionStorage.setItem(lockKey, "pending");
+    savedFingerprintRef.current = fingerprint;
+
+    const complexity = buildComplexity(answers);
+    const strandTest =
+      complexity === "alto"
+        ? T[language].strandStrong
+        : T[language].strandRecommended;
+    const assessment = buildAssessment(answers, language);
+    const notes = buildNotes(answers, language);
+
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const res = await fetch("/api/consultations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "botanical_color",
+            source: "botanical_experience",
+            language,
+            payload: {
+              answers: { ...answers },
+              complexity,
+              strandTest,
+              assessment,
+              notes,
+            },
+          }),
+        });
+
+        if (cancelled) return;
+
+        if (res.ok) {
+          const data = (await res.json()) as { publicRef?: string };
+          if (data.publicRef) {
+            sessionStorage.setItem(refKey, data.publicRef);
+            sessionStorage.setItem(lockKey, "done");
+            setPublicRef(data.publicRef);
+            setRefUnavailable(false);
+          } else {
+            sessionStorage.removeItem(lockKey);
+            setRefUnavailable(true);
+          }
+        } else {
+          sessionStorage.removeItem(lockKey);
+          savedFingerprintRef.current = null;
+          setRefUnavailable(true);
+        }
+      } catch {
+        if (!cancelled) {
+          sessionStorage.removeItem(lockKey);
+          savedFingerprintRef.current = null;
+          setRefUnavailable(true);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [showResults, answers, language]);
 
   const t = T[language];
 
@@ -549,9 +654,12 @@ export default function DiagnosiClient() {
     setStep(0);
     setShowResults(false);
     setStarted(false);
+    setPublicRef(null);
+    setRefUnavailable(false);
+    savedFingerprintRef.current = null;
   };
 
-  const waHref = () => {
+  const waHref = (ref: string | null) => {
     const profileKeys: AnswerKey[] = [
       "base",
       "riflesso",
@@ -570,6 +678,7 @@ export default function DiagnosiClient() {
       "",
       t.waIntro,
       "",
+      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
       t.waProfile,
       "",
       ...profileKeys
@@ -661,6 +770,14 @@ export default function DiagnosiClient() {
               <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
                 {t.resultTitle}
               </h1>
+              {(publicRef || refUnavailable) && (
+                <p className="mt-3 text-sm text-muted-foreground">
+                  {t.refLabel}:{" "}
+                  {publicRef ?? (
+                    <span className="italic">{t.refUnavailable}</span>
+                  )}
+                </p>
+              )}
             </div>
             <button
               onClick={restart}
@@ -809,7 +926,7 @@ export default function DiagnosiClient() {
               {t.consultText}
             </p>
             <a
-              href={waHref()}
+              href={waHref(publicRef)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
