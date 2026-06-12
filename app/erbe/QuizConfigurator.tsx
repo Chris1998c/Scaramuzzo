@@ -134,9 +134,22 @@ const T = {
     waProfile: "Profilo:",
     waRoutine: "Routine suggerita:",
     waClosing: "Vorrei un tuo parere professionale.",
+    waName: "Nome",
     refLabel: "Riferimento consulenza",
     refUnavailable: "Riferimento non disponibile",
     waRef: "Riferimento consulenza",
+    contactKicker: "Ultimo passaggio",
+    contactTitle: "I tuoi dati",
+    contactIntro:
+      "Inseriscili per ricevere la tua routine personalizzata e completare la richiesta.",
+    nameLabel: "Nome e Cognome",
+    namePlaceholder: "Es. Mario Rossi",
+    phoneLabel: "Numero WhatsApp",
+    phonePlaceholder: "Es. +39 347 0000000",
+    ageLabel: "Fascia d’età",
+    contactErrorMsg:
+      "Controlla i dati: nome (min. 2 caratteri), WhatsApp valido e fascia d’età.",
+    contactSubmit: "Vedi la routine",
     customOnlyTitle: "Prodotto personalizzato su misura",
     customOnlyText:
       "Il profilo indicato richiede una valutazione personalizzata prima di consigliare una routine pronta.",
@@ -193,9 +206,22 @@ const T = {
     waProfile: "Profile:",
     waRoutine: "Suggested routine:",
     waClosing: "I'd like your professional opinion.",
+    waName: "Name",
     refLabel: "Consultation reference",
     refUnavailable: "Reference unavailable",
     waRef: "Consultation reference",
+    contactKicker: "Last step",
+    contactTitle: "Your details",
+    contactIntro:
+      "Enter them to receive your personalized routine and complete your request.",
+    nameLabel: "Full name",
+    namePlaceholder: "E.g. Mario Rossi",
+    phoneLabel: "WhatsApp number",
+    phonePlaceholder: "E.g. +39 347 0000000",
+    ageLabel: "Age range",
+    contactErrorMsg:
+      "Check your details: name (min. 2 chars), valid WhatsApp and age range.",
+    contactSubmit: "See the routine",
     customOnlyTitle: "Made-to-measure personalized product",
     customOnlyText:
       "Your profile requires a personalized assessment before we recommend a ready-made routine.",
@@ -223,6 +249,8 @@ type CompleteAnswers = {
 
 type CrmSource = "quiz_routine" | "quiz_custom";
 
+const AGE_RANGES = ["18-25", "26-35", "36-45", "46-55", "56-65", "65+"] as const;
+
 function answersFingerprint(answers: CompleteAnswers): string {
   return JSON.stringify(answers);
 }
@@ -243,6 +271,11 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
   const [publicRef, setPublicRef] = useState<string | null>(null);
   const [publicRefCustom, setPublicRefCustom] = useState<string | null>(null);
   const [refUnavailable, setRefUnavailable] = useState(false);
+  const [showContact, setShowContact] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [ageRange, setAgeRange] = useState("");
+  const [contactError, setContactError] = useState(false);
   const savedRoutineRef = useRef<string | null>(null);
   const savedCustomRef = useRef<string | null>(null);
 
@@ -253,11 +286,17 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
 
+  const isContactValid =
+    customerName.trim().length >= 2 &&
+    customerPhone.replace(/\D/g, "").length >= 8 &&
+    /^[+\d][\d\s().-]*$/.test(customerPhone.trim()) &&
+    ageRange.length > 0;
+
   const select = (key: StepKey, id: string) => {
     const next = { ...answers, [key]: id } as Answers;
     setAnswers(next);
     if (isLast) {
-      setShowResults(true);
+      setShowContact(true);
     } else {
       setStep((s) => s + 1);
     }
@@ -267,6 +306,11 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     setAnswers({});
     setStep(0);
     setShowResults(false);
+    setShowContact(false);
+    setCustomerName("");
+    setCustomerPhone("");
+    setAgeRange("");
+    setContactError(false);
     setAddedIds([]);
     setPublicRef(null);
     setPublicRefCustom(null);
@@ -315,6 +359,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     if (!completeAnswers) return null;
     return {
       answers: { ...completeAnswers },
+      ageRange,
       recommendedProducts: recos.map((r) => ({
         kind: r.kind,
         productId: r.productId,
@@ -370,6 +415,8 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
             type: "personalizzati",
             source,
             language,
+            customerName: customerName.trim(),
+            customerPhone: customerPhone.trim(),
             payload,
           }),
         });
@@ -405,7 +452,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- recos/formula derivati da completeAnswers
-  }, [showResults, completeAnswers, language, customOnly]);
+  }, [showResults, completeAnswers, language, customOnly, customerName, customerPhone, ageRange]);
 
   useEffect(() => {
     if (!showResults || !completeAnswers) return;
@@ -448,6 +495,8 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
             type: "personalizzati",
             source,
             language,
+            customerName: customerName.trim(),
+            customerPhone: customerPhone.trim(),
             payload,
           }),
         });
@@ -486,7 +535,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- recos/formula derivati da completeAnswers
-  }, [showResults, completeAnswers, formula, language, customOnly]);
+  }, [showResults, completeAnswers, formula, language, customOnly, customerName, customerPhone, ageRange]);
 
   const addOne = (r: Reco) => {
     addToCart({
@@ -514,13 +563,18 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     openCart();
   };
 
+  const nameLine = (): string[] =>
+    customerName.trim() ? [`${t.waName}: ${customerName.trim()}`] : [];
+
   const waHref = (ref: string | null) => {
     const lines = [
       t.waGreeting,
       "",
       t.waIntro,
       "",
-      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
+      ...nameLine(),
+      ...(ref ? [`${t.waRef}: ${ref}`] : []),
+      "",
       t.waProfile,
       "",
       `• ${t.hairLabel}: ${labelFor("capello")}`,
@@ -546,7 +600,9 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
       "",
       t.waIntro,
       "",
-      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
+      ...nameLine(),
+      ...(ref ? [`${t.waRef}: ${ref}`] : []),
+      "",
       t.waProfile,
       "",
       `• ${t.hairLabel}: ${labelFor("capello")}`,
@@ -570,7 +626,9 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
       "",
       t.waCustomIntro,
       "",
-      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
+      ...nameLine(),
+      ...(ref ? [`${t.waRef}: ${ref}`] : []),
+      "",
       t.waProfile,
       "",
       `• ${t.hairLabel}: ${labelFor("capello")}`,
@@ -911,6 +969,106 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
         )}
           </>
         )}
+      </div>
+    );
+  }
+
+  // ---------------- DATI CLIENTE ----------------
+  if (showContact) {
+    return (
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+          {t.contactKicker}
+        </p>
+        <h3 className="mt-2 text-2xl font-semibold sm:text-3xl">
+          {t.contactTitle}
+        </h3>
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          {t.contactIntro}
+        </p>
+
+        <div className="mt-8 max-w-lg space-y-5">
+          <div>
+            <label
+              htmlFor="ppName"
+              className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+            >
+              {t.nameLabel}
+            </label>
+            <input
+              id="ppName"
+              type="text"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder={t.namePlaceholder}
+              className="mt-2 w-full rounded-2xl border border-border/50 bg-background/60 px-4 py-3 text-base outline-none transition focus:border-accent/60"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="ppPhone"
+              className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+            >
+              {t.phoneLabel}
+            </label>
+            <input
+              id="ppPhone"
+              type="tel"
+              inputMode="tel"
+              value={customerPhone}
+              onChange={(e) => setCustomerPhone(e.target.value)}
+              placeholder={t.phonePlaceholder}
+              className="mt-2 w-full rounded-2xl border border-border/50 bg-background/60 px-4 py-3 text-base outline-none transition focus:border-accent/60"
+            />
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t.ageLabel}
+            </p>
+            <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {AGE_RANGES.map((range) => {
+                const selected = ageRange === range;
+                return (
+                  <button
+                    key={range}
+                    type="button"
+                    onClick={() => setAgeRange(range)}
+                    aria-pressed={selected}
+                    className={`rounded-2xl border px-4 py-3 text-sm font-medium transition ${
+                      selected
+                        ? "border-accent bg-accent/10 text-accent"
+                        : "border-border/50 bg-card/40 hover:border-accent/40"
+                    }`}
+                  >
+                    {range}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {contactError && (
+            <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              {t.contactErrorMsg}
+            </p>
+          )}
+
+          <button
+            onClick={() => {
+              if (isContactValid) {
+                setContactError(false);
+                setShowResults(true);
+              } else {
+                setContactError(true);
+              }
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
+          >
+            {t.contactSubmit}
+          </button>
+        </div>
       </div>
     );
   }

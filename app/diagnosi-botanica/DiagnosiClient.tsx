@@ -45,7 +45,14 @@ interface PhotoScreen {
   type: "photo";
 }
 
-type Screen = ChoiceScreen | PhotoScreen;
+interface ContactScreen {
+  id: "dati";
+  type: "contact";
+}
+
+type Screen = ChoiceScreen | PhotoScreen | ContactScreen;
+
+const AGE_RANGES = ["18-25", "26-35", "36-45", "46-55", "56-65", "65+"] as const;
 
 // ============================================================
 // SCHERMATE (una domanda per schermata)
@@ -202,6 +209,7 @@ const SCREENS: Screen[] = [
     ],
   },
   { id: "foto", type: "photo" },
+  { id: "dati", type: "contact" },
 ];
 
 // Sezione di appartenenza di ogni schermata (per percezione "diagnosi", non "quiz").
@@ -237,7 +245,19 @@ const T = {
       "Per una valutazione accurata serviranno tre foto. Scattale con luce naturale, su capelli asciutti e pettinati.",
     photoNote:
       "Le foto verranno richieste nella fase finale tramite WhatsApp.",
-    photoContinue: "Vai al risultato",
+    photoContinue: "Continua",
+    contactKicker: "Ultimo passaggio",
+    contactTitle: "I tuoi dati",
+    contactIntro:
+      "Inseriscili per ricevere la tua valutazione personalizzata e completare la consulenza.",
+    nameLabel: "Nome e Cognome",
+    namePlaceholder: "Es. Mario Rossi",
+    phoneLabel: "Numero WhatsApp",
+    phonePlaceholder: "Es. +39 347 0000000",
+    ageLabel: "Fascia d’età",
+    contactError:
+      "Controlla i dati: nome (min. 2 caratteri), WhatsApp valido e fascia d’età.",
+    contactSubmit: "Vai al risultato",
     photoItems: [
       {
         title: "Radice",
@@ -295,6 +315,7 @@ const T = {
     // whatsapp
     waGreeting: "Buongiorno,",
     waIntro: "ho completato la Botanical Color Experience sul sito.",
+    waName: "Nome",
     waRef: "Riferimento consulenza",
     waProfile: "Profilo:",
     waObjective: "Obiettivo:",
@@ -322,7 +343,19 @@ const T = {
       "For an accurate assessment we'll need three photos. Take them in natural light, on dry, combed hair.",
     photoNote:
       "Photos will be requested in the final step via WhatsApp.",
-    photoContinue: "Go to result",
+    photoContinue: "Continue",
+    contactKicker: "Last step",
+    contactTitle: "Your details",
+    contactIntro:
+      "Enter them to receive your personalized assessment and complete the consultation.",
+    nameLabel: "Full name",
+    namePlaceholder: "E.g. Mario Rossi",
+    phoneLabel: "WhatsApp number",
+    phonePlaceholder: "E.g. +39 347 0000000",
+    ageLabel: "Age range",
+    contactError:
+      "Check your details: name (min. 2 chars), valid WhatsApp and age range.",
+    contactSubmit: "Go to result",
     photoItems: [
       {
         title: "Roots",
@@ -376,6 +409,7 @@ const T = {
     refUnavailable: "Reference unavailable",
     waGreeting: "Hello,",
     waIntro: "I completed the Botanical Color Experience on the website.",
+    waName: "Name",
     waRef: "Consultation reference",
     waProfile: "Profile:",
     waObjective: "Objective:",
@@ -408,6 +442,18 @@ function buildComplexity(a: Answers): Complexity {
   if (medium) return "medio";
 
   return "basso";
+}
+
+// Applica la contrazione di + articolo (di la → della, di l' → dell', …).
+function applyItalianDi(phrase: string): string {
+  const s = phrase.trim();
+  if (s.startsWith("l'")) return "dell'" + s.slice(2);
+  if (s.startsWith("la ")) return "della " + s.slice(3);
+  if (s.startsWith("le ")) return "delle " + s.slice(3);
+  if (s.startsWith("lo ")) return "dello " + s.slice(3);
+  if (s.startsWith("il ")) return "del " + s.slice(3);
+  if (s.startsWith("i ")) return "dei " + s.slice(2);
+  return "di " + s;
 }
 
 // Unione elenco con virgole e congiunzione finale ("a, b e c").
@@ -454,9 +500,11 @@ function buildAssessment(a: Answers, lang: Lang): string {
     );
   }
 
-  const joined = listJoin(focuses, lang);
+  const joined = isIT
+    ? listJoin(focuses.map(applyItalianDi), lang)
+    : listJoin(focuses, lang);
   return isIT
-    ? `Il profilo rilevato suggerisce una valutazione approfondita di ${joined}.`
+    ? `Il profilo rilevato suggerisce una valutazione approfondita ${joined}.`
     : `The detected profile suggests an in-depth assessment of ${joined}.`;
 }
 
@@ -531,7 +579,17 @@ export default function DiagnosiClient() {
   const [showResults, setShowResults] = useState(false);
   const [publicRef, setPublicRef] = useState<string | null>(null);
   const [refUnavailable, setRefUnavailable] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [ageRange, setAgeRange] = useState("");
+  const [contactError, setContactError] = useState(false);
   const savedFingerprintRef = useRef<string | null>(null);
+
+  const isContactValid =
+    customerName.trim().length >= 2 &&
+    customerPhone.replace(/\D/g, "").length >= 8 &&
+    /^[+\d][\d\s().-]*$/.test(customerPhone.trim()) &&
+    ageRange.length > 0;
 
   useEffect(() => {
     const stored = localStorage.getItem("language") as Lang | null;
@@ -580,8 +638,11 @@ export default function DiagnosiClient() {
             type: "botanical_color",
             source: "botanical_experience",
             language,
+            customerName: customerName.trim(),
+            customerPhone: customerPhone.trim(),
             payload: {
               answers: { ...answers },
+              ageRange,
               complexity,
               strandTest,
               assessment,
@@ -620,7 +681,7 @@ export default function DiagnosiClient() {
     return () => {
       cancelled = true;
     };
-  }, [showResults, answers, language]);
+  }, [showResults, answers, language, customerName, customerPhone, ageRange]);
 
   const t = T[language];
 
@@ -656,6 +717,10 @@ export default function DiagnosiClient() {
     setStarted(false);
     setPublicRef(null);
     setRefUnavailable(false);
+    setCustomerName("");
+    setCustomerPhone("");
+    setAgeRange("");
+    setContactError(false);
     savedFingerprintRef.current = null;
   };
 
@@ -678,7 +743,9 @@ export default function DiagnosiClient() {
       "",
       t.waIntro,
       "",
-      ...(ref ? [`${t.waRef}: ${ref}`, ""] : []),
+      ...(customerName.trim() ? [`${t.waName}: ${customerName.trim()}`] : []),
+      ...(ref ? [`${t.waRef}: ${ref}`] : []),
+      "",
       t.waProfile,
       "",
       ...profileKeys
@@ -999,7 +1066,7 @@ export default function DiagnosiClient() {
               })}
             </div>
           </>
-        ) : (
+        ) : current.type === "photo" ? (
           // PHOTO SCREEN
           <>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
@@ -1032,14 +1099,111 @@ export default function DiagnosiClient() {
             </div>
 
             <button
-              onClick={() => setShowResults(true)}
+              onClick={() => setStep((s) => s + 1)}
               className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-base font-semibold text-black shadow-md transition hover:bg-neutral-200"
             >
               {t.photoContinue}
               <ArrowRight className="h-5 w-5" />
             </button>
           </>
-        )}
+        ) : current.type === "contact" ? (
+          // CONTACT SCREEN
+          <>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              {t.contactKicker}
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">
+              {t.contactTitle}
+            </h2>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              {t.contactIntro}
+            </p>
+
+            <div className="mt-8 max-w-lg space-y-5">
+              <div>
+                <label
+                  htmlFor="customerName"
+                  className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                >
+                  {t.nameLabel}
+                </label>
+                <input
+                  id="customerName"
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder={t.namePlaceholder}
+                  className="mt-2 w-full rounded-2xl border border-border/50 bg-background/60 px-4 py-3 text-base outline-none transition focus:border-accent/60"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="customerPhone"
+                  className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                >
+                  {t.phoneLabel}
+                </label>
+                <input
+                  id="customerPhone"
+                  type="tel"
+                  inputMode="tel"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  placeholder={t.phonePlaceholder}
+                  className="mt-2 w-full rounded-2xl border border-border/50 bg-background/60 px-4 py-3 text-base outline-none transition focus:border-accent/60"
+                />
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t.ageLabel}
+                </p>
+                <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {AGE_RANGES.map((range) => {
+                    const selected = ageRange === range;
+                    return (
+                      <button
+                        key={range}
+                        type="button"
+                        onClick={() => setAgeRange(range)}
+                        aria-pressed={selected}
+                        className={`rounded-2xl border px-4 py-3 text-sm font-medium transition ${
+                          selected
+                            ? "border-accent bg-accent/10 text-accent"
+                            : "border-border/50 bg-card/40 hover:border-accent/40"
+                        }`}
+                      >
+                        {range}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {contactError && (
+                <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                  {t.contactError}
+                </p>
+              )}
+
+              <button
+                onClick={() => {
+                  if (isContactValid) {
+                    setContactError(false);
+                    setShowResults(true);
+                  } else {
+                    setContactError(true);
+                  }
+                }}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
+              >
+                {t.contactSubmit}
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </div>
+          </>
+        ) : null}
 
         {step > 0 && (
           <button

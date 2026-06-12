@@ -6,6 +6,10 @@ import {
 } from "@/lib/crm/types";
 
 const MAX_PAYLOAD_BYTES = 50_000;
+const MAX_NAME = 120;
+const MAX_PHONE = 40;
+const MIN_NAME = 2;
+const MIN_PHONE = 8;
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -47,8 +51,33 @@ export function validateCreateConsultationBody(
     return { ok: false, error: "Payload troppo grande." };
   }
 
+  const customerName =
+    typeof body.customerName === "string" ? body.customerName.trim() : "";
+  const customerPhone =
+    typeof body.customerPhone === "string" ? body.customerPhone.trim() : "";
+
+  if (customerName.length < MIN_NAME || customerName.length > MAX_NAME) {
+    return { ok: false, error: "Nome e cognome non valido." };
+  }
+  // Accetta prefissi internazionali (+39 …); conta solo le cifre per il minimo.
+  const phoneDigits = customerPhone.replace(/\D/g, "");
+  if (
+    customerPhone.length > MAX_PHONE ||
+    phoneDigits.length < MIN_PHONE ||
+    !/^[+\d][\d\s().-]*$/.test(customerPhone)
+  ) {
+    return { ok: false, error: "Numero WhatsApp non valido." };
+  }
+
   return {
     ok: true,
-    data: { type, source, language, payload: body.payload },
+    data: {
+      type,
+      source,
+      language,
+      payload: body.payload,
+      customerName,
+      customerPhone,
+    },
   };
 }

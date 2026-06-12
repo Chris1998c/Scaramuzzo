@@ -45,6 +45,8 @@ export async function createConsultation(
         source: input.source,
         language: input.language,
         payload: input.payload,
+        customer_name: input.customerName ?? null,
+        customer_phone: input.customerPhone ?? null,
         status: "nuova",
         whatsapp_clicked: false,
       })
