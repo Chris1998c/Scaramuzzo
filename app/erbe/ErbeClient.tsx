@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/app/components/site/LanguageProvider";
-import { MessageCircle, Sparkles } from "lucide-react";
+import { MessageCircle, Sparkles, Layers, Wind, Target } from "lucide-react";
 import ProductSection from "@/components/product/ProductSection";
 import InfoCards from "@/components/product/InfoCards";
 import QuizConfigurator from "./QuizConfigurator";
@@ -37,8 +37,31 @@ const copy = {
       { n: "03", title: "Routine", text: "Ricevi shampoo, maschera e trattamento su misura." },
       { n: "04", title: "Carrello", text: "Aggiungi tutto al carrello o invia la configurazione." },
     ],
+    trustKicker: "Perché personalizzare",
+    trustTitle: "Perché una routine personalizzata?",
+    trustText:
+      "Ogni capello ha esigenze diverse: cute, fibra, stile di vita e obiettivo finale cambiano il modo in cui un prodotto dovrebbe essere scelto.",
+    trustCards: [
+      {
+        icon: Layers,
+        title: "Cute e lunghezze non hanno sempre lo stesso bisogno",
+        text: "Una routine efficace distingue le zone del capello e le tratta in modo coerente con il profilo rilevato.",
+      },
+      {
+        icon: Wind,
+        title: "La profumazione deve accompagnare, non coprire",
+        text: "Intensità e carattere olfattivo si scelgono sul gusto personale, senza sovrastare l’esperienza di cura.",
+      },
+      {
+        icon: Target,
+        title: "Il prodotto giusto nasce dal profilo, non dal caso",
+        text: "Partiamo dalle tue risposte: se la routine pronta non è adatta, ti indirizziamo verso una valutazione su misura.",
+      },
+    ],
     quizKicker: "Configuratore guidato",
     quizTitle: "Configura la tua routine",
+    quizMicrocopy:
+      "Rispondi a poche domande: se la routine pronta non è adatta, ti proporremo una valutazione personalizzata.",
     consultKicker: "Consulenza diretta",
     consultTitle: "Hai esigenze particolari?",
     consultText:
@@ -78,8 +101,31 @@ const copy = {
       { n: "03", title: "Routine", text: "Get a tailored shampoo, mask and treatment." },
       { n: "04", title: "Cart", text: "Add everything to cart or send your configuration." },
     ],
+    trustKicker: "Why personalize",
+    trustTitle: "Why a personalized routine?",
+    trustText:
+      "Every head of hair has different needs: scalp, fiber, lifestyle and final goal all change how a product should be chosen.",
+    trustCards: [
+      {
+        icon: Layers,
+        title: "Scalp and lengths don't always need the same care",
+        text: "An effective routine distinguishes hair zones and treats them in line with the profile detected.",
+      },
+      {
+        icon: Wind,
+        title: "Fragrance should accompany, not overpower",
+        text: "Intensity and olfactory character are chosen to your taste, without overshadowing the care experience.",
+      },
+      {
+        icon: Target,
+        title: "The right product comes from your profile, not chance",
+        text: "We start from your answers: if a ready-made routine isn't suitable, we guide you toward a tailored assessment.",
+      },
+    ],
     quizKicker: "Guided configurator",
     quizTitle: "Configure your routine",
+    quizMicrocopy:
+      "Answer a few questions: if a ready-made routine isn't right for you, we'll suggest a personalized assessment.",
     consultKicker: "Direct consultation",
     consultTitle: "Have special needs?",
     consultText:
@@ -178,9 +224,37 @@ export default function ErbeClient() {
           <InfoCards items={[...t.steps]} />
         </ProductSection>
 
+        {/* ===================== PERCHÉ PERSONALIZZARE ===================== */}
+        <ProductSection kicker={t.trustKicker} title={t.trustTitle}>
+          <p className="max-w-3xl text-base leading-relaxed text-muted-foreground">
+            {t.trustText}
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {t.trustCards.map(({ icon: Icon, title, text }) => (
+              <div
+                key={title}
+                className="group rounded-2xl border border-border/50 bg-background/40 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/20 bg-accent/10">
+                  <Icon className="h-5 w-5 text-accent" />
+                </div>
+                <h3 className="mt-5 text-base font-semibold leading-snug">
+                  {title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </ProductSection>
+
         {/* ===================== PERCORSO A — QUIZ ===================== */}
         <ProductSection kicker={t.quizKicker} title={t.quizTitle}>
-          <div id="quiz" className="scroll-mt-24">
+          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {t.quizMicrocopy}
+          </p>
+          <div id="quiz" className="mt-8 scroll-mt-24">
             <div className="rounded-3xl border border-border/40 bg-card/30 p-6 sm:p-10">
               <QuizConfigurator
                 language={language}

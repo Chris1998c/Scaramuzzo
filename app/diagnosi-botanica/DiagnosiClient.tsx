@@ -289,6 +289,15 @@ const T = {
     finalText:
       "La formula definitiva viene confermata dopo valutazione fotografica e consulenza professionale.",
     notesTitle: "Note professionali",
+    synthesisTitle: "Sintesi professionale",
+    technicalProfileTitle: "Profilo tecnico rilevato",
+    indicationsTitle: "Indicazioni prima della consulenza",
+    clientLabel: "Cliente",
+    indications: [
+      "Allegare foto di radice, lunghezze e nuca in luce naturale.",
+      "Non effettuare nuovi trattamenti prima della valutazione professionale.",
+      "Attendere la conferma del team Scaramuzzo prima di procedere.",
+    ],
     intentLabel: "Intento",
     toneLabel: "Tonalità desiderata",
     strand: {
@@ -386,6 +395,15 @@ const T = {
     finalText:
       "The final formula is confirmed after photo evaluation and professional consultation.",
     notesTitle: "Professional notes",
+    synthesisTitle: "Professional summary",
+    technicalProfileTitle: "Detected technical profile",
+    indicationsTitle: "Before your consultation",
+    clientLabel: "Client",
+    indications: [
+      "Attach photos of roots, lengths and nape in natural light.",
+      "Do not perform new treatments before the professional assessment.",
+      "Wait for confirmation from the Scaramuzzo team before proceeding.",
+    ],
     intentLabel: "Intent",
     toneLabel: "Desired tone",
     strand: {
@@ -810,17 +828,35 @@ export default function DiagnosiClient() {
   // STEP 4/5 — RISULTATO + CONSULENZA
   // ============================================================
   if (showResults) {
-    const colorProfileKeys: AnswerKey[] = [
+    const technicalProfileKeys: AnswerKey[] = [
       "base",
       "riflesso",
       "bianchiPerc",
+      ...(answers.bianchiPerc && answers.bianchiPerc !== "0"
+        ? (["bianchiDistribuzione"] as AnswerKey[])
+        : []),
       "porosita",
+      "storico",
     ];
     const assessment = buildAssessment(answers, language);
     const notes = buildNotes(answers, language);
     const complexity = buildComplexity(answers);
     const strandLabel =
       complexity === "alto" ? t.strandStrong : t.strandRecommended;
+    const clientName = customerName.trim();
+
+    const profileRow = (key: AnswerKey) =>
+      answers[key] ? (
+        <div
+          key={key}
+          className="flex items-start justify-between gap-4 border-b border-border/30 py-3 last:border-0"
+        >
+          <dt className="text-sm text-muted-foreground">{t.labels[key]}</dt>
+          <dd className="max-w-[55%] text-right text-sm font-medium leading-snug">
+            {optionLabel(key)}
+          </dd>
+        </div>
+      ) : null;
 
     return (
       <div className="bg-background text-foreground">
@@ -833,14 +869,6 @@ export default function DiagnosiClient() {
               <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
                 {t.resultTitle}
               </h1>
-              {(publicRef || refUnavailable) && (
-                <p className="mt-3 text-sm text-muted-foreground">
-                  {t.refLabel}:{" "}
-                  {publicRef ?? (
-                    <span className="italic">{t.refUnavailable}</span>
-                  )}
-                </p>
-              )}
             </div>
             <button
               onClick={restart}
@@ -851,134 +879,178 @@ export default function DiagnosiClient() {
             </button>
           </div>
 
-          {/* CARTA PROFESSIONALE BOTANICA */}
-          <div className="mt-8 overflow-hidden rounded-[1.75rem] border border-accent/30 bg-card/40 shadow-xl">
-            {/* intestazione certificato */}
-            <div className="flex items-center gap-3 border-b border-border/40 bg-gradient-to-br from-accent/10 to-transparent px-6 py-5 sm:px-10">
-              <FlaskConical className="h-6 w-6 shrink-0 text-accent" />
-              <div>
-                <p className="text-sm font-semibold tracking-wide">
-                  {t.cardHolder}
-                </p>
-                <p className="text-xs text-muted-foreground">{t.resultKicker}</p>
+          {/* CARTA PROFESSIONALE BOTANICA — documento premium */}
+          <div className="relative mt-10 overflow-hidden rounded-[1.75rem] border border-accent/25 bg-card/50 shadow-2xl">
+            {/* barra oro superiore */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
+
+            {/* header certificato */}
+            <div className="border-b border-border/40 bg-gradient-to-b from-accent/[0.08] to-transparent px-6 py-8 text-center sm:px-10 sm:py-10">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-accent">
+                {t.cardHolder}
+              </p>
+              <p className="mt-3 font-serif text-xl font-medium tracking-wide text-foreground sm:text-2xl">
+                {t.resultKicker}
+              </p>
+              <div className="mx-auto mt-6 max-w-md space-y-2 border-y border-border/30 py-4">
+                {(publicRef || refUnavailable) && (
+                  <p className="text-sm text-muted-foreground">
+                    {t.refLabel}
+                    <br />
+                    <span className="mt-1 inline-block font-mono text-base font-semibold tracking-wide text-accent">
+                      {publicRef ?? t.refUnavailable}
+                    </span>
+                  </p>
+                )}
+                {clientName && (
+                  <p className="text-sm text-muted-foreground">
+                    {t.clientLabel}
+                    <br />
+                    <span className="mt-1 inline-block text-base font-semibold text-foreground">
+                      {clientName}
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
 
-            <div className="space-y-8 px-6 py-8 sm:px-10 sm:py-10">
-              {/* 1 + 2 — profilo colore + obiettivo */}
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    {t.colorProfileTitle}
-                  </p>
-                  <dl className="mt-4 space-y-2.5 text-sm">
-                    {colorProfileKeys
-                      .filter((k) => answers[k])
-                      .map((k) => (
-                        <div key={k} className="flex justify-between gap-4">
-                          <dt className="text-muted-foreground">
-                            {t.labels[k]}
-                          </dt>
-                          <dd className="text-right font-medium">
-                            {optionLabel(k)}
-                          </dd>
-                        </div>
-                      ))}
-                  </dl>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    {t.objectiveTitle}
-                  </p>
-                  <dl className="mt-4 space-y-2.5 text-sm">
-                    <div className="flex justify-between gap-4">
-                      <dt className="text-muted-foreground">{t.intentLabel}</dt>
-                      <dd className="text-right font-medium">
-                        {optionLabel("intento")}
-                      </dd>
+            <div className="space-y-10 px-6 py-8 sm:px-10 sm:py-10">
+              {/* 1 — Sintesi professionale */}
+              <section>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+                  {t.synthesisTitle}
+                </p>
+                <div className="mt-5 space-y-5 rounded-2xl border border-border/40 bg-background/30 p-5 sm:p-6">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t.expectedTitle}
+                    </p>
+                    <p className="mt-2 text-base leading-relaxed text-foreground/90">
+                      {assessment}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 border-t border-border/30 pt-5 sm:grid-cols-2">
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {t.complexityTitle}
+                      </p>
+                      <span
+                        className={`mt-2 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold ${
+                          complexity === "alto"
+                            ? "bg-accent text-accent-foreground"
+                            : "bg-accent/10 text-accent"
+                        }`}
+                      >
+                        <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                        {t.complexityLevels[complexity]}
+                      </span>
                     </div>
-                    <div className="flex justify-between gap-4">
-                      <dt className="text-muted-foreground">{t.toneLabel}</dt>
-                      <dd className="text-right font-medium">
-                        {optionLabel("tonalita")}
-                      </dd>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {t.strandTitle}
+                      </p>
+                      <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent">
+                        <FlaskConical className="h-4 w-4" />
+                        {strandLabel}
+                      </span>
                     </div>
-                  </dl>
+                  </div>
                 </div>
-              </div>
+              </section>
 
-              <div className="h-px bg-border/40" />
-
-              {/* 3 — risultato atteso */}
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                  {t.expectedTitle}
+              {/* 2 — Profilo tecnico rilevato */}
+              <section>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+                  {t.technicalProfileTitle}
                 </p>
-                <p className="mt-3 text-base leading-relaxed text-foreground/90">
-                  {assessment}
-                </p>
-              </div>
+                <dl className="mt-5 rounded-2xl border border-border/40 bg-background/20 px-5 sm:px-6">
+                  {technicalProfileKeys.map((k) => profileRow(k))}
+                </dl>
+              </section>
 
-              {/* 4 + 5 — complessità + prova ciocca */}
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/40 bg-background/40 p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    {t.complexityTitle}
-                  </p>
-                  <span
-                    className={`mt-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold ${
-                      complexity === "alto"
-                        ? "bg-accent text-accent-foreground"
-                        : "bg-accent/10 text-accent"
-                    }`}
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                    {t.complexityLevels[complexity]}
-                  </span>
-                </div>
-                <div className="rounded-2xl border border-border/40 bg-background/40 p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    {t.strandTitle}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1.5 text-sm font-semibold text-accent">
-                    <FlaskConical className="h-4 w-4" />
-                    {strandLabel}
-                  </span>
-                  <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                    {t.strand.text}
-                  </p>
-                </div>
-              </div>
-
-              {/* 6 — note professionali */}
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                  {t.notesTitle}
+              {/* Obiettivo colore */}
+              <section>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+                  {t.objectiveTitle}
                 </p>
-                <ul className="mt-3 space-y-2.5">
-                  {notes.map((n, i) => (
+                <dl className="mt-5 rounded-2xl border border-border/40 bg-background/20 px-5 sm:px-6">
+                  <div className="flex items-start justify-between gap-4 border-b border-border/30 py-3">
+                    <dt className="text-sm text-muted-foreground">
+                      {t.intentLabel}
+                    </dt>
+                    <dd className="max-w-[55%] text-right text-sm font-medium">
+                      {optionLabel("intento")}
+                    </dd>
+                  </div>
+                  <div className="flex items-start justify-between gap-4 py-3">
+                    <dt className="text-sm text-muted-foreground">
+                      {t.toneLabel}
+                    </dt>
+                    <dd className="max-w-[55%] text-right text-sm font-medium">
+                      {optionLabel("tonalita")}
+                    </dd>
+                  </div>
+                </dl>
+              </section>
+
+              {/* Note professionali */}
+              {notes.length > 0 && (
+                <section>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+                    {t.notesTitle}
+                  </p>
+                  <ul className="mt-5 space-y-3 rounded-2xl border border-border/40 bg-background/20 p-5 sm:p-6">
+                    {notes.map((n, i) => (
+                      <li
+                        key={i}
+                        className="flex gap-3 text-sm leading-relaxed text-muted-foreground"
+                      >
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                        {n}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {/* 3 — Indicazioni prima della consulenza */}
+              <section>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+                  {t.indicationsTitle}
+                </p>
+                <ul className="mt-5 space-y-0 rounded-2xl border border-accent/20 bg-accent/[0.04] p-5 sm:p-6">
+                  {t.indications.map((item, i) => (
                     <li
-                      key={i}
-                      className="flex gap-3 text-sm leading-relaxed text-muted-foreground"
+                      key={item}
+                      className="flex gap-4 border-b border-border/20 py-4 last:border-0 last:pb-0 first:pt-0"
                     >
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                      {n}
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-background/60 text-xs font-semibold text-accent">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <p className="pt-0.5 text-sm leading-relaxed text-foreground/85">
+                        {item}
+                      </p>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
 
-              <div className="h-px bg-border/40" />
-
-              {/* valutazione finale */}
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+              {/* Valutazione finale */}
+              <div className="rounded-2xl border border-dashed border-border/50 bg-background/10 px-5 py-4 sm:px-6">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">
                   {t.finalTitle}
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {t.finalText}
                 </p>
               </div>
+            </div>
+
+            {/* footer documento */}
+            <div className="border-t border-border/40 bg-background/20 px-6 py-4 text-center sm:px-10">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                {t.cardHolder}
+              </p>
             </div>
           </div>
 
