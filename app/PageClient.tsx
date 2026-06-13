@@ -4,7 +4,7 @@ import HomeHero from "@/app/components/Home";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/app/components/site/LanguageProvider";
-import { Store, CalendarDays, UserCheck, Leaf, MapPin, ArrowRight } from "lucide-react";
+import { Store, CalendarDays, UserCheck, Leaf, MapPin, ArrowRight, ScanLine, Package, MessageCircle } from "lucide-react";
 import InfoCards from "@/components/product/InfoCards";
 
 const copy = {
@@ -46,6 +46,26 @@ const copy = {
         { city: "Cosenza", region: "Calabria" },
         { city: "Castrovillari", region: "Calabria" },
       ],
+    },
+    socialProof: {
+      kicker: "Fiducia",
+      title: "Una realtà costruita sulla fiducia delle clienti",
+      subtitle:
+        "Ogni percorso Scaramuzzo nasce dall’ascolto, dalla diagnosi e dall’esperienza diretta nei nostri saloni.",
+      cards: [
+        { icon: Store, label: "4 saloni professionali" },
+        { icon: CalendarDays, label: "Oltre 30 anni di esperienza" },
+        { icon: UserCheck, label: "Consulenza personalizzata" },
+        { icon: Leaf, label: "Metodo botanico professionale" },
+      ],
+      expect: {
+        kicker: "Cosa puoi aspettarti",
+        items: [
+          { icon: ScanLine, text: "Una valutazione reale del capello" },
+          { icon: Package, text: "Prodotti e trattamenti consigliati in base al profilo" },
+          { icon: MessageCircle, text: "Un contatto diretto con il team Scaramuzzo" },
+        ],
+      },
     },
     botany: {
       kicker: "Ricerca",
@@ -118,6 +138,26 @@ const copy = {
         { city: "Cosenza", region: "Calabria" },
         { city: "Castrovillari", region: "Calabria" },
       ],
+    },
+    socialProof: {
+      kicker: "Trust",
+      title: "A brand built on our clients' trust",
+      subtitle:
+        "Every Scaramuzzo journey starts with listening, diagnosis and hands-on experience in our salons.",
+      cards: [
+        { icon: Store, label: "4 professional salons" },
+        { icon: CalendarDays, label: "Over 30 years of experience" },
+        { icon: UserCheck, label: "Personalized consultation" },
+        { icon: Leaf, label: "Professional botanical method" },
+      ],
+      expect: {
+        kicker: "What you can expect",
+        items: [
+          { icon: ScanLine, text: "A real assessment of your hair" },
+          { icon: Package, text: "Products and treatments recommended for your profile" },
+          { icon: MessageCircle, text: "Direct contact with the Scaramuzzo team" },
+        ],
+      },
     },
     botany: {
       kicker: "Research",
@@ -253,6 +293,63 @@ export default function PageClient() {
                 <p className="mt-1 text-sm text-muted-foreground">{s.region}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5b. FIDUCIA & SOCIAL PROOF */}
+      <section className="border-y border-border/40 bg-card/20 py-20 sm:py-24">
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              {t.socialProof.kicker}
+            </p>
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              {t.socialProof.title}
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              {t.socialProof.subtitle}
+            </p>
+          </div>
+
+          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {t.socialProof.cards.map(({ icon: Icon, label }) => (
+              <div
+                key={label}
+                className="group rounded-2xl border border-border/50 bg-background/40 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/20 bg-accent/10">
+                  <Icon className="h-5 w-5 text-accent" />
+                </div>
+                <p className="mt-5 text-base font-semibold leading-snug">
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mx-auto mt-16 max-w-3xl rounded-3xl border border-border/40 bg-background/30 p-8 sm:p-10">
+            <p className="text-center text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              {t.socialProof.expect.kicker}
+            </p>
+            <ul className="mt-8 space-y-5">
+              {t.socialProof.expect.items.map(({ icon: Icon, text }, i) => (
+                <li
+                  key={text}
+                  className="flex items-start gap-4 border-b border-border/30 pb-5 last:border-0 last:pb-0"
+                >
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/10 text-xs font-semibold text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex flex-1 items-start gap-3 pt-0.5">
+                    <Icon className="mt-0.5 h-5 w-5 shrink-0 text-accent/80" />
+                    <p className="text-base leading-relaxed text-foreground/90">
+                      {text}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
