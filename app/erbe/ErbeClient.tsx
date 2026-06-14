@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/app/components/site/LanguageProvider";
-import { MessageCircle, Sparkles, Layers, Wind, Target } from "lucide-react";
+import { MessageCircle, Sparkles, Layers, Wind, Target, Check } from "lucide-react";
 import ProductSection from "@/components/product/ProductSection";
 import InfoCards from "@/components/product/InfoCards";
 import QuizConfigurator from "./QuizConfigurator";
@@ -62,6 +62,28 @@ const copy = {
     quizTitle: "Configura la tua routine",
     quizMicrocopy:
       "Rispondi a poche domande: se la routine pronta non è adatta, ti proporremo una valutazione personalizzata.",
+    processKicker: "Processo professionale",
+    processTitle: "Cosa succede dopo il quiz?",
+    processText:
+      "Dopo l’invio, il team tecnico Scaramuzzo analizza il profilo dei tuoi capelli e valuta se consigliarti una routine pronta o una soluzione personalizzata preparata dal nostro laboratorio.",
+    processSteps: [
+      "Compili il profilo",
+      "Il team Scaramuzzo valuta le tue esigenze",
+      "Ricevi una routine o una proposta personalizzata",
+      "Se necessario, vieni contattata su WhatsApp",
+    ],
+    consultBandTitle: "Una consulenza prima del prodotto",
+    consultBandText:
+      "Ogni capello è diverso. Per questo motivo il Team Scaramuzzo valuta il profilo prima di consigliare una routine pronta o una soluzione personalizzata.",
+    consultBandPoints: [
+      "Profilo capelli",
+      "Valutazione professionale",
+      "Routine consigliata",
+    ],
+    consultBandMicrocopy:
+      "Non riceverai consigli generici. Ogni richiesta viene valutata dal Team Scaramuzzo.",
+    labLink:
+      "Formule e prodotti personalizzati nascono dal laboratorio cosmetico Scaramuzzo.",
     consultKicker: "Consulenza diretta",
     consultTitle: "Hai esigenze particolari?",
     consultText:
@@ -126,6 +148,28 @@ const copy = {
     quizTitle: "Configure your routine",
     quizMicrocopy:
       "Answer a few questions: if a ready-made routine isn't right for you, we'll suggest a personalized assessment.",
+    processKicker: "Professional process",
+    processTitle: "What happens after the quiz?",
+    processText:
+      "After submission, the Scaramuzzo technical team reviews your hair profile and assesses whether to recommend a ready-made routine or a personalized solution prepared in our laboratory.",
+    processSteps: [
+      "You complete your profile",
+      "The Scaramuzzo team evaluates your needs",
+      "You receive a routine or a personalized proposal",
+      "If needed, you are contacted on WhatsApp",
+    ],
+    consultBandTitle: "Consultation before the product",
+    consultBandText:
+      "Every head of hair is different. That is why the Scaramuzzo team evaluates your profile before recommending a ready-made routine or a personalized solution.",
+    consultBandPoints: [
+      "Hair profile",
+      "Professional assessment",
+      "Recommended routine",
+    ],
+    consultBandMicrocopy:
+      "You will not receive generic advice. Every request is reviewed by the Scaramuzzo team.",
+    labLink:
+      "Formulas and personalized products come from the Scaramuzzo cosmetic laboratory.",
     consultKicker: "Direct consultation",
     consultTitle: "Have special needs?",
     consultText:
@@ -254,6 +298,68 @@ export default function ErbeClient() {
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {t.quizMicrocopy}
           </p>
+
+          <div className="mt-10 rounded-3xl border border-border/40 bg-background/30 p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              {t.processKicker}
+            </p>
+            <h3 className="mt-3 text-xl font-semibold sm:text-2xl">
+              {t.processTitle}
+            </h3>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+              {t.processText}
+            </p>
+            <ol className="mt-8 space-y-0">
+              {t.processSteps.map((step, i) => (
+                <li
+                  key={step}
+                  className="flex gap-4 border-b border-border/30 py-4 last:border-0 last:pb-0 first:pt-0"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-xs font-semibold text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="pt-1 text-sm leading-relaxed text-foreground/90">
+                    {step}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="mt-8 overflow-hidden rounded-3xl border border-accent/25 bg-gradient-to-br from-card to-card/40 p-6 sm:p-8">
+            <h3 className="text-xl font-semibold sm:text-2xl">
+              {t.consultBandTitle}
+            </h3>
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {t.consultBandText}
+            </p>
+            <ul className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8">
+              {t.consultBandPoints.map((point) => (
+                <li
+                  key={point}
+                  className="flex items-center gap-2.5 text-sm font-medium text-foreground/90"
+                >
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/15">
+                    <Check className="h-3.5 w-3.5 text-accent" strokeWidth={2.5} />
+                  </span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 border-t border-border/30 pt-5 text-sm leading-relaxed text-muted-foreground">
+              {t.consultBandMicrocopy}
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              {t.labLink}{" "}
+              <Link
+                href="/#laboratorio"
+                className="font-medium text-accent transition hover:opacity-80"
+              >
+                {language === "it" ? "Scopri di più" : "Learn more"}
+              </Link>
+            </p>
+          </div>
+
           <div id="quiz" className="mt-8 scroll-mt-24">
             <div className="rounded-3xl border border-border/40 bg-card/30 p-6 sm:p-10">
               <QuizConfigurator

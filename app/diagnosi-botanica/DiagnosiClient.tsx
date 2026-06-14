@@ -234,6 +234,16 @@ const T = {
     heroSubtitle:
       "Analizza il tuo profilo colore, la storia dei tuoi capelli e ricevi una valutazione professionale per il tuo percorso botanico personalizzato.",
     heroCta: "Inizia la diagnosi",
+    processKicker: "Pre-consulenza professionale",
+    processTitle: "Cosa succede dopo la diagnosi?",
+    processText:
+      "Dopo l’invio, il team tecnico Scaramuzzo valuta il profilo colore, la presenza di capelli bianchi, la porosità e lo storico tecnico per orientare la consulenza botanica più adatta.",
+    processSteps: [
+      "Compili il profilo colore",
+      "Il team Scaramuzzo valuta le informazioni",
+      "Ricevi una prima indicazione professionale",
+      "Se necessario, prosegui su WhatsApp con il Centro Consulenze",
+    ],
     stepLabel: "Passaggio",
     of: "di",
     back: "Indietro",
@@ -322,6 +332,8 @@ const T = {
     consultCta: "Continua su WhatsApp",
     refLabel: "Riferimento consulenza",
     refUnavailable: "Riferimento non disponibile",
+    resultSavedNote:
+      "La tua diagnosi viene salvata nel Centro Consulenze Scaramuzzo e può essere seguita dal nostro team.",
     // whatsapp
     waGreeting: "Buongiorno,",
     waIntro: "ho completato la Botanical Color Experience sul sito.",
@@ -342,6 +354,16 @@ const T = {
     heroSubtitle:
       "Analyse your color profile, your hair history and receive a professional assessment for your personalized botanical journey.",
     heroCta: "Start the diagnosis",
+    processKicker: "Professional pre-consultation",
+    processTitle: "What happens after the diagnosis?",
+    processText:
+      "After submission, the Scaramuzzo technical team evaluates your color profile, grey hair, porosity and technical history to guide the most suitable botanical consultation.",
+    processSteps: [
+      "You complete your color profile",
+      "The Scaramuzzo team reviews your information",
+      "You receive a preliminary professional indication",
+      "If needed, continue on WhatsApp with the Consultation Centre",
+    ],
     stepLabel: "Step",
     of: "of",
     back: "Back",
@@ -426,6 +448,8 @@ const T = {
     consultCta: "Continue on WhatsApp",
     refLabel: "Consultation reference",
     refUnavailable: "Reference unavailable",
+    resultSavedNote:
+      "Your diagnosis is saved in the Scaramuzzo Consultation Centre and can be followed up by our team.",
     waGreeting: "Hello,",
     waIntro: "I completed the Botanical Color Experience on the website.",
     waName: "Name",
@@ -790,7 +814,7 @@ export default function DiagnosiClient() {
   if (!started) {
     return (
       <div className="bg-background text-foreground">
-        <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden">
+        <section className="relative flex min-h-[55vh] items-center justify-center overflow-hidden sm:min-h-[60vh]">
           <Image
             src="/ERBE.webp"
             alt="Diagnosi Botanica Professionale Scaramuzzo"
@@ -811,9 +835,38 @@ export default function DiagnosiClient() {
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/85 drop-shadow-md sm:text-lg">
               {t.heroSubtitle}
             </p>
+          </div>
+        </section>
+
+        <section className="container mx-auto max-w-3xl px-4 py-12 sm:py-16">
+          <div className="rounded-3xl border border-border/40 bg-card/40 p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              {t.processKicker}
+            </p>
+            <h2 className="mt-3 text-xl font-semibold sm:text-2xl">
+              {t.processTitle}
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {t.processText}
+            </p>
+            <ol className="mt-8 space-y-0">
+              {t.processSteps.map((step, i) => (
+                <li
+                  key={step}
+                  className="flex gap-4 border-b border-border/30 py-4 last:border-0 last:pb-0 first:pt-0"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-xs font-semibold text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="pt-1 text-sm leading-relaxed text-foreground/90">
+                    {step}
+                  </p>
+                </li>
+              ))}
+            </ol>
             <button
               onClick={() => setStarted(true)}
-              className="mt-10 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-base font-semibold text-black shadow-lg transition hover:bg-neutral-200"
+              className="mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90 sm:w-auto"
             >
               {t.heroCta}
               <ArrowRight className="h-5 w-5" />
@@ -915,6 +968,10 @@ export default function DiagnosiClient() {
             </div>
 
             <div className="space-y-10 px-6 py-8 sm:px-10 sm:py-10">
+              <p className="rounded-xl border border-border/40 bg-background/30 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+                {t.resultSavedNote}
+              </p>
+
               {/* 1 — Sintesi professionale */}
               <section>
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">

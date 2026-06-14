@@ -4,7 +4,7 @@ import HomeHero from "@/app/components/Home";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/app/components/site/LanguageProvider";
-import { Store, CalendarDays, UserCheck, Leaf, MapPin, ArrowRight, ScanLine, Package, MessageCircle } from "lucide-react";
+import { Store, CalendarDays, UserCheck, Leaf, MapPin, ArrowRight, ScanLine, Package, MessageCircle, Check } from "lucide-react";
 import InfoCards from "@/components/product/InfoCards";
 
 const copy = {
@@ -40,11 +40,38 @@ const copy = {
       kicker: "Presenza territoriale",
       title: "I nostri saloni",
       subtitle: "Una realtà consolidata, presente in più città tra Calabria e Roma.",
+      trustBadges: [
+        "Metodo Scaramuzzo",
+        "Consulenza professionale",
+        "Colorazione botanica",
+        "Team specializzato",
+      ],
+      contactCta: "Contatta il salone",
       list: [
-        { city: "Roma", region: "Centro Storico" },
-        { city: "Corigliano-Rossano", region: "Calabria" },
-        { city: "Cosenza", region: "Calabria" },
-        { city: "Castrovillari", region: "Calabria" },
+        {
+          city: "Roma",
+          region: "Centro Storico",
+          description:
+            "Consulenza personalizzata, colorazione botanica e percorsi professionali nel cuore della capitale.",
+        },
+        {
+          city: "Cosenza",
+          region: "Calabria",
+          description:
+            "Storico punto di riferimento del metodo Scaramuzzo in Calabria.",
+        },
+        {
+          city: "Corigliano-Rossano",
+          region: "Calabria",
+          description:
+            "Consulenze e trattamenti professionali secondo il metodo Scaramuzzo.",
+        },
+        {
+          city: "Castrovillari",
+          region: "Calabria",
+          description:
+            "Percorsi colore, benessere e consulenza professionale.",
+        },
       ],
     },
     socialProof: {
@@ -67,13 +94,23 @@ const copy = {
         ],
       },
     },
-    botany: {
-      kicker: "Ricerca",
-      title: "Ricerca botanica",
-      paragraphs: [
-        "La nostra ricerca botanica nasce dall’esperienza maturata nei saloni: anni di lavoro sul capello reale e di confronto con le esigenze delle clienti.",
-        "I prodotti sono il risultato della ricerca e dell’esperienza professionale: una conseguenza del metodo, non il punto di partenza.",
+    laboratory: {
+      kicker: "Laboratorio",
+      title: "Laboratorio cosmetico e botanica calabrese",
+      intro:
+        "Nei nostri saloni osserviamo ogni giorno esigenze reali: cute sensibili, capelli bianchi, lunghezze trattate, capelli crespi o sensibilizzati.",
+      body:
+        "Da questa esperienza nasce il lavoro del laboratorio cosmetico Scaramuzzo: formule professionali, prodotti personalizzati e trattamenti ispirati alla botanica calabrese, al rispetto della fibra capillare e alla valorizzazione del territorio.",
+      keyPoints: [
+        "Esperienza reale dei saloni",
+        "Ricerca botanica",
+        "Formule professionali",
+        "Prodotti personalizzati",
+        "Rispetto del territorio",
       ],
+      cta: "Scopri i prodotti personalizzati",
+      imageAlt:
+        "Laboratorio cosmetico Scaramuzzo — erbe, botanica calabrese e preparazione professionale",
     },
     paths: {
       kicker: "Due percorsi",
@@ -132,11 +169,38 @@ const copy = {
       kicker: "Local presence",
       title: "Our salons",
       subtitle: "An established reality, present in several cities across Calabria and Rome.",
+      trustBadges: [
+        "Scaramuzzo Method",
+        "Professional consultation",
+        "Botanical color",
+        "Specialist team",
+      ],
+      contactCta: "Contact the salon",
       list: [
-        { city: "Rome", region: "Historic Center" },
-        { city: "Corigliano-Rossano", region: "Calabria" },
-        { city: "Cosenza", region: "Calabria" },
-        { city: "Castrovillari", region: "Calabria" },
+        {
+          city: "Rome",
+          region: "Historic Center",
+          description:
+            "Personalized consultation, botanical color and professional journeys in the heart of the capital.",
+        },
+        {
+          city: "Cosenza",
+          region: "Calabria",
+          description:
+            "A long-standing reference point for the Scaramuzzo method in Calabria.",
+        },
+        {
+          city: "Corigliano-Rossano",
+          region: "Calabria",
+          description:
+            "Consultations and professional treatments following the Scaramuzzo method.",
+        },
+        {
+          city: "Castrovillari",
+          region: "Calabria",
+          description:
+            "Color journeys, wellbeing and professional consultation.",
+        },
       ],
     },
     socialProof: {
@@ -159,13 +223,23 @@ const copy = {
         ],
       },
     },
-    botany: {
-      kicker: "Research",
-      title: "Botanical research",
-      paragraphs: [
-        "Our botanical research comes from the experience gained in the salons: years of work on real hair and dialogue with our clients' needs.",
-        "The products are the result of research and professional experience: a consequence of the method, not the starting point.",
+    laboratory: {
+      kicker: "Laboratory",
+      title: "Cosmetic laboratory and Calabrian botanicals",
+      intro:
+        "In our salons we observe real needs every day: sensitive scalps, grey hair, treated lengths, frizzy or sensitized hair.",
+      body:
+        "From this experience comes the work of the Scaramuzzo cosmetic laboratory: professional formulas, personalized products and treatments inspired by Calabrian botanicals, respect for the hair fiber and valorization of the territory.",
+      keyPoints: [
+        "Real salon experience",
+        "Botanical research",
+        "Professional formulas",
+        "Personalized products",
+        "Respect for the territory",
       ],
+      cta: "Discover personalized products",
+      imageAlt:
+        "Scaramuzzo cosmetic laboratory — herbs, Calabrian botany and professional preparation",
     },
     paths: {
       kicker: "Two journeys",
@@ -282,15 +356,40 @@ export default function PageClient() {
               {t.salons.subtitle}
             </p>
           </div>
-          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+          <ul className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            {t.salons.trustBadges.map((badge) => (
+              <li
+                key={badge}
+                className="flex items-center gap-2 text-sm font-medium text-foreground/90"
+              >
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent/15">
+                  <Check className="h-3.5 w-3.5 text-accent" strokeWidth={2.5} />
+                </span>
+                {badge}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2">
             {t.salons.list.map((s) => (
               <div
                 key={s.city}
-                className="group rounded-2xl border border-border/50 bg-card/50 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl"
+                className="group flex flex-col rounded-2xl border border-border/50 bg-card/50 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl sm:p-8"
               >
                 <MapPin className="h-5 w-5 text-accent" />
                 <h3 className="mt-4 text-xl font-semibold">{s.city}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{s.region}</p>
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  {s.description}
+                </p>
+                <Link
+                  href="/contact"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent transition hover:opacity-80"
+                >
+                  {t.salons.contactCta}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </div>
             ))}
           </div>
@@ -354,13 +453,16 @@ export default function PageClient() {
         </div>
       </section>
 
-      {/* 6. RICERCA BOTANICA */}
-      <section className="border-y border-border/40 bg-card/20 py-20 sm:py-24">
+      {/* 6. LABORATORIO COSMETICO */}
+      <section
+        id="laboratorio"
+        className="scroll-mt-24 border-y border-border/40 bg-card/20 py-20 sm:py-24"
+      >
         <div className="container mx-auto grid max-w-6xl items-center gap-10 px-4 md:grid-cols-2 md:gap-14">
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-border/40 shadow-xl">
             <Image
               src="/ERBE.webp"
-              alt="Ricerca botanica Scaramuzzo — erbe, polveri vegetali e preparazione in laboratorio"
+              alt={t.laboratory.imageAlt}
               fill
               sizes="(max-width: 768px) 90vw, 560px"
               className="object-cover"
@@ -368,19 +470,37 @@ export default function PageClient() {
           </div>
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-              {t.botany.kicker}
+              {t.laboratory.kicker}
             </p>
-            <h2 className="text-3xl font-bold sm:text-4xl">{t.botany.title}</h2>
-            <div className="mt-6 space-y-5">
-              {t.botany.paragraphs.map((p, i) => (
-                <p
-                  key={i}
-                  className="text-base leading-relaxed text-muted-foreground"
-                >
-                  {p}
-                </p>
-              ))}
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              {t.laboratory.title}
+            </h2>
+            <div className="mt-6 space-y-5 border-l-2 border-accent/40 pl-6 sm:pl-8">
+              <p className="text-base leading-relaxed text-foreground/90 sm:text-lg">
+                {t.laboratory.intro}
+              </p>
+              <p className="text-base leading-relaxed text-muted-foreground">
+                {t.laboratory.body}
+              </p>
             </div>
+            <ul className="mt-8 grid grid-cols-1 gap-3">
+              {t.laboratory.keyPoints.map((point) => (
+                <li
+                  key={point}
+                  className="flex items-start gap-3 rounded-xl border border-border/40 bg-background/30 px-4 py-3.5 text-sm leading-snug text-foreground/90"
+                >
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/erbe"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
+            >
+              {t.laboratory.cta}
+              <ArrowRight className="h-5 w-5" />
+            </Link>
           </div>
         </div>
       </section>

@@ -137,6 +137,8 @@ const T = {
     waName: "Nome",
     refLabel: "Riferimento consulenza",
     refUnavailable: "Riferimento non disponibile",
+    resultSavedNote:
+      "La tua richiesta viene salvata nel Centro Consulenze Scaramuzzo e può essere seguita dal nostro team.",
     waRef: "Riferimento consulenza",
     contactKicker: "Ultimo passaggio",
     contactTitle: "I tuoi dati",
@@ -209,6 +211,8 @@ const T = {
     waName: "Name",
     refLabel: "Consultation reference",
     refUnavailable: "Reference unavailable",
+    resultSavedNote:
+      "Your request is saved in the Scaramuzzo Consultation Centre and can be followed up by our team.",
     waRef: "Consultation reference",
     contactKicker: "Last step",
     contactTitle: "Your details",
@@ -677,6 +681,9 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
                 )}
               </p>
             )}
+            <p className="mt-3 max-w-2xl rounded-xl border border-border/40 bg-background/30 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+              {t.resultSavedNote}
+            </p>
           </div>
           <button
             onClick={reset}
