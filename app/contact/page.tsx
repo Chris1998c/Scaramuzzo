@@ -4,9 +4,17 @@ import ContactClient from "./ContactClient";
 const ogImage = "https://www.scaramuzzo.green/roma-salone-hero-wide.webp";
 
 export const metadata: Metadata = {
-  title: "Contatti | Scaramuzzo Hair Natural Beauty",
+  title: "Contatti & Consulenza Capelli | Scaramuzzo Hair Natural Beauty",
   description:
-    "Contattaci per informazioni su servizi, prodotti, appuntamenti e collaborazioni professionali.",
+    "Contattaci per consulenza capelli, appuntamenti e informazioni. Saloni Scaramuzzo a Roma, Cosenza, Corigliano-Rossano e Castrovillari: colorazione botanica e henné professionale.",
+
+  keywords: [
+    "consulenza capelli",
+    "contatti salone parrucchiere",
+    "Scaramuzzo Roma",
+    "Scaramuzzo Calabria",
+    "appuntamento parrucchiere",
+  ],
 
   alternates: {
     canonical: "https://www.scaramuzzo.green/contact",
@@ -15,9 +23,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.scaramuzzo.green/contact",
-    title: "Contatti | Scaramuzzo Hair Natural Beauty",
+    locale: "it_IT",
+    siteName: "Scaramuzzo Hair Natural Beauty",
+    title: "Contatti & Consulenza Capelli | Scaramuzzo Hair Natural Beauty",
     description:
-      "Richiedi informazioni su servizi, prodotti, trattamenti o collaborazioni.",
+      "Richiedi consulenza capelli o informazioni sui saloni Scaramuzzo: Roma, Cosenza, Corigliano-Rossano e Castrovillari.",
     images: [
       {
         url: ogImage,
@@ -30,8 +40,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Contatti | Scaramuzzo",
-    description: "Scrivici per informazioni su servizi e prodotti.",
+    title: "Contatti & Consulenza Capelli | Scaramuzzo",
+    description:
+      "Consulenza capelli e informazioni sui saloni Scaramuzzo in Roma e Calabria.",
     images: [ogImage],
   },
 };

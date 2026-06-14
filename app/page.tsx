@@ -5,10 +5,19 @@ import PageClient from "./PageClient";
 const ogImage = "https://www.scaramuzzo.green/roma-salone-hero-wide.webp";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.scaramuzzo.green"),
-  title: "Scaramuzzo Hair Natural Beauty | Saloni & Prodotti Professionali",
+  title: "Scaramuzzo | Colorazione Botanica, Henné Professionale & Consulenza Capelli",
   description:
-    "Scopri i saloni Scaramuzzo Hair Natural Beauty e la nostra linea professionale di shampoo, maschere, trattamenti e styling naturali.",
+    "Quattro saloni tra Roma e Calabria. Metodo Scaramuzzo: colorazione botanica, henné professionale, prodotti personalizzati capelli, diagnosi online e consulenza professionale.",
+
+  keywords: [
+    "colorazione botanica",
+    "henné professionale",
+    "consulenza capelli",
+    "prodotti personalizzati capelli",
+    "diagnosi capelli online",
+    "saloni Scaramuzzo",
+    "Metodo Scaramuzzo",
+  ],
 
   alternates: {
     canonical: "https://www.scaramuzzo.green",
@@ -17,9 +26,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.scaramuzzo.green",
-    title: "Scaramuzzo Hair Natural Beauty | Saloni & Prodotti Professionali",
+    locale: "it_IT",
+    siteName: "Scaramuzzo Hair Natural Beauty",
+    title: "Scaramuzzo | Colorazione Botanica, Henné Professionale & Consulenza Capelli",
     description:
-      "Tecnica, natura, erbe botaniche e ricerca uniti in un percorso personale di bellezza. Scopri i nostri saloni e i prodotti professionali Scaramuzzo.",
+      "Colorazione botanica, henné professionale e consulenza capelli: scopri il Metodo Scaramuzzo, i saloni e i percorsi personalizzati online.",
     images: [
       {
         url: ogImage,
@@ -32,9 +43,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Scaramuzzo Hair Natural Beauty",
+    title: "Scaramuzzo | Colorazione Botanica & Consulenza Capelli",
     description:
-      "Scopri i saloni Scaramuzzo e i nostri prodotti professionali naturali.",
+      "Henné professionale, prodotti personalizzati e diagnosi capelli online con il Metodo Scaramuzzo.",
     images: [ogImage],
   },
 };

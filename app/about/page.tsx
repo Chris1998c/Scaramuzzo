@@ -4,20 +4,31 @@ import AboutClient from "./AboutClient";
 const ogImage = "https://www.scaramuzzo.green/roma-salone-hero-wide.webp";
 
 export const metadata: Metadata = {
-  title: "Chi Siamo | Scaramuzzo Hair Natural Beauty",
+  title: "Chi Siamo | Metodo Scaramuzzo, Henné e Colorazione Botanica",
   description:
-    "Scaramuzzo Hair Natural Beauty: tradizione, erbe botaniche, ricerca e innovazione tra Calabria e Roma.",
+    "Storia di Giuseppe Scaramuzzo dal 1993: henné professionale, colorazione botanica, ricerca botanica e consulenza capelli nei saloni di Roma, Cosenza, Corigliano-Rossano e Castrovillari.",
+
+  keywords: [
+    "Giuseppe Scaramuzzo",
+    "Metodo Scaramuzzo",
+    "henné professionale",
+    "colorazione botanica",
+    "consulenza capelli",
+    "saloni parrucchiere Calabria Roma",
+  ],
 
   alternates: {
     canonical: "https://www.scaramuzzo.green/about",
   },
 
   openGraph: {
-    type: "article",
+    type: "website",
     url: "https://www.scaramuzzo.green/about",
-    title: "Chi Siamo | Scaramuzzo Hair Natural Beauty",
+    locale: "it_IT",
+    siteName: "Scaramuzzo Hair Natural Beauty",
+    title: "Chi Siamo | Metodo Scaramuzzo, Henné e Colorazione Botanica",
     description:
-      "La storia, la filosofia e il team Scaramuzzo: tradizione, naturalezza e ricerca continua.",
+      "Oltre 30 anni di esperienza in henné professionale, colorazione botanica e consulenza capelli: la storia e il metodo Scaramuzzo.",
     images: [
       {
         url: ogImage,
@@ -30,9 +41,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Chi Siamo | Scaramuzzo",
+    title: "Chi Siamo | Metodo Scaramuzzo",
     description:
-      "Scaramuzzo Hair Natural Beauty: tradizione, botanica e ricerca applicata alla bellezza.",
+      "Henné professionale, colorazione botanica e consulenza capelli: la storia Scaramuzzo dal 1993.",
     images: [ogImage],
   },
 };

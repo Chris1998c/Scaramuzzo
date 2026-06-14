@@ -4,9 +4,18 @@ import ErbeClient from "./ErbeClient";
 const ogImage = "https://www.scaramuzzo.green/ERBE.webp";
 
 export const metadata: Metadata = {
-  title: "Prodotti Personalizzati | Scaramuzzo Hair Natural Beauty",
+  title: "Prodotti Personalizzati Capelli | Routine su Misura Scaramuzzo",
   description:
-    "Scopri la routine capelli su misura del Metodo Scaramuzzo: diagnosi, erbe botaniche e prodotti professionali scelti per il tuo capello.",
+    "Configura la tua routine capelli con diagnosi online: prodotti personalizzati, erbe botaniche e consulenza professionale. Valutazione su misura se la routine pronta non è adatta.",
+
+  keywords: [
+    "prodotti personalizzati capelli",
+    "routine capelli su misura",
+    "diagnosi capelli online",
+    "consulenza capelli",
+    "erbe botaniche capelli",
+    "Metodo Scaramuzzo",
+  ],
 
   alternates: {
     canonical: "https://www.scaramuzzo.green/erbe",
@@ -15,9 +24,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.scaramuzzo.green/erbe",
-    title: "Prodotti Personalizzati | Scaramuzzo Hair Natural Beauty",
+    locale: "it_IT",
+    siteName: "Scaramuzzo Hair Natural Beauty",
+    title: "Prodotti Personalizzati Capelli | Routine su Misura Scaramuzzo",
     description:
-      "Diagnosi capelli e routine personalizzata: erbe botaniche e prodotti professionali scelti per te.",
+      "Diagnosi capelli online e prodotti personalizzati: routine professionale su misura con consulenza Scaramuzzo.",
     images: [
       {
         url: ogImage,
@@ -30,9 +41,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Prodotti Personalizzati | Scaramuzzo",
+    title: "Prodotti Personalizzati Capelli | Scaramuzzo",
     description:
-      "Diagnosi capelli e routine personalizzata con il Metodo Scaramuzzo.",
+      "Diagnosi capelli online, prodotti personalizzati e consulenza professionale con il Metodo Scaramuzzo.",
     images: [ogImage],
   },
 };

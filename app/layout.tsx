@@ -29,24 +29,27 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Scaramuzzo Hair Natural Beauty — prodotti premium, servizi professionali e trattamenti avanzati per la cura naturale dei capelli.",
+    "Scaramuzzo Hair Natural Beauty — colorazione botanica, henné professionale, prodotti personalizzati capelli e consulenza nei saloni di Roma e Calabria.",
 
   keywords: [
     "Scaramuzzo",
-    "hair natural beauty",
-    "prodotti capelli professionali",
+    "colorazione botanica",
+    "henné professionale",
+    "prodotti personalizzati capelli",
+    "diagnosi capelli online",
+    "consulenza capelli",
     "parrucchiere Roma",
-    "parrucchiere Cosenza",
-    "parrucchiere Corigliano",
+    "parrucchiere Calabria",
     "erbe tintorie",
-    "cura dei capelli naturale",
+    "Metodo Scaramuzzo",
   ],
   openGraph: {
     type: "website",
     url: "https://www.scaramuzzo.green",
+    locale: "it_IT",
     title: "Scaramuzzo Hair Natural Beauty",
     description:
-      "Scopri i nostri prodotti professionali, trattamenti naturali e servizi dedicati alla salute dei capelli.",
+      "Colorazione botanica, henné professionale e consulenza capelli: scopri il Metodo Scaramuzzo nei nostri saloni e percorsi personalizzati online.",
     siteName: "Scaramuzzo Hair Natural Beauty",
     images: [
       {
@@ -61,7 +64,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Scaramuzzo Hair Natural Beauty",
-    description: "Prodotti professionali e trattamenti naturali per i capelli.",
+    description:
+      "Colorazione botanica, henné professionale e consulenza capelli con oltre 30 anni di esperienza.",
     images: ["/og-default.webp"],
   },
 };

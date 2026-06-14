@@ -47,14 +47,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${base}/erbe`,
       lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.6,
+      changeFrequency: "weekly",
+      priority: 0.85,
     },
     {
       url: `${base}/diagnosi-botanica`,
       lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
+      changeFrequency: "weekly",
+      priority: 0.85,
     },
 
     // PAGINE LEGALI AGGIUNTE

@@ -4,9 +4,21 @@ import DiagnosiClient from "./DiagnosiClient";
 const ogImage = "https://www.scaramuzzo.green/ERBE.webp";
 
 export const metadata: Metadata = {
-  title: { absolute: "Scaramuzzo Botanical Color Experience" },
+  title: {
+    absolute:
+      "Diagnosi Capelli Online | Botanical Color Experience Scaramuzzo",
+  },
   description:
-    "Esperienza professionale di valutazione botanica personalizzata per capelli, colore, porosità e capelli bianchi.",
+    "Diagnosi capelli online e valutazione professionale del profilo colore: porosità, bianchi, storico tecnico e consulenza per colorazione botanica e henné professionale.",
+
+  keywords: [
+    "diagnosi capelli online",
+    "colorazione botanica",
+    "henné professionale",
+    "consulenza capelli",
+    "Botanical Color Experience",
+    "valutazione colore capelli",
+  ],
 
   alternates: {
     canonical: "https://www.scaramuzzo.green/diagnosi-botanica",
@@ -15,9 +27,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.scaramuzzo.green/diagnosi-botanica",
-    title: "Scaramuzzo Botanical Color Experience",
+    locale: "it_IT",
+    siteName: "Scaramuzzo Hair Natural Beauty",
+    title: "Diagnosi Capelli Online | Botanical Color Experience Scaramuzzo",
     description:
-      "Esperienza professionale di valutazione botanica personalizzata per capelli, colore, porosità e capelli bianchi.",
+      "Valutazione professionale del profilo colore, capelli bianchi e storico tecnico. Consulenza per colorazione botanica personalizzata.",
     images: [
       {
         url: ogImage,
@@ -30,9 +44,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Scaramuzzo Botanical Color Experience",
+    title: "Diagnosi Capelli Online | Scaramuzzo",
     description:
-      "Esperienza professionale di valutazione botanica personalizzata per capelli, colore, porosità e capelli bianchi.",
+      "Colorazione botanica e consulenza professionale: valutazione profilo colore, bianchi e porosità.",
     images: [ogImage],
   },
 };
