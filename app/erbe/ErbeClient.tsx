@@ -10,7 +10,7 @@ import QuizConfigurator from "./QuizConfigurator";
 
 
 // Numero WhatsApp ufficiale (formato internazionale, solo cifre).
-const WHATSAPP_NUMBER = "393470914731";
+const WHATSAPP_NUMBER = "393920655925";
 
 const copy = {
   it: {
