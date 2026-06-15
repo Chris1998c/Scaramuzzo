@@ -16,7 +16,9 @@ export default function Footer() {
       links: "Link utili",
       services: "Servizi",
       products: "Prodotti",
-      herbs: "Erbe & Botanica",
+      custom: "Prodotti Personalizzati",
+      bce: "Botanical Color Experience",
+      about: "Chi Siamo",
       contact: "Contatti",
       privacy: "Privacy Policy",
       cookie: "Cookie Policy",
@@ -41,7 +43,9 @@ export default function Footer() {
       links: "Useful links",
       services: "Services",
       products: "Products",
-      herbs: "Herbs & Botanicals",
+      custom: "Personalized Products",
+      bce: "Botanical Color Experience",
+      about: "About Us",
       contact: "Contact",
       privacy: "Privacy Policy",
       cookie: "Cookie Policy",
@@ -143,18 +147,28 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">{t.links}</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/services" className="hover:underline">
-                  {t.services}
-                </Link>
-              </li>
-              <li>
                 <Link href="/products" className="hover:underline">
                   {t.products}
                 </Link>
               </li>
               <li>
                 <Link href="/erbe" className="hover:underline">
-                  {t.herbs}
+                  {t.custom}
+                </Link>
+              </li>
+              <li>
+                <Link href="/diagnosi-botanica" className="hover:underline">
+                  {t.bce}
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="hover:underline">
+                  {t.services}
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:underline">
+                  {t.about}
                 </Link>
               </li>
               <li>

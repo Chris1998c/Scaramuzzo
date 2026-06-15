@@ -47,17 +47,17 @@ const Home: FC<HomeProps> = ({ language }) => {
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <Link
-              href="#metodo"
+              href="/erbe"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
             >
-              {t.ctaPrimary}
+              {t.ctaSecondary}
               <ArrowRight className="h-5 w-5" />
             </Link>
             <Link
-              href="/erbe"
+              href="#metodo"
               className="inline-flex items-center justify-center rounded-full border border-border/60 px-7 py-3.5 text-base font-semibold transition hover:border-accent/50 hover:bg-card/60"
             >
-              {t.ctaSecondary}
+              {t.ctaPrimary}
             </Link>
           </div>
         </div>
