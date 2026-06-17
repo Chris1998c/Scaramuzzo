@@ -87,7 +87,7 @@ export async function POST(req: Request) {
     if (order.customerEmail) {
       const customerResult = await sendOrderEmail({
         ...emailPayload,
-        customerEmail: order.customerEmail,
+        recipientEmail: order.customerEmail,
       });
 
       if (!customerResult.success) {
@@ -100,7 +100,7 @@ export async function POST(req: Request) {
 
     const staffResult = await sendOrderEmail({
       ...emailPayload,
-      customerEmail: STAFF_EMAIL,
+      recipientEmail: STAFF_EMAIL,
     });
 
     if (!staffResult.success) {

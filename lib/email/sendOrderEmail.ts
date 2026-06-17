@@ -10,9 +10,10 @@ export type OrderItem = {
 };
 
 export type SendOrderEmailInput = {
+  recipientEmail: string;
+  customerEmail: string;
   orderId: string;
   orderRef: string;
-  customerEmail: string;
   total: number;
   subtotal: number;
   shipping: number;
@@ -25,13 +26,15 @@ export type SendOrderEmailInput = {
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendOrderEmail(input: SendOrderEmailInput) {
+  const { recipientEmail, ...templateProps } = input;
+
   try {
     const response = await resend.emails.send({
       from: "Scaramuzzo Green <noreply@scaramuzzo.green>",
       replyTo: "scaramuzzohnb@gmail.com",
-      to: input.customerEmail,
+      to: recipientEmail,
       subject: `Il tuo ordine ${input.orderRef} è stato confermato`,
-      react: OrderConfirmationEmail(input),
+      react: OrderConfirmationEmail(templateProps),
     });
 
     return { success: true, response };

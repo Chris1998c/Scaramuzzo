@@ -78,6 +78,16 @@ function shippingDetailsFromSession(session: Stripe.Checkout.Session) {
   return extended.shipping_details ?? null;
 }
 
+function lineAmountCents(
+  lineItem: Stripe.LineItem,
+  preferSubtotal = true
+): number {
+  if (preferSubtotal && lineItem.amount_subtotal != null) {
+    return lineItem.amount_subtotal;
+  }
+  return lineItem.amount_total ?? 0;
+}
+
 export async function parseCheckoutSession(
   stripe: Stripe,
   session: Stripe.Checkout.Session
@@ -89,21 +99,26 @@ export async function parseCheckoutSession(
 
   const items: OrderItem[] = [];
   let productsSubtotalCents = 0;
+  let shippingFromLineItemCents = 0;
 
   for (const lineItem of lineItemsRes.data) {
     const name = lineItemName(lineItem);
-    if (SHIPPING_LABELS.has(name)) continue;
-
     const quantity = lineItem.quantity ?? 1;
-    const lineTotalCents = lineItem.amount_total ?? 0;
-    productsSubtotalCents += lineTotalCents;
+    const lineSubtotalCents = lineAmountCents(lineItem, true);
+
+    if (SHIPPING_LABELS.has(name)) {
+      shippingFromLineItemCents += lineAmountCents(lineItem, false);
+      continue;
+    }
+
+    productsSubtotalCents += lineSubtotalCents;
 
     const catalogId = catalogIdFromLineItem(lineItem);
 
     items.push({
       id: catalogId ?? lineItem.id,
       name,
-      price: quantity > 0 ? lineTotalCents / 100 / quantity : 0,
+      price: quantity > 0 ? lineSubtotalCents / 100 / quantity : 0,
       quantity,
       image: resolveImage(catalogId),
     });
@@ -111,7 +126,8 @@ export async function parseCheckoutSession(
 
   const total = (session.amount_total ?? 0) / 100;
   const discount = (session.total_details?.amount_discount ?? 0) / 100;
-  const shipping = (session.total_details?.amount_shipping ?? 0) / 100;
+  const shippingFromStripe = (session.total_details?.amount_shipping ?? 0) / 100;
+  const shipping = Math.max(shippingFromLineItemCents / 100, shippingFromStripe);
   const subtotal = productsSubtotalCents / 100;
 
   const shippingDetails = shippingDetailsFromSession(session);
