@@ -5,6 +5,7 @@ import Navbar from "./components/site/Navbar";
 import Footer from "./components/site/Footer";
 import CookieBanner from "./components/site/CookieBanner";
 import GoogleTagManager from "./components/analytics/GoogleTagManager";
+import AttributionBootstrap from "./components/analytics/AttributionBootstrap";
 import { LanguageProvider } from "./components/site/LanguageProvider";
 import { CONSENT_BOOTSTRAP_SCRIPT } from "@/lib/tracking/consentMode";
 import Script from "next/script";
@@ -246,6 +247,7 @@ export default function RootLayout({
         className={`${inter.variable} ${mono.variable} bg-background text-foreground antialiased min-h-screen`}
       >
         <GoogleTagManager />
+        <AttributionBootstrap />
         <LanguageProvider>
           <Navbar />
           <CookieBanner />

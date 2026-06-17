@@ -1,5 +1,6 @@
 import { trackEventOnce } from "./trackEventOnce";
 import { trackEvent } from "./trackEvent";
+import { withTrackingAttribution } from "./attribution";
 
 export type QuizCompleteTrackingInput = {
   fingerprint: string;
@@ -14,7 +15,7 @@ export type QuizCompleteTrackingInput = {
 export function trackQuizPersonalizzatiComplete(
   input: QuizCompleteTrackingInput
 ): void {
-  trackEventOnce(`track-quiz-complete-${input.fingerprint}`, "quiz_personalizzati_complete", {
+  trackEventOnce(`track-quiz-complete-${input.fingerprint}`, "quiz_personalizzati_complete", withTrackingAttribution({
     category: "quiz",
     language: input.language,
     custom_only: input.customOnly,
@@ -23,7 +24,7 @@ export function trackQuizPersonalizzatiComplete(
     obiettivo: input.obiettivo,
     capello: input.capello,
     cute: input.cute,
-  });
+  }));
 }
 
 export type BceCompleteTrackingInput = {
@@ -50,7 +51,7 @@ export function trackBceComplete(input: BceCompleteTrackingInput): void {
 
   if (input.incarnato) payload.incarnato = input.incarnato;
 
-  trackEventOnce(`track-bce-complete-${input.fingerprint}`, "bce_complete", payload);
+  trackEventOnce(`track-bce-complete-${input.fingerprint}`, "bce_complete", withTrackingAttribution(payload));
 }
 
 export type WhatsappClickLocation =
@@ -79,5 +80,5 @@ export function trackWhatsappClick(input: WhatsappClickTrackingInput): void {
   if (input.customOnly !== undefined) payload.custom_only = input.customOnly;
   if (input.complexity) payload.complexity = input.complexity;
 
-  trackEvent("whatsapp_click", payload);
+  trackEvent("whatsapp_click", withTrackingAttribution(payload));
 }

@@ -1,5 +1,6 @@
 import { trackEvent } from "./trackEvent";
 import { trackEventOnce } from "./trackEventOnce";
+import { withTrackingAttribution } from "./attribution";
 
 const VIEW_CART_DEBOUNCE_MS = 1000;
 export const ECOMMERCE_CURRENCY = "EUR";
@@ -143,12 +144,12 @@ export type BeginCheckoutInput = {
 };
 
 export function trackBeginCheckout(input: BeginCheckoutInput): void {
-  trackEventOnce(`track-begin-checkout-${input.fingerprint}`, "begin_checkout", {
+  trackEventOnce(`track-begin-checkout-${input.fingerprint}`, "begin_checkout", withTrackingAttribution({
     item_count: input.itemCount,
     value: input.value,
     currency: ECOMMERCE_CURRENCY,
     items: input.items,
-  });
+  }));
 }
 
 export type VerifiedPurchaseResponse = {
@@ -193,11 +194,12 @@ export type PurchaseInput = {
 };
 
 export function trackPurchase(input: PurchaseInput): void {
-  trackEventOnce(input.storageKey, "purchase", {
+  trackEventOnce(input.storageKey, "purchase", withTrackingAttribution({
     order_ref: input.orderRef,
+    transaction_id: input.orderRef,
     value: input.value,
     item_count: input.itemCount,
     currency: input.currency,
     items: input.items,
-  });
+  }));
 }

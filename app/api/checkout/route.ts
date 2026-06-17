@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { randomBytes } from "crypto";
 import { productTranslations } from "@/app/products/data";
+import { sanitizeAttributionForStripe } from "@/lib/tracking/attributionMetadata";
 
 export const runtime = "nodejs";
 
@@ -36,8 +37,11 @@ function buildCartSummary(items: TrustedItem[]): string {
 export async function POST(request: Request) {
   try {
     // ⚠️ Dal client accettiamo SOLO id e qty: tutto il resto è ricostruito lato server.
-    const { cart }: { cart: Array<{ id?: unknown; qty?: unknown }> } =
-      await request.json();
+    const body = (await request.json()) as {
+      cart?: Array<{ id?: unknown; qty?: unknown }>;
+      attribution?: unknown;
+    };
+    const { cart, attribution: rawAttribution } = body;
 
     if (!Array.isArray(cart) || cart.length === 0) {
       return NextResponse.json(
@@ -142,6 +146,7 @@ export async function POST(request: Request) {
 
     const orderRef = buildOrderRef();
     const cartSummary = buildCartSummary(trustedItems);
+    const stripeAttribution = sanitizeAttributionForStripe(rawAttribution);
 
     // --- CREA SESSIONE STRIPE ---
     const session = await stripe.checkout.sessions.create({
@@ -158,6 +163,7 @@ export async function POST(request: Request) {
         order_ref: orderRef,
         item_count: String(trustedItems.length),
         cart_summary: cartSummary,
+        ...stripeAttribution,
       },
 
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,

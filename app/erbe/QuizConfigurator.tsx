@@ -19,6 +19,7 @@ import {
 import {
   trackQuizPersonalizzatiComplete,
   trackWhatsappClick,
+  getAttributionForPayload,
 } from "@/lib/tracking";
 
 type Answers = {
@@ -385,6 +386,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
       customOnly,
       customReason: customOnly ? customReason : "",
       customProductLabel: customOnly ? customProductLabel : "",
+      attribution: getAttributionForPayload(),
     };
   };
 

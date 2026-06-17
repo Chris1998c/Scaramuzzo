@@ -1,7 +1,7 @@
 "use client";
 
 import type { CartItem } from "@/lib/store/cartStore";
-import { savePendingPurchase, sumCartQty } from "@/lib/tracking";
+import { savePendingPurchase, sumCartQty, getAttributionForStripeMetadata } from "@/lib/tracking";
 
 /**
  * Checkout PREMIUM compatibile iPhone / Safari / Android / PC
@@ -17,7 +17,10 @@ export async function startStripeCheckout(cart: CartItem[]): Promise<void> {
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart }),
+      body: JSON.stringify({
+        cart,
+        attribution: getAttributionForStripeMetadata(),
+      }),
     });
 
     if (!response.ok) {

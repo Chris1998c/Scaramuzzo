@@ -11,7 +11,7 @@ import {
   ArrowRight,
   FlaskConical,
 } from "lucide-react";
-import { trackBceComplete, trackWhatsappClick } from "@/lib/tracking";
+import { trackBceComplete, trackWhatsappClick, getAttributionForPayload } from "@/lib/tracking";
 
 type Lang = "it" | "en";
 
@@ -687,6 +687,7 @@ export default function DiagnosiClient() {
               strandTest,
               assessment,
               notes,
+              attribution: getAttributionForPayload(),
             },
           }),
         });

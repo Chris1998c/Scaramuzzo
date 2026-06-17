@@ -88,3 +88,22 @@ export {
 } from "./pendingPurchase";
 
 export type { PendingPurchase } from "./pendingPurchase";
+
+export {
+  captureAttributionFromUrl,
+  getAttribution,
+  getAttributionForPayload,
+  getAttributionForTracking,
+  getAttributionForStripeMetadata,
+  withTrackingAttribution,
+} from "./attribution";
+
+export type {
+  AttributionTouch,
+  StoredAttribution,
+  AttributionPayload,
+} from "./attributionTypes";
+
+export { ATTRIBUTION_STORAGE_KEY, ATTRIBUTION_TTL_MS } from "./attributionTypes";
+
+export { sanitizeAttributionForStripe } from "./attributionMetadata";
