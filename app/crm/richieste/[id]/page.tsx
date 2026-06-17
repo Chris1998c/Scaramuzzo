@@ -12,6 +12,8 @@ import {
 } from "@/lib/crm/format";
 import { StatusSelect } from "./StatusSelect";
 import { NoteForm } from "./NoteForm";
+import { ManualPaymentForm } from "./ManualPaymentForm";
+import { isStripeConfigured } from "@/lib/stripe/client";
 
 function Field({
   label,
@@ -318,6 +320,15 @@ export default async function CrmRequestDetailPage({
             </ul>
           )}
         </Section>
+
+        {isStripeConfigured() && (
+          <Section title="Proposta di pagamento">
+            <ManualPaymentForm
+              consultationId={row.id}
+              defaultEmail={row.customer_email}
+            />
+          </Section>
+        )}
       </div>
     </div>
   );

@@ -15,6 +15,8 @@ const SOURCE_LABELS: Record<string, string> = {
   quiz_custom: "Quiz custom",
   whatsapp_direct: "WhatsApp diretto",
   botanical_experience: "Botanical Experience",
+  crm_manual: "CRM — pagamento manuale",
+  ecommerce: "E-commerce",
 };
 
 const STATUS_LABELS: Record<string, string> = {

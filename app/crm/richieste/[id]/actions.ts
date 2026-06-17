@@ -8,6 +8,12 @@ import {
   updateConsultationStatus,
 } from "@/lib/crm/updateConsultation";
 import { addConsultationNote } from "@/lib/crm/notes";
+import { getConsultationById } from "@/lib/crm/fetchConsultations";
+import {
+  createManualPaymentSession,
+  type ManualPaymentInput,
+} from "@/lib/crm/manualPayment";
+import { isStripeConfigured } from "@/lib/stripe/client";
 
 async function assertCrmAuth(): Promise<void> {
   const cookieStore = await cookies();
@@ -41,4 +47,21 @@ export async function addNoteAction(
   }
   await addConsultationNote(id, body, "Staff");
   revalidatePath(`/crm/richieste/${id}`);
+}
+
+export async function createManualPaymentLinkAction(
+  input: ManualPaymentInput
+): Promise<{ url: string; orderRef: string; sessionId: string }> {
+  await assertCrmAuth();
+
+  if (!isStripeConfigured()) {
+    throw new Error("Stripe non configurato.");
+  }
+
+  const consultation = await getConsultationById(input.consultationId);
+  if (!consultation) {
+    throw new Error("Consulenza non trovata.");
+  }
+
+  return createManualPaymentSession(consultation, input);
 }

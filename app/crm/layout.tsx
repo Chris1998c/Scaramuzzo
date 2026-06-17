@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { cookies } from "next/headers";
 import { CRM_COOKIE, isValidSessionValue } from "@/lib/crm/auth";
 
@@ -29,14 +30,30 @@ export default async function CrmLayout({
             </p>
           </div>
           {authed && (
-            <form action="/api/crm/logout" method="post">
-              <button
-                type="submit"
-                className="rounded-full border border-border/50 px-4 py-2 text-sm font-medium transition hover:border-accent/50 hover:bg-background/40"
-              >
-                Esci
-              </button>
-            </form>
+            <div className="flex flex-col items-end gap-3 sm:flex-row sm:items-center">
+              <nav className="flex gap-2 text-sm">
+                <Link
+                  href="/crm"
+                  className="rounded-full border border-border/50 px-4 py-2 font-medium transition hover:border-accent/50 hover:bg-background/40"
+                >
+                  Richieste
+                </Link>
+                <Link
+                  href="/crm/ordini"
+                  className="rounded-full border border-border/50 px-4 py-2 font-medium transition hover:border-accent/50 hover:bg-background/40"
+                >
+                  Ordini
+                </Link>
+              </nav>
+              <form action="/api/crm/logout" method="post">
+                <button
+                  type="submit"
+                  className="rounded-full border border-border/50 px-4 py-2 text-sm font-medium transition hover:border-accent/50 hover:bg-background/40"
+                >
+                  Esci
+                </button>
+              </form>
+            </div>
           )}
         </div>
       </header>
