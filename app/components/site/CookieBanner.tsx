@@ -1,55 +1,160 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import {
+  consentFromAcceptAll,
+  consentFromRejectAll,
+  publishConsent,
+  readConsentPreferences,
+  restoreConsentFromStorage,
+  writeConsentPreferences,
+} from "@/lib/tracking";
 
 export default function CookieBanner() {
   const [open, setOpen] = useState(false);
+  const [showPreferences, setShowPreferences] = useState(false);
+  const [analytics, setAnalytics] = useState(false);
+  const [marketing, setMarketing] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("cookie-consent");
-    if (!consent) setOpen(true);
+    const stored = readConsentPreferences();
+    if (stored) {
+      restoreConsentFromStorage();
+      setOpen(false);
+      return;
+    }
+
+    setOpen(true);
   }, []);
 
+  const closeWithConsent = (preferences: {
+    analytics: boolean;
+    marketing: boolean;
+  }) => {
+    const saved = writeConsentPreferences(preferences);
+    publishConsent(saved);
+    setOpen(false);
+  };
+
   const acceptAll = () => {
-    localStorage.setItem("cookie-consent", "accepted");
+    const saved = consentFromAcceptAll();
+    publishConsent(saved);
     setOpen(false);
   };
 
   const rejectAll = () => {
-    localStorage.setItem("cookie-consent", "rejected");
+    const saved = consentFromRejectAll();
+    publishConsent(saved);
     setOpen(false);
+  };
+
+  const savePreferences = () => {
+    closeWithConsent({ analytics, marketing });
   };
 
   if (!open) return null;
 
   return (
-    <div className="fixed bottom-4 left-0 right-0 flex justify-center z-50 px-4">
-      <div className="max-w-3xl w-full bg-[#1b0d08]/95 border border-neutral-700 shadow-xl rounded-2xl p-6 text-white backdrop-blur-md">
-        <h3 className="text-xl font-semibold mb-2">
-          Cookie & Privacy
-        </h3>
+    <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-4">
+      <div className="w-full max-w-3xl rounded-2xl border border-neutral-700 bg-[#1b0d08]/95 p-6 text-white shadow-xl backdrop-blur-md">
+        <h3 className="mb-2 text-xl font-semibold">Cookie & Privacy</h3>
 
-        <p className="text-sm text-neutral-300 mb-4 leading-relaxed">
-          Utilizziamo cookie tecnici e, previo consenso, cookie di analisi
-          anonima per migliorare la tua esperienza. Nessun dato viene condiviso
-          senza permesso.
+        <p className="mb-4 text-sm leading-relaxed text-neutral-300">
+          Utilizziamo cookie necessari per il funzionamento del sito e, previo
+          consenso, cookie di analisi e marketing. Puoi accettare, rifiutare o
+          personalizzare le tue scelte in qualsiasi momento.
         </p>
 
-        <div className="flex gap-3 mt-4">
+        {showPreferences && (
+          <div className="mb-4 space-y-3 rounded-xl border border-neutral-700 bg-black/20 p-4">
+            <label className="flex items-start justify-between gap-4">
+              <span>
+                <span className="block text-sm font-medium">Necessari</span>
+                <span className="mt-1 block text-xs text-neutral-400">
+                  Sempre attivi. Richiesti per sicurezza e funzionalità base.
+                </span>
+              </span>
+              <span className="shrink-0 rounded-full bg-neutral-700 px-3 py-1 text-xs font-medium">
+                Sempre attivi
+              </span>
+            </label>
+
+            <label className="flex items-start justify-between gap-4">
+              <span>
+                <span className="block text-sm font-medium">Analytics</span>
+                <span className="mt-1 block text-xs text-neutral-400">
+                  Statistiche anonime per migliorare il sito.
+                </span>
+              </span>
+              <input
+                type="checkbox"
+                checked={analytics}
+                onChange={(e) => setAnalytics(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-white"
+              />
+            </label>
+
+            <label className="flex items-start justify-between gap-4">
+              <span>
+                <span className="block text-sm font-medium">Marketing</span>
+                <span className="mt-1 block text-xs text-neutral-400">
+                  Personalizzazione e misurazione campagne pubblicitarie.
+                </span>
+              </span>
+              <input
+                type="checkbox"
+                checked={marketing}
+                onChange={(e) => setMarketing(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-white"
+              />
+            </label>
+          </div>
+        )}
+
+        <div className="flex flex-wrap gap-3">
           <button
+            type="button"
             onClick={rejectAll}
-            className="px-4 py-2 rounded-xl bg-neutral-700 hover:bg-neutral-600 transition text-sm"
+            className="rounded-xl bg-neutral-700 px-4 py-2 text-sm transition hover:bg-neutral-600"
           >
-            Rifiuta
+            Rifiuta tutti
           </button>
 
           <button
-            onClick={acceptAll}
-            className="px-4 py-2 rounded-xl bg-white text-black font-medium hover:bg-neutral-200 transition text-sm"
+            type="button"
+            onClick={() => setShowPreferences((prev) => !prev)}
+            className="rounded-xl border border-neutral-600 px-4 py-2 text-sm transition hover:bg-neutral-800"
           >
-            Accetta
+            {showPreferences ? "Nascondi preferenze" : "Personalizza"}
           </button>
+
+          {showPreferences ? (
+            <button
+              type="button"
+              onClick={savePreferences}
+              className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-neutral-200"
+            >
+              Salva preferenze
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={acceptAll}
+              className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-neutral-200"
+            >
+              Accetta tutti
+            </button>
+          )}
         </div>
+
+        <p className="mt-4 text-xs text-neutral-500">
+          Maggiori informazioni nella{" "}
+          <Link href="/cookie" className="underline hover:text-neutral-300">
+            Cookie Policy
+          </Link>
+          .
+        </p>
       </div>
     </div>
   );

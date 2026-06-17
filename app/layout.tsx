@@ -4,7 +4,9 @@ import "./globals.css";
 import Navbar from "./components/site/Navbar";
 import Footer from "./components/site/Footer";
 import CookieBanner from "./components/site/CookieBanner";
+import GoogleTagManager from "./components/analytics/GoogleTagManager";
 import { LanguageProvider } from "./components/site/LanguageProvider";
+import { CONSENT_MODE_DEFAULT_SCRIPT } from "@/lib/tracking/consentMode";
 import Script from "next/script";
 
 const inter = localFont({
@@ -85,22 +87,11 @@ export default function RootLayout({
           }}
         />
 
-        {/* GA4 */}
-        <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-S0VBCLMV14"
+        {/* Google Consent Mode — default denied, before GTM */}
+        <script
+          dangerouslySetInnerHTML={{ __html: CONSENT_MODE_DEFAULT_SCRIPT }}
         />
 
-        <Script id="ga4-init">
-          {`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-S0VBCLMV14', {
-        page_path: window.location.pathname,
-      });
-    `}
-        </Script>
         {/* JSON-LD Multilocation SEO – mantiene il tuo */}
         <Script
           id="schema-multilocation"
@@ -254,6 +245,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${mono.variable} bg-background text-foreground antialiased min-h-screen`}
       >
+        <GoogleTagManager />
         <LanguageProvider>
           <Navbar />
           <CookieBanner />
