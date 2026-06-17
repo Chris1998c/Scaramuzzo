@@ -1,10 +1,17 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { sendOrderEmail } from "@/lib/email/sendOrderEmail";
+import {
+  beginOrderProcessing,
+  endOrderProcessing,
+  isOrderProcessing,
+} from "@/lib/stripe/orderIdempotency";
+import { parseCheckoutSession } from "@/lib/stripe/parseCheckoutSession";
 
 export const runtime = "nodejs";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const STAFF_EMAIL = "scaramuzzohnb@gmail.com";
 
 export async function POST(req: Request) {
   const sig = req.headers.get("stripe-signature");
@@ -17,7 +24,6 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
 
-  // 🔐 Verifica firma Stripe
   try {
     event = stripe.webhooks.constructEvent(
       rawBody,
@@ -33,75 +39,88 @@ export async function POST(req: Request) {
     );
   }
 
-  // 🎯 Evento Checkout Completato
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
+  if (event.type !== "checkout.session.completed") {
+    return NextResponse.json({ received: true });
+  }
 
-    // 🔁 IDEMPOTENZA: se già processato, non reinviare le email
-    if (session.metadata?.emailed === "1") {
-      console.log("↩️ Ordine già processato, skip email:", session.id);
+  const session = event.data.object as Stripe.Checkout.Session;
+
+  if (session.metadata?.emailed === "1") {
+    console.log("↩️ Ordine già processato (metadata), skip:", session.id);
+    return NextResponse.json({ received: true });
+  }
+
+  if (isOrderProcessing(session.id)) {
+    console.log("↩️ Ordine già in elaborazione su questa istanza, skip:", session.id);
+    return NextResponse.json({ received: true });
+  }
+
+  if (!beginOrderProcessing(session.id)) {
+    return NextResponse.json({ received: true });
+  }
+
+  try {
+    const fresh = await stripe.checkout.sessions.retrieve(session.id);
+
+    if (fresh.metadata?.emailed === "1") {
+      console.log("↩️ Ordine già processato (re-fetch), skip:", session.id);
       return NextResponse.json({ received: true });
     }
 
-    const orderId = session.id;
-    const customerEmail = session.customer_details?.email || "";
+    const order = await parseCheckoutSession(stripe, fresh);
 
-    const subtotal = Number(session.metadata?.subtotal || "0");
-    const shippingCost = Number(session.metadata?.shippingCost || "0");
+    console.log("📦 Nuovo ordine completato:", order.orderRef);
 
-    // Prodotti acquistati
-    const items = JSON.parse(session.metadata?.items || "[]") as {
-      id: string;
-      name: string;
-      price: number;
-      quantity: number;
-      image: string;
-    }[];
+    const emailPayload = {
+      orderId: order.orderId,
+      orderRef: order.orderRef,
+      customerEmail: order.customerEmail,
+      total: order.total,
+      subtotal: order.subtotal,
+      shipping: order.shipping,
+      discount: order.discount,
+      items: order.items,
+      billingAddress: order.billingAddress,
+      shippingAddress: order.shippingAddress,
+    };
 
-    const total = subtotal + shippingCost;
-
-    console.log("📦 Nuovo ordine completato:", orderId);
-
-    // ---------------------------------------------------
-    // 📧 EMAIL AL CLIENTE (solo se l'email è presente)
-    // ---------------------------------------------------
-    if (customerEmail) {
-      await sendOrderEmail({
-        orderId,
-        customerEmail,
-        total,
-        items,
+    if (order.customerEmail) {
+      const customerResult = await sendOrderEmail({
+        ...emailPayload,
+        customerEmail: order.customerEmail,
       });
+
+      if (!customerResult.success) {
+        console.error("❌ Email cliente non inviata:", order.orderRef);
+        return NextResponse.json({ error: "Customer email failed" }, { status: 500 });
+      }
     } else {
       console.warn("⚠️ Email cliente mancante: invio solo email staff.");
     }
 
-    // ---------------------------------------------------
-    // 📧 EMAIL A TE (STAFF SCARAMUZZO)
-    // ---------------------------------------------------
-    await sendOrderEmail({
-      orderId,
-      customerEmail: "scaramuzzohnb@gmail.com",
-      total,
-      items,
+    const staffResult = await sendOrderEmail({
+      ...emailPayload,
+      customerEmail: STAFF_EMAIL,
     });
 
-    console.log("📨 Email inviate");
-
-    // ---------------------------------------------------
-    // ✅ MARCA COME PROCESSATO (preserva i metadata esistenti)
-    // ---------------------------------------------------
-    try {
-      await stripe.checkout.sessions.update(session.id, {
-        metadata: {
-          ...session.metadata,
-          emailed: "1",
-        },
-      });
-    } catch (err) {
-      console.error("❌ Errore aggiornamento metadata sessione:", err);
+    if (!staffResult.success) {
+      console.error("❌ Email staff non inviata:", order.orderRef);
+      return NextResponse.json({ error: "Staff email failed" }, { status: 500 });
     }
-  }
 
-  return NextResponse.json({ received: true });
+    await stripe.checkout.sessions.update(session.id, {
+      metadata: {
+        ...fresh.metadata,
+        emailed: "1",
+      },
+    });
+
+    console.log("📨 Email inviate per ordine:", order.orderRef);
+    return NextResponse.json({ received: true });
+  } catch (err) {
+    console.error("❌ Errore webhook checkout.session.completed:", err);
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
+  } finally {
+    endOrderProcessing(session.id);
+  }
 }

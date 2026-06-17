@@ -16,8 +16,12 @@ import {
 
 interface OrderEmailProps {
   orderId: string;
+  orderRef: string;
   customerEmail: string;
   total: number;
+  subtotal: number;
+  shipping: number;
+  discount: number;
   items: {
     id: string;
     name: string;
@@ -25,6 +29,8 @@ interface OrderEmailProps {
     quantity: number;
     image: string;
   }[];
+  billingAddress?: string;
+  shippingAddress?: string;
 }
 
 const COLORS = {
@@ -47,9 +53,15 @@ const money = (n: number) => `€ ${n.toFixed(2)}`;
 
 export default function OrderConfirmationEmail({
   orderId,
+  orderRef,
   customerEmail,
   total,
+  subtotal,
+  shipping,
+  discount,
   items,
+  billingAddress,
+  shippingAddress,
 }: OrderEmailProps) {
   return (
     <Html lang="it">
@@ -163,8 +175,8 @@ export default function OrderConfirmationEmail({
             >
               <Row>
                 <Column style={{ width: "50%", verticalAlign: "top" }}>
-                  <Text style={metaLabel}>Numero ordine</Text>
-                  <Text style={metaValue}>{orderId}</Text>
+                  <Text style={metaLabel}>Riferimento ordine</Text>
+                  <Text style={metaValue}>{orderRef}</Text>
                 </Column>
                 <Column style={{ width: "50%", verticalAlign: "top" }}>
                   <Text style={metaLabel}>Email cliente</Text>
@@ -173,7 +185,58 @@ export default function OrderConfirmationEmail({
                   </Text>
                 </Column>
               </Row>
+              <Text
+                style={{
+                  margin: "12px 0 0 0",
+                  fontSize: "11px",
+                  color: COLORS.dim,
+                  wordBreak: "break-all",
+                }}
+              >
+                ID Stripe: {orderId}
+              </Text>
             </Section>
+
+            {(shippingAddress || billingAddress) && (
+              <Section
+                style={{
+                  backgroundColor: COLORS.cardSoft,
+                  borderRadius: "12px",
+                  padding: "18px 20px",
+                  margin: "16px 0 0 0",
+                }}
+              >
+                {shippingAddress && (
+                  <>
+                    <Text style={metaLabel}>Indirizzo spedizione</Text>
+                    <Text
+                      style={{
+                        ...metaValue,
+                        fontWeight: "normal",
+                        whiteSpace: "pre-line",
+                        marginBottom: billingAddress ? "12px" : 0,
+                      }}
+                    >
+                      {shippingAddress}
+                    </Text>
+                  </>
+                )}
+                {billingAddress && (
+                  <>
+                    <Text style={metaLabel}>Indirizzo fatturazione</Text>
+                    <Text
+                      style={{
+                        ...metaValue,
+                        fontWeight: "normal",
+                        whiteSpace: "pre-line",
+                      }}
+                    >
+                      {billingAddress}
+                    </Text>
+                  </>
+                )}
+              </Section>
+            )}
 
             {/* PRODOTTI */}
             <Section style={{ padding: "16px 0 0 0" }}>
@@ -256,7 +319,42 @@ export default function OrderConfirmationEmail({
 
               <Hr style={{ borderColor: COLORS.border, margin: "16px 0" }} />
 
-              {/* TOTALE */}
+              <Row style={{ marginBottom: "6px" }}>
+                <Column>
+                  <Text style={summaryLabel}>Subtotale prodotti</Text>
+                </Column>
+                <Column style={{ textAlign: "right" }}>
+                  <Text style={summaryValue}>{money(subtotal)}</Text>
+                </Column>
+              </Row>
+
+              <Row style={{ marginBottom: "6px" }}>
+                <Column>
+                  <Text style={summaryLabel}>Spedizione</Text>
+                </Column>
+                <Column style={{ textAlign: "right" }}>
+                  <Text style={summaryValue}>
+                    {shipping <= 0 ? "Gratuita" : money(shipping)}
+                  </Text>
+                </Column>
+              </Row>
+
+              {discount > 0 && (
+                <Row style={{ marginBottom: "6px" }}>
+                  <Column>
+                    <Text style={summaryLabel}>Sconto</Text>
+                  </Column>
+                  <Column style={{ textAlign: "right" }}>
+                    <Text style={{ ...summaryValue, color: COLORS.goldSoft }}>
+                      −{money(discount)}
+                    </Text>
+                  </Column>
+                </Row>
+              )}
+
+              <Hr style={{ borderColor: COLORS.border, margin: "12px 0 16px 0" }} />
+
+              {/* TOTALE PAGATO */}
               <Row>
                 <Column style={{ textAlign: "left", verticalAlign: "middle" }}>
                   <Text
@@ -268,7 +366,7 @@ export default function OrderConfirmationEmail({
                       color: COLORS.muted,
                     }}
                   >
-                    Totale
+                    Totale pagato
                   </Text>
                 </Column>
                 <Column style={{ textAlign: "right", verticalAlign: "middle" }}>
@@ -371,6 +469,19 @@ const metaLabel: React.CSSProperties = {
 const metaValue: React.CSSProperties = {
   margin: "4px 0 0 0",
   fontSize: "14px",
+  fontWeight: "bold",
+  color: "#f5efe6",
+};
+
+const summaryLabel: React.CSSProperties = {
+  margin: 0,
+  fontSize: "13px",
+  color: "#bcab9c",
+};
+
+const summaryValue: React.CSSProperties = {
+  margin: 0,
+  fontSize: "13px",
   fontWeight: "bold",
   color: "#f5efe6",
 };

@@ -1,13 +1,19 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
+import { randomBytes } from "crypto";
 import { productTranslations } from "@/app/products/data";
 
 export const runtime = "nodejs";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-// Tipo per metadata del webhook
-type OrderItem = {
+const MAX_QTY = 20;
+const MAX_CART_SUMMARY = 450;
+
+// Catalogo server-side: unica fonte di verità per prezzo/nome/immagine
+const catalog = productTranslations.it.products;
+
+type TrustedItem = {
   id: string;
   name: string;
   price: number;
@@ -15,11 +21,17 @@ type OrderItem = {
   image: string;
 };
 
-// Quantità massima ragionevole per singolo articolo
-const MAX_QTY = 20;
+function buildOrderRef(): string {
+  const suffix = randomBytes(3).toString("hex").toUpperCase();
+  return `SCG-${Date.now().toString(36).toUpperCase()}-${suffix}`;
+}
 
-// Catalogo server-side: unica fonte di verità per prezzo/nome/immagine
-const catalog = productTranslations.it.products;
+function buildCartSummary(items: TrustedItem[]): string {
+  return items
+    .map((item) => `${item.name} x${item.quantity}`)
+    .join("; ")
+    .slice(0, MAX_CART_SUMMARY);
+}
 
 export async function POST(request: Request) {
   try {
@@ -35,7 +47,7 @@ export async function POST(request: Request) {
     }
 
     // --- ITEMS VALIDATI E RICOSTRUITI DAL SERVER ---
-    const trustedItems: OrderItem[] = [];
+    const trustedItems: TrustedItem[] = [];
 
     for (const rawItem of cart) {
       const id = rawItem?.id;
@@ -96,9 +108,6 @@ export async function POST(request: Request) {
     // --- SPEDIZIONE: GRATIS sopra 49€ ---
     const shippingCost = subtotal >= 49 ? 0 : 7;
 
-    // --- COSTRUZIONE ITEMS PER METADATA ---
-    const metadataItems: OrderItem[] = trustedItems;
-
     // --- LINE ITEMS PRODOTTI ---
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
       trustedItems.map((item) => ({
@@ -107,6 +116,7 @@ export async function POST(request: Request) {
           product_data: {
             name: item.name,
             images: [item.image],
+            metadata: { catalog_id: item.id },
           },
           unit_amount: Math.round(item.price * 100),
         },
@@ -130,6 +140,9 @@ export async function POST(request: Request) {
       });
     }
 
+    const orderRef = buildOrderRef();
+    const cartSummary = buildCartSummary(trustedItems);
+
     // --- CREA SESSIONE STRIPE ---
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -141,11 +154,10 @@ export async function POST(request: Request) {
         allowed_countries: ["IT", "FR", "DE", "ES", "PT", "BE", "NL", "AT"],
       },
 
-      // *** METADATA ESSENZIALI ***
       metadata: {
-        items: JSON.stringify(metadataItems),
-        shippingCost: shippingCost.toString(),
-        subtotal: subtotal.toString(),
+        order_ref: orderRef,
+        item_count: String(trustedItems.length),
+        cart_summary: cartSummary,
       },
 
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
