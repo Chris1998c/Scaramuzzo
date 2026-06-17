@@ -383,6 +383,98 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     };
   };
 
+  const persistCustomConsultation = async (): Promise<string | null> => {
+    if (!completeAnswers) return null;
+
+    const source: CrmSource = "quiz_custom";
+    const fingerprint = answersFingerprint(completeAnswers);
+    const refKey = crmRefStorageKey(source, fingerprint);
+    const lockKey = crmLockStorageKey(source, fingerprint);
+
+    const cachedRef = sessionStorage.getItem(refKey);
+    if (cachedRef) {
+      setPublicRefCustom(cachedRef);
+      if (customOnly) {
+        setPublicRef(cachedRef);
+        setRefUnavailable(false);
+      }
+      savedCustomRef.current = fingerprint;
+      return cachedRef;
+    }
+
+    if (savedCustomRef.current === fingerprint && publicRefCustom) {
+      return publicRefCustom;
+    }
+
+    if (sessionStorage.getItem(lockKey) === "pending") {
+      for (let i = 0; i < 50; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const pendingRef = sessionStorage.getItem(refKey);
+        if (pendingRef) {
+          setPublicRefCustom(pendingRef);
+          if (customOnly) {
+            setPublicRef(pendingRef);
+            setRefUnavailable(false);
+          }
+          savedCustomRef.current = fingerprint;
+          return pendingRef;
+        }
+        if (sessionStorage.getItem(lockKey) !== "pending") break;
+      }
+      return sessionStorage.getItem(refKey);
+    }
+
+    const payload = buildCrmPayload();
+    if (!payload) return null;
+
+    sessionStorage.setItem(lockKey, "pending");
+    savedCustomRef.current = fingerprint;
+
+    try {
+      const res = await fetch("/api/consultations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "personalizzati",
+          source,
+          language,
+          customerName: customerName.trim(),
+          customerPhone: customerPhone.trim(),
+          payload,
+        }),
+      });
+
+      if (res.ok) {
+        const data = (await res.json()) as { publicRef?: string };
+        if (data.publicRef) {
+          sessionStorage.setItem(refKey, data.publicRef);
+          sessionStorage.setItem(lockKey, "done");
+          setPublicRefCustom(data.publicRef);
+          if (customOnly) {
+            setPublicRef(data.publicRef);
+            setRefUnavailable(false);
+          }
+          return data.publicRef;
+        }
+      }
+
+      sessionStorage.removeItem(lockKey);
+      savedCustomRef.current = null;
+      if (customOnly) setRefUnavailable(true);
+      return null;
+    } catch {
+      sessionStorage.removeItem(lockKey);
+      savedCustomRef.current = null;
+      if (customOnly) setRefUnavailable(true);
+      return null;
+    }
+  };
+
+  const handleRequestCustomFormula = async () => {
+    const ref = await persistCustomConsultation();
+    window.open(waHrefCustom(ref), "_blank", "noopener,noreferrer");
+  };
+
   useEffect(() => {
     if (!showResults || !completeAnswers || customOnly) return;
 
@@ -459,87 +551,20 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
   }, [showResults, completeAnswers, language, customOnly, customerName, customerPhone, ageRange]);
 
   useEffect(() => {
-    if (!showResults || !completeAnswers) return;
-    if (!customOnly && !formula) return;
-
-    const source: CrmSource = "quiz_custom";
-    const fingerprint = answersFingerprint(completeAnswers);
-    const refKey = crmRefStorageKey(source, fingerprint);
-    const lockKey = crmLockStorageKey(source, fingerprint);
-
-    const cachedRef = sessionStorage.getItem(refKey);
-    if (cachedRef) {
-      if (customOnly) {
-        setPublicRef(cachedRef);
-        setRefUnavailable(false);
-      } else {
-        setPublicRefCustom(cachedRef);
-      }
-      savedCustomRef.current = fingerprint;
-      return;
-    }
-
-    if (savedCustomRef.current === fingerprint) return;
-    if (sessionStorage.getItem(lockKey) === "pending") return;
-
-    const payload = buildCrmPayload();
-    if (!payload) return;
-
-    sessionStorage.setItem(lockKey, "pending");
-    savedCustomRef.current = fingerprint;
+    if (!showResults || !completeAnswers || !customOnly) return;
 
     let cancelled = false;
 
     void (async () => {
-      try {
-        const res = await fetch("/api/consultations", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "personalizzati",
-            source,
-            language,
-            customerName: customerName.trim(),
-            customerPhone: customerPhone.trim(),
-            payload,
-          }),
-        });
-
-        if (cancelled) return;
-
-        if (res.ok) {
-          const data = (await res.json()) as { publicRef?: string };
-          if (data.publicRef) {
-            sessionStorage.setItem(refKey, data.publicRef);
-            sessionStorage.setItem(lockKey, "done");
-            if (customOnly) {
-              setPublicRef(data.publicRef);
-              setRefUnavailable(false);
-            } else {
-              setPublicRefCustom(data.publicRef);
-            }
-          } else if (customOnly) {
-            setRefUnavailable(true);
-          }
-        } else {
-          sessionStorage.removeItem(lockKey);
-          savedCustomRef.current = null;
-          if (customOnly) setRefUnavailable(true);
-        }
-      } catch {
-        if (!cancelled) {
-          sessionStorage.removeItem(lockKey);
-          savedCustomRef.current = null;
-          if (customOnly) setRefUnavailable(true);
-        }
-      }
+      if (cancelled) return;
+      await persistCustomConsultation();
     })();
 
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- recos/formula derivati da completeAnswers
-  }, [showResults, completeAnswers, formula, language, customOnly, customerName, customerPhone, ageRange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- persistCustomConsultation usa completeAnswers e payload derivati
+  }, [showResults, completeAnswers, language, customOnly, customerName, customerPhone, ageRange]);
 
   const addOne = (r: Reco) => {
     addToCart({
@@ -963,15 +988,14 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
               </div>
             </div>
 
-            <a
-              href={waHrefCustom(publicRefCustom ?? publicRef)}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => void handleRequestCustomFormula()}
               className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
             >
               <Sparkles className="h-5 w-5" />
               {t.requestCustom}
-            </a>
+            </button>
           </div>
         )}
           </>

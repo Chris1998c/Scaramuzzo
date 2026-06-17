@@ -35,11 +35,6 @@ export interface Reco {
   reason: string;
 }
 
-const CUTE_LABEL: Record<Lang, Record<Cute, string>> = {
-  it: { grassa: "grassa", secca: "secca", sensibile: "sensibile", normale: "normale" },
-  en: { grassa: "oily", secca: "dry", sensibile: "sensitive", normale: "normal" },
-};
-
 const GOAL_LABEL: Record<Lang, Record<Obiettivo, string>> = {
   it: {
     idratazione: "idratazione",
@@ -76,6 +71,50 @@ const KIND_TITLE: Record<Lang, Record<Reco["kind"], string>> = {
   },
 };
 
+/** Motivi verificati — legati al prodotto reale in catalogo, non claim generici */
+const PRODUCT_REASON: Record<string, { it: string; en: string }> = {
+  "shampoo-purificante-seboregolatore": {
+    it: "Formula purificante del catalogo, pensata per cute grassa.",
+    en: "Purifying formula from our catalogue, designed for oily scalp.",
+  },
+  "shampoo-emolliente": {
+    it: "Detersione delicata del catalogo, pensata per cute sensibile.",
+    en: "Gentle cleansing formula from our catalogue, designed for sensitive scalp.",
+  },
+  "shampoo-rigenerante-bergamotto": {
+    it: "Shampoo ristrutturante del catalogo, pensato per cute secca o capelli che richiedono nutrimento.",
+    en: "Restructuring shampoo from our catalogue, designed for dry scalp or hair needing nourishment.",
+  },
+  "shampoo-energizzante": {
+    it: "Shampoo stimolante del catalogo, pensato per rinforzo e volume.",
+    en: "Stimulating shampoo from our catalogue, designed for strength and volume.",
+  },
+  "shampoo-riflessante-henne": {
+    it: "Shampoo riflessante del catalogo, pensato per lucentezza e riflessi.",
+    en: "Reflective shampoo from our catalogue, designed for shine and reflection.",
+  },
+  "maschera-nutriente-oliva": {
+    it: "Maschera nutriente del catalogo, pensata per idratazione e nutrimento delle lunghezze.",
+    en: "Nourishing mask from our catalogue, designed to hydrate and nourish lengths.",
+  },
+  "maschera-riflessante-henne": {
+    it: "Maschera riflessante del catalogo, pensata per lucentezza sulle lunghezze.",
+    en: "Reflective mask from our catalogue, designed for shine along the lengths.",
+  },
+  "maschera-ristrutturante-bergamotto": {
+    it: "Maschera ristrutturante del catalogo, pensata per lunghezze che necessitano riparazione.",
+    en: "Restructuring mask from our catalogue, designed for lengths needing repair.",
+  },
+  "lozione-anticaduta": {
+    it: "Trattamento anticaduta del catalogo, pensato come supporto intensivo.",
+    en: "Anti-hair-loss treatment from our catalogue, designed as intensive support.",
+  },
+  "styling-cream-curl": {
+    it: "Crema modellante del catalogo, pensata per definire ricci e mossi.",
+    en: "Styling cream from our catalogue, designed to define curls and waves.",
+  },
+};
+
 function getProduct(id: string, lang: Lang) {
   return productTranslations[lang].products.find((p) => p.id === id);
 }
@@ -89,57 +128,279 @@ function keyActivesFromCatalog(raw: string | undefined): string[] {
     .filter(Boolean);
 }
 
-function shampooPick(a: QuizAnswers): string {
-  if (a.cute === "grassa") return "shampoo-purificante-seboregolatore";
-  if (a.cute === "sensibile") return "shampoo-emolliente";
-  if (a.cute === "secca") return "shampoo-rigenerante-bergamotto";
-  if (a.obiettivo === "anticaduta" || a.obiettivo === "volume")
-    return "shampoo-energizzante";
-  if (a.obiettivo === "lucentezza") return "shampoo-riflessante-henne";
-  return "shampoo-emolliente";
-}
-
-function maskPick(a: QuizAnswers): string {
-  if (["nutrizione", "idratazione", "definizione-ricci"].includes(a.obiettivo))
-    return "maschera-nutriente-oliva";
-  if (a.obiettivo === "lucentezza") return "maschera-riflessante-henne";
-  return "maschera-ristrutturante-bergamotto";
-}
-
-function thirdPick(
-  a: QuizAnswers
-): { id: string; kind: Reco["kind"] } | null {
-  if (a.obiettivo === "anticaduta")
-    return { id: "lozione-anticaduta", kind: "trattamento" };
-  if (a.capello === "ricci" || a.capello === "molto-ricci")
-    return { id: "styling-cream-curl", kind: "styling" };
-  return null;
-}
-
-function shampooReason(a: QuizAnswers, lang: Lang): string {
-  const cute = CUTE_LABEL[lang][a.cute];
-  const goal = GOAL_LABEL[lang][a.obiettivo];
+function productReason(productId: string, lang: Lang): string {
+  const copy = PRODUCT_REASON[productId];
+  if (copy) return copy[lang];
   return lang === "it"
-    ? `Abbiamo selezionato questo prodotto perché compatibile con cute ${cute} e obiettivo ${goal}.`
-    : `We selected this product because it suits a ${cute} scalp and your ${goal} goal.`;
+    ? "Prodotto selezionato dal catalogo Scaramuzzo."
+    : "Product selected from the Scaramuzzo catalogue.";
 }
 
-function maskReason(a: QuizAnswers, lang: Lang): string {
-  const goal = GOAL_LABEL[lang][a.obiettivo];
-  return lang === "it"
-    ? `Consigliata per sostenere l'obiettivo ${goal} sulle lunghezze.`
-    : `Recommended to support your ${goal} goal along the lengths.`;
-}
+type RoutineSpec = {
+  shampooId: string;
+  maskId: string;
+  third?: { id: string; kind: Reco["kind"] };
+};
 
-function thirdReason(kind: Reco["kind"], lang: Lang): string {
-  if (kind === "trattamento") {
-    return lang === "it"
-      ? "Trattamento intensivo consigliato per l'obiettivo anticaduta."
-      : "Intensive treatment recommended for your anti-hair-loss goal.";
+const CURLY: Capello[] = ["ricci", "molto-ricci"];
+
+/**
+ * Routine catalogo ammessa solo con match forte e prodotti realmente coerenti.
+ * Nessun fallback generico: null → customOnly.
+ */
+function resolveCatalogRoutine(a: QuizAnswers): RoutineSpec | null {
+  if (a.intensita === "intensa") return null;
+
+  if (
+    a.obiettivo === "definizione-ricci" &&
+    !CURLY.includes(a.capello)
+  ) {
+    return null;
   }
-  return lang === "it"
-    ? "Prodotto styling consigliato per definire e controllare i ricci."
-    : "Styling product recommended to define and control curls.";
+
+  if (a.cute === "secca" && a.obiettivo === "purificazione") return null;
+  if (a.cute === "grassa" && a.obiettivo === "purificazione") {
+    return {
+      shampooId: "shampoo-purificante-seboregolatore",
+      maskId: "maschera-ristrutturante-bergamotto",
+    };
+  }
+  if (
+    a.cute === "grassa" &&
+    ["nutrizione", "idratazione", "lucentezza", "volume", "anticaduta"].includes(
+      a.obiettivo
+    )
+  ) {
+    return null;
+  }
+  if (
+    a.cute === "sensibile" &&
+    [
+      "anticaduta",
+      "volume",
+      "purificazione",
+      "lucentezza",
+      "definizione-ricci",
+    ].includes(a.obiettivo)
+  ) {
+    return null;
+  }
+  if (
+    a.cute === "grassa" &&
+    a.capello === "molto-ricci" &&
+    a.obiettivo === "definizione-ricci"
+  ) {
+    return null;
+  }
+  if (a.capello === "molto-ricci" && a.cute === "sensibile") return null;
+  if (a.capello === "molto-ricci" && a.obiettivo === "anticaduta") return null;
+
+  switch (a.obiettivo) {
+    case "purificazione":
+      return null;
+
+    case "nutrizione":
+    case "idratazione":
+      if (a.cute === "secca") {
+        return {
+          shampooId: "shampoo-rigenerante-bergamotto",
+          maskId: "maschera-nutriente-oliva",
+        };
+      }
+      if (a.cute === "sensibile") {
+        return {
+          shampooId: "shampoo-emolliente",
+          maskId: "maschera-nutriente-oliva",
+        };
+      }
+      if (a.cute === "normale") {
+        return {
+          shampooId: "shampoo-rigenerante-bergamotto",
+          maskId: "maschera-nutriente-oliva",
+        };
+      }
+      return null;
+
+    case "lucentezza":
+      if (a.cute === "secca" || a.cute === "normale") {
+        return {
+          shampooId: "shampoo-riflessante-henne",
+          maskId: "maschera-riflessante-henne",
+        };
+      }
+      return null;
+
+    case "volume":
+      if (a.cute === "normale" && !CURLY.includes(a.capello)) {
+        return {
+          shampooId: "shampoo-energizzante",
+          maskId: "maschera-ristrutturante-bergamotto",
+        };
+      }
+      return null;
+
+    case "anticaduta":
+      if (a.cute === "normale" || a.cute === "grassa") {
+        return {
+          shampooId: "shampoo-energizzante",
+          maskId: "maschera-ristrutturante-bergamotto",
+          third: { id: "lozione-anticaduta", kind: "trattamento" },
+        };
+      }
+      return null;
+
+    case "definizione-ricci":
+      if (!CURLY.includes(a.capello)) return null;
+      if (a.cute === "normale" || a.cute === "secca") {
+        return {
+          shampooId: "shampoo-rigenerante-bergamotto",
+          maskId: "maschera-nutriente-oliva",
+          third: { id: "styling-cream-curl", kind: "styling" },
+        };
+      }
+      return null;
+
+    default:
+      return null;
+  }
+}
+
+function buildCustomReason(a: QuizAnswers, lang: Lang): string {
+  const isIT = lang === "it";
+  const reasons: string[] = [];
+
+  if (a.intensita === "intensa") {
+    reasons.push(
+      isIT
+        ? "La profumazione intensa non è gestibile con una routine pronta del catalogo."
+        : "Intense fragrance cannot be covered by a ready-made catalogue routine."
+    );
+  }
+
+  if (a.obiettivo === "definizione-ricci" && !CURLY.includes(a.capello)) {
+    reasons.push(
+      isIT
+        ? "L'obiettivo definizione ricci su capelli lisci o mossi richiede una valutazione personalizzata."
+        : "Curl definition on straight or wavy hair requires a personalized assessment."
+    );
+  }
+
+  if (a.cute === "secca" && a.obiettivo === "purificazione") {
+    reasons.push(
+      isIT
+        ? "Cute secca con obiettivo purificazione richiede una valutazione per non stressare capello e cute."
+        : "Dry scalp with a purification goal requires assessment to avoid stressing hair and scalp."
+    );
+  }
+
+  if (
+    a.cute === "grassa" &&
+    ["nutrizione", "idratazione", "lucentezza"].includes(a.obiettivo)
+  ) {
+    reasons.push(
+      isIT
+        ? "Cute grassa con questo obiettivo richiede un equilibrio non coperto da una routine standard del catalogo."
+        : "Oily scalp with this goal needs a balance not covered by a standard catalogue routine."
+    );
+  }
+
+  if (a.cute === "sensibile" && a.obiettivo === "anticaduta") {
+    reasons.push(
+      isIT
+        ? "Cute sensibile con obiettivo anticaduta richiede una valutazione personalizzata."
+        : "Sensitive scalp with an anti-hair-loss goal requires a personalized assessment."
+    );
+  }
+
+  if (a.cute === "sensibile" && a.obiettivo === "volume") {
+    reasons.push(
+      isIT
+        ? "Cute sensibile con obiettivo volume richiede prodotti calibrati professionalmente."
+        : "Sensitive scalp with a volume goal requires professionally calibrated products."
+    );
+  }
+
+  if (a.cute === "sensibile" && a.obiettivo === "definizione-ricci") {
+    reasons.push(
+      isIT
+        ? "Cute sensibile con obiettivo definizione ricci richiede prodotti calibrati professionalmente."
+        : "Sensitive scalp with curl definition goal requires professionally calibrated products."
+    );
+  }
+
+  if (
+    a.cute === "grassa" &&
+    a.capello === "molto-ricci" &&
+    a.obiettivo === "definizione-ricci"
+  ) {
+    reasons.push(
+      isIT
+        ? "Cute grassa, capelli molto ricci e definizione ricci richiedono un equilibrio su misura."
+        : "Oily scalp, very curly hair and curl definition need a tailored balance."
+    );
+  }
+
+  if (a.capello === "molto-ricci" && a.cute === "sensibile") {
+    reasons.push(
+      isIT
+        ? "Capelli molto ricci con cute sensibile richiedono un approccio delicato e personalizzato."
+        : "Very curly hair with a sensitive scalp requires a gentle, personalized approach."
+    );
+  }
+
+  if (a.capello === "molto-ricci" && a.obiettivo === "anticaduta") {
+    reasons.push(
+      isIT
+        ? "Capelli molto ricci con obiettivo anticaduta richiedono un percorso personalizzato."
+        : "Very curly hair with an anti-hair-loss goal requires a personalized journey."
+    );
+  }
+
+  if (a.obiettivo === "volume" && (a.cute !== "normale" || CURLY.includes(a.capello))) {
+    reasons.push(
+      isIT
+        ? "L'obiettivo volume su questo profilo non è coperto da una routine pronta coerente del catalogo."
+        : "The volume goal for this profile is not covered by a coherent ready-made catalogue routine."
+    );
+  }
+
+  if (a.obiettivo === "purificazione" && a.cute !== "grassa") {
+    reasons.push(
+      isIT
+        ? "L'obiettivo purificazione su questa cute non è coperto da una routine pronta del catalogo."
+        : "The purification goal for this scalp type is not covered by a ready-made catalogue routine."
+    );
+  }
+
+  if (reasons.length === 0) {
+    reasons.push(
+      isIT
+        ? "Il profilo indicato non corrisponde a una routine pronta del catalogo: il Team Scaramuzzo valuterà la soluzione più adatta."
+        : "Your profile does not match a ready-made catalogue routine: the Scaramuzzo team will assess the most suitable solution."
+    );
+  }
+
+  return reasons.join(" ");
+}
+
+function buildReco(
+  kind: Reco["kind"],
+  productId: string,
+  lang: Lang
+): Reco | null {
+  const prod = getProduct(productId, lang);
+  if (!prod) return null;
+
+  return {
+    kind,
+    title: KIND_TITLE[lang][kind],
+    productId: prod.id,
+    productName: prod.name,
+    price: prod.price,
+    image: prod.image,
+    keyActives: keyActivesFromCatalog(prod.keyActives),
+    reason: productReason(prod.id, lang),
+  };
 }
 
 /**
@@ -205,140 +466,48 @@ export interface RecommendResult {
   customProductLabel: string;
 }
 
-function evaluateCustomOnly(
-  a: QuizAnswers,
-  lang: Lang
-): Pick<RecommendResult, "customOnly" | "customReason" | "customProductLabel"> | null {
-  const isIT = lang === "it";
-  const reasons: string[] = [];
-
-  if (a.cute === "sensibile" && a.obiettivo === "anticaduta") {
-    reasons.push(
-      isIT
-        ? "Cute sensibile con obiettivo anticaduta richiede una valutazione personalizzata."
-        : "Sensitive scalp with an anti-hair-loss goal requires a personalized assessment."
-    );
-  }
-
-  if (
-    a.cute === "grassa" &&
-    a.capello === "molto-ricci" &&
-    a.obiettivo === "definizione-ricci"
-  ) {
-    reasons.push(
-      isIT
-        ? "Cute grassa, capelli molto ricci e definizione ricci richiedono un equilibrio su misura non coperto da una routine standard."
-        : "Oily scalp, very curly hair and curl definition need a tailored balance not covered by a standard routine."
-    );
-  }
-
-  if (a.capello === "molto-ricci" && a.cute === "sensibile") {
-    reasons.push(
-      isIT
-        ? "Capelli molto ricci con cute sensibile richiedono un approccio delicato e personalizzato."
-        : "Very curly hair with a sensitive scalp requires a gentle, personalized approach."
-    );
-  }
-
-  if (a.obiettivo === "anticaduta" && a.intensita === "intensa") {
-    reasons.push(
-      isIT
-        ? "Obiettivo anticaduta con profumazione intensa richiede una formula studiata su misura."
-        : "Anti-hair-loss goal with intense fragrance requires a made-to-measure formula."
-    );
-  }
-
-  if (a.cute === "sensibile" && a.obiettivo === "definizione-ricci") {
-    reasons.push(
-      isIT
-        ? "Cute sensibile con obiettivo definizione ricci richiede prodotti calibrati professionalmente."
-        : "Sensitive scalp with curl definition goal requires professionally calibrated products."
-    );
-  }
-
-  if (a.cute === "secca" && a.obiettivo === "purificazione") {
-    reasons.push(
-      isIT
-        ? "Cute secca con obiettivo purificazione richiede una valutazione per non stressare capello e cute."
-        : "Dry scalp with a purification goal requires assessment to avoid stressing hair and scalp."
-    );
-  }
-
-  if (a.capello === "molto-ricci" && a.obiettivo === "anticaduta") {
-    reasons.push(
-      isIT
-        ? "Capelli molto ricci con obiettivo anticaduta richiedono un percorso personalizzato."
-        : "Very curly hair with an anti-hair-loss goal requires a personalized journey."
-    );
-  }
-
-  if (reasons.length === 0) return null;
-
-  const customProductLabel = isIT
-    ? "Routine personalizzata Scaramuzzo"
-    : "Scaramuzzo personalized routine";
-
-  return {
-    customOnly: true,
-    customReason: reasons.join(" "),
-    customProductLabel,
-  };
-}
-
 export function recommend(a: QuizAnswers, lang: Lang): RecommendResult {
-  const custom = evaluateCustomOnly(a, lang);
-  if (custom) {
+  const customProductLabel =
+    lang === "it"
+      ? "Routine personalizzata Scaramuzzo"
+      : "Scaramuzzo personalized routine";
+
+  const spec = resolveCatalogRoutine(a);
+  if (!spec) {
     return {
       recommendedProducts: [],
-      ...custom,
+      customOnly: true,
+      customReason: buildCustomReason(a, lang),
+      customProductLabel,
     };
   }
 
   const recos: Reco[] = [];
 
-  const shProd = getProduct(shampooPick(a), lang);
-  if (shProd) {
-    recos.push({
-      kind: "shampoo",
-      title: KIND_TITLE[lang].shampoo,
-      productId: shProd.id,
-      productName: shProd.name,
-      price: shProd.price,
-      image: shProd.image,
-      keyActives: keyActivesFromCatalog(shProd.keyActives),
-      reason: shampooReason(a, lang),
-    });
+  const shampoo = buildReco("shampoo", spec.shampooId, lang);
+  const mask = buildReco("maschera", spec.maskId, lang);
+  if (!shampoo || !mask) {
+    return {
+      recommendedProducts: [],
+      customOnly: true,
+      customReason: buildCustomReason(a, lang),
+      customProductLabel,
+    };
   }
 
-  const mkProd = getProduct(maskPick(a), lang);
-  if (mkProd) {
-    recos.push({
-      kind: "maschera",
-      title: KIND_TITLE[lang].maschera,
-      productId: mkProd.id,
-      productName: mkProd.name,
-      price: mkProd.price,
-      image: mkProd.image,
-      keyActives: keyActivesFromCatalog(mkProd.keyActives),
-      reason: maskReason(a, lang),
-    });
-  }
+  recos.push(shampoo, mask);
 
-  const th = thirdPick(a);
-  if (th) {
-    const thProd = getProduct(th.id, lang);
-    if (thProd) {
-      recos.push({
-        kind: th.kind,
-        title: KIND_TITLE[lang][th.kind],
-        productId: thProd.id,
-        productName: thProd.name,
-        price: thProd.price,
-        image: thProd.image,
-        keyActives: keyActivesFromCatalog(thProd.keyActives),
-        reason: thirdReason(th.kind, lang),
-      });
+  if (spec.third) {
+    const third = buildReco(spec.third.kind, spec.third.id, lang);
+    if (!third) {
+      return {
+        recommendedProducts: [],
+        customOnly: true,
+        customReason: buildCustomReason(a, lang),
+        customProductLabel,
+      };
     }
+    recos.push(third);
   }
 
   return {
