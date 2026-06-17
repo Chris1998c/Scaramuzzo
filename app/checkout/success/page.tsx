@@ -1,21 +1,72 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 import { useCartStore } from "@/lib/store/cartStore";
+import {
+  clearPendingPurchase,
+  fetchVerifiedCheckoutSession,
+  hasValidPendingPurchase,
+  pendingOrderRefMatches,
+  trackPurchase,
+} from "@/lib/tracking";
 
 function SuccessContent() {
   const params = useSearchParams();
   const sessionId = params.get("session_id");
   const clearCart = useCartStore((s) => s.clearCart);
   const closeCart = useCartStore((s) => s.closeCart);
+  const trackedPurchaseRef = useRef<string | null>(null);
 
   useEffect(() => {
     clearCart();
     closeCart();
   }, [clearCart, closeCart]);
+
+  useEffect(() => {
+    if (!sessionId) return;
+    if (trackedPurchaseRef.current === sessionId) return;
+
+    const storageKey = `track-purchase-${sessionId}`;
+    if (sessionStorage.getItem(storageKey) === "1") {
+      trackedPurchaseRef.current = sessionId;
+      clearPendingPurchase();
+      return;
+    }
+
+    if (!hasValidPendingPurchase()) return;
+
+    let cancelled = false;
+
+    void (async () => {
+      const verified = await fetchVerifiedCheckoutSession(sessionId);
+      if (cancelled || !verified) return;
+
+      if (!pendingOrderRefMatches(verified.order_ref)) {
+        clearPendingPurchase();
+        return;
+      }
+
+      if (trackedPurchaseRef.current === sessionId) return;
+
+      trackedPurchaseRef.current = sessionId;
+      trackPurchase({
+        storageKey,
+        orderRef: verified.order_ref,
+        value: verified.value,
+        itemCount: verified.item_count,
+        currency: verified.currency,
+        items: verified.items,
+      });
+      clearPendingPurchase();
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 py-20 text-neutral-100">

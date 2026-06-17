@@ -6,7 +6,7 @@ import Footer from "./components/site/Footer";
 import CookieBanner from "./components/site/CookieBanner";
 import GoogleTagManager from "./components/analytics/GoogleTagManager";
 import { LanguageProvider } from "./components/site/LanguageProvider";
-import { CONSENT_MODE_DEFAULT_SCRIPT } from "@/lib/tracking/consentMode";
+import { CONSENT_BOOTSTRAP_SCRIPT } from "@/lib/tracking/consentMode";
 import Script from "next/script";
 
 const inter = localFont({
@@ -87,9 +87,9 @@ export default function RootLayout({
           }}
         />
 
-        {/* Google Consent Mode — default denied, before GTM */}
+        {/* Consent Mode bootstrap — default denied + restore pre-GTM */}
         <script
-          dangerouslySetInnerHTML={{ __html: CONSENT_MODE_DEFAULT_SCRIPT }}
+          dangerouslySetInnerHTML={{ __html: CONSENT_BOOTSTRAP_SCRIPT }}
         />
 
         {/* JSON-LD Multilocation SEO – mantiene il tuo */}

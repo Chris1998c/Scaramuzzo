@@ -7,7 +7,6 @@ import {
   consentFromRejectAll,
   publishConsent,
   readConsentPreferences,
-  restoreConsentFromStorage,
   writeConsentPreferences,
 } from "@/lib/tracking";
 
@@ -20,7 +19,6 @@ export default function CookieBanner() {
   useEffect(() => {
     const stored = readConsentPreferences();
     if (stored) {
-      restoreConsentFromStorage();
       setOpen(false);
       return;
     }

@@ -16,6 +16,10 @@ import {
   type Reco,
   type RecommendResult,
 } from "./recommend";
+import {
+  trackQuizPersonalizzatiComplete,
+  trackWhatsappClick,
+} from "@/lib/tracking";
 
 type Answers = {
   capello?: Capello;
@@ -282,6 +286,7 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
   const [contactError, setContactError] = useState(false);
   const savedRoutineRef = useRef<string | null>(null);
   const savedCustomRef = useRef<string | null>(null);
+  const trackedQuizCompleteRef = useRef<string | null>(null);
 
   const addToCart = useCartStore((s) => s.addToCart);
   const openCart = useCartStore((s) => s.openCart);
@@ -472,8 +477,65 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
 
   const handleRequestCustomFormula = async () => {
     const ref = await persistCustomConsultation();
+    trackWhatsappClick({
+      page: "/erbe",
+      location: "custom_formula",
+      intent: answers.obiettivo ?? "",
+      publicRef: ref,
+      customOnly: false,
+    });
     window.open(waHrefCustom(ref), "_blank", "noopener,noreferrer");
   };
+
+  useEffect(() => {
+    if (!showResults) return;
+    if (
+      !answers.capello ||
+      !answers.cute ||
+      !answers.obiettivo ||
+      !answers.profumo ||
+      !answers.intensita
+    ) {
+      return;
+    }
+
+    const complete: CompleteAnswers = {
+      capello: answers.capello,
+      cute: answers.cute,
+      obiettivo: answers.obiettivo,
+      profumo: answers.profumo,
+      intensita: answers.intensita,
+    };
+    const fingerprint = answersFingerprint(complete);
+    if (trackedQuizCompleteRef.current === fingerprint) return;
+
+    const storageKey = `track-quiz-complete-${fingerprint}`;
+    if (sessionStorage.getItem(storageKey) === "1") {
+      trackedQuizCompleteRef.current = fingerprint;
+      return;
+    }
+
+    trackedQuizCompleteRef.current = fingerprint;
+    const result = recommend(complete, language);
+
+    trackQuizPersonalizzatiComplete({
+      fingerprint,
+      language,
+      customOnly: result.customOnly,
+      recommendedCount: result.recommendedProducts.length,
+      obiettivo: complete.obiettivo,
+      capello: complete.capello,
+      cute: complete.cute,
+    });
+  }, [
+    showResults,
+    answers.capello,
+    answers.cute,
+    answers.obiettivo,
+    answers.profumo,
+    answers.intensita,
+    language,
+  ]);
 
   useEffect(() => {
     if (!showResults || !completeAnswers || customOnly) return;
@@ -682,6 +744,22 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
     )}`;
   };
 
+  const openErbeWhatsapp = (
+    href: string,
+    location: "quiz_result" | "custom_formula",
+    ref: string | null,
+    customOnlyFlag: boolean
+  ) => {
+    trackWhatsappClick({
+      page: "/erbe",
+      location,
+      intent: answers.obiettivo ?? "",
+      publicRef: ref,
+      customOnly: customOnlyFlag,
+    });
+    window.open(href, "_blank", "noopener,noreferrer");
+  };
+
   // ---------------- RISULTATI ----------------
   if (showResults) {
     return (
@@ -792,6 +870,15 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
 
             <a
               href={waHrefCustomOnly(publicRef)}
+              onClick={(e) => {
+                e.preventDefault();
+                openErbeWhatsapp(
+                  waHrefCustomOnly(publicRef),
+                  "quiz_result",
+                  publicRef,
+                  true
+                );
+              }}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"
@@ -898,6 +985,15 @@ export default function QuizConfigurator({ language, whatsappNumber }: Props) {
           </button>
           <a
             href={waHref(publicRef)}
+            onClick={(e) => {
+              e.preventDefault();
+              openErbeWhatsapp(
+                waHref(publicRef),
+                "quiz_result",
+                publicRef,
+                false
+              );
+            }}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-border/60 px-7 py-3.5 text-base font-semibold transition hover:border-accent/50 hover:bg-card/60"

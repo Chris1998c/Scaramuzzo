@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState, useCallback } from "react";
+import { FC, useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,10 @@ import { useLanguage } from "@/app/components/site/LanguageProvider";
 import InfoCards from "@/components/product/InfoCards";
 import Faq from "@/components/product/Faq";
 import RelatedProducts from "@/components/product/RelatedProducts";
+import {
+  getProductCategory,
+  trackViewItem,
+} from "@/lib/tracking";
 
 interface ProductPageClientProps {
   id: string;
@@ -143,6 +147,7 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
   const { language } = useLanguage();
   const [product, setProduct] = useState<Product | null>(null);
   const [added, setAdded] = useState(false);
+  const trackedViewItemRef = useRef<string | null>(null);
 
   // Zustand → addItem
   const addToCart = useCartStore((s) => s.addToCart);
@@ -155,6 +160,25 @@ const ProductPageClient: FC<ProductPageClientProps> = ({ id }) => {
     );
     setProduct(result || null);
   }, [id, language]);
+
+  useEffect(() => {
+    if (!product) return;
+    if (trackedViewItemRef.current === product.id) return;
+
+    const storageKey = `track-view-item-${product.id}`;
+    if (sessionStorage.getItem(storageKey) === "1") {
+      trackedViewItemRef.current = product.id;
+      return;
+    }
+
+    trackedViewItemRef.current = product.id;
+    trackViewItem({
+      itemId: product.id,
+      itemName: product.name,
+      price: product.price,
+      category: getProductCategory(product.id),
+    });
+  }, [product]);
 
   // BACK
   const handleBackClick = useCallback(() => {

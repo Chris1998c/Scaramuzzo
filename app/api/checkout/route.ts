@@ -164,7 +164,7 @@ export async function POST(request: Request) {
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/cart`,
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: session.url, order_ref: orderRef });
   } catch (error) {
     console.error("🔥 Stripe Checkout ERROR:", error);
 

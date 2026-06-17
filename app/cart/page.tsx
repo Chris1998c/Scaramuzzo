@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { useCartStore } from "@/lib/store/cartStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { mapCartItemsToTracking, sumCartQty, trackViewCart } from "@/lib/tracking";
 
 export default function CartPage() {
   const router = useRouter();
@@ -15,6 +17,17 @@ export default function CartPage() {
   const subtotal = useCartStore((s) => s.getSubtotal());
   const shipping = useCartStore((s) => s.getShipping());
   const total = useCartStore((s) => s.getTotal());
+
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    trackViewCart({
+      itemCount: sumCartQty(items),
+      value: total,
+      source: "page",
+      items: mapCartItemsToTracking(items),
+    });
+  }, [items, total]);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16 text-neutral-100">

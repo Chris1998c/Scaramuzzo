@@ -1,6 +1,7 @@
 "use client";
 
 import type { CartItem } from "@/lib/store/cartStore";
+import { savePendingPurchase, sumCartQty } from "@/lib/tracking";
 
 /**
  * Checkout PREMIUM compatibile iPhone / Safari / Android / PC
@@ -23,10 +24,21 @@ export async function startStripeCheckout(cart: CartItem[]): Promise<void> {
       throw new Error(`HTTP Error ${response.status}`);
     }
 
-    const data: { url?: string; error?: string } = await response.json();
+    const data: { url?: string; order_ref?: string; error?: string } =
+      await response.json();
 
     if (data.error) throw new Error(data.error);
     if (!data.url) throw new Error("URL checkout Stripe mancante.");
+
+    const value = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+    const subtotal = value;
+    const shipping = subtotal >= 49 ? 0 : 7;
+
+    savePendingPurchase({
+      order_ref: data.order_ref ?? "",
+      value: subtotal + shipping,
+      item_count: sumCartQty(cart),
+    });
 
     // 🔥 REDIRECT IPHONE SAFE
     window.location.assign(data.url);

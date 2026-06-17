@@ -11,6 +11,7 @@ import {
   ArrowRight,
   FlaskConical,
 } from "lucide-react";
+import { trackBceComplete, trackWhatsappClick } from "@/lib/tracking";
 
 type Lang = "it" | "en";
 
@@ -627,6 +628,7 @@ export default function DiagnosiClient() {
   const [ageRange, setAgeRange] = useState("");
   const [contactError, setContactError] = useState(false);
   const savedFingerprintRef = useRef<string | null>(null);
+  const trackedBceCompleteRef = useRef<string | null>(null);
 
   const isContactValid =
     customerName.trim().length >= 2 &&
@@ -721,6 +723,38 @@ export default function DiagnosiClient() {
     };
   }, [showResults, answers, language, customerName, customerPhone, ageRange]);
 
+  useEffect(() => {
+    if (!showResults) return;
+    if (!answers.intento || !answers.base || !answers.bianchiPerc) return;
+
+    const fingerprint = answersFingerprint(answers);
+    if (trackedBceCompleteRef.current === fingerprint) return;
+
+    const storageKey = `track-bce-complete-${fingerprint}`;
+    if (sessionStorage.getItem(storageKey) === "1") {
+      trackedBceCompleteRef.current = fingerprint;
+      return;
+    }
+
+    trackedBceCompleteRef.current = fingerprint;
+
+    const complexity = buildComplexity(answers);
+    const strandTest =
+      complexity === "alto" ? "strongly_recommended" : "recommended";
+    const incarnato = (answers as Record<string, string | undefined>).incarnato;
+
+    trackBceComplete({
+      fingerprint,
+      language,
+      complexity,
+      strandTest,
+      intento: answers.intento,
+      base: answers.base,
+      bianchiPerc: answers.bianchiPerc,
+      incarnato,
+    });
+  }, [showResults, answers, language]);
+
   const t = T[language];
 
   // Schermate attive (salta distribuzione bianchi se assenti)
@@ -806,6 +840,17 @@ export default function DiagnosiClient() {
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
       lines.join("\n")
     )}`;
+  };
+
+  const openBceWhatsapp = (ref: string | null) => {
+    trackWhatsappClick({
+      page: "/diagnosi-botanica",
+      location: "bce_result",
+      intent: answers.intento ?? "",
+      publicRef: ref,
+      complexity: buildComplexity(answers),
+    });
+    window.open(waHref(ref), "_blank", "noopener,noreferrer");
   };
 
   // ============================================================
@@ -1119,6 +1164,10 @@ export default function DiagnosiClient() {
             </p>
             <a
               href={waHref(publicRef)}
+              onClick={(e) => {
+                e.preventDefault();
+                openBceWhatsapp(publicRef);
+              }}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground shadow-md transition hover:opacity-90"

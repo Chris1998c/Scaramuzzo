@@ -1,14 +1,43 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useCartStore } from "@/lib/store/cartStore";
 import { startStripeCheckout } from "@/lib/checkout";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+  cartFingerprint,
+  mapCartItemsToTracking,
+  sumCartQty,
+  trackBeginCheckout,
+} from "@/lib/tracking";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const items = useCartStore((s) => s.items);
   const total = useCartStore((s) => s.getTotal());
+  const trackedBeginCheckoutRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const fingerprint = cartFingerprint(items);
+    if (trackedBeginCheckoutRef.current === fingerprint) return;
+
+    const storageKey = `track-begin-checkout-${fingerprint}`;
+    if (sessionStorage.getItem(storageKey) === "1") {
+      trackedBeginCheckoutRef.current = fingerprint;
+      return;
+    }
+
+    trackedBeginCheckoutRef.current = fingerprint;
+    trackBeginCheckout({
+      fingerprint,
+      itemCount: sumCartQty(items),
+      value: total,
+      items: mapCartItemsToTracking(items),
+    });
+  }, [items, total]);
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16 text-neutral-100">

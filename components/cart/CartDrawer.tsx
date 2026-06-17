@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useCartStore } from "@/lib/store/cartStore";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { X, Plus, Minus, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { mapCartItemsToTracking, sumCartQty, trackViewCart } from "@/lib/tracking";
 
 export default function CartDrawer() {
   const isOpen = useCartStore((s) => s.isOpen);
@@ -13,9 +15,27 @@ export default function CartDrawer() {
   const remove = useCartStore((s) => s.removeFromCart);
   const increase = useCartStore((s) => s.increaseQty);
   const decrease = useCartStore((s) => s.decreaseQty);
- const getTotal = useCartStore((s) => s.getTotal);
+  const getTotal = useCartStore((s) => s.getTotal);
+  const wasOpenRef = useRef(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isOpen) {
+      wasOpenRef.current = false;
+      return;
+    }
+
+    if (wasOpenRef.current || items.length === 0) return;
+
+    wasOpenRef.current = true;
+    trackViewCart({
+      itemCount: sumCartQty(items),
+      value: getTotal(),
+      source: "drawer",
+      items: mapCartItemsToTracking(items),
+    });
+  }, [isOpen, items, getTotal]);
 
   const goToCheckout = () => {
     closeCart();

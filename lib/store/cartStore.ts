@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { trackAddToCart } from "@/lib/tracking";
 
 export type CartItem = {
   id: string;
@@ -48,6 +49,13 @@ export const useCartStore = create<CartState>()(
               i.id === item.id ? { ...i, qty: i.qty + 1 } : i
             )
           : [...items, { ...item, qty: 1 }];
+
+        trackAddToCart({
+          itemId: item.id,
+          itemName: item.name,
+          price: item.price,
+          quantity: 1,
+        });
 
         set({ items: updated, isOpen: true });
       },
