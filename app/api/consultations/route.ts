@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createConsultation } from "@/lib/crm/createConsultation";
 import { validateCreateConsultationBody } from "@/lib/crm/validateConsultation";
+import { enforceRateLimit } from "@/lib/rateLimit";
 import { hasSupabaseAdminCredentials, logSupabaseAdminDebug } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  const limited = enforceRateLimit(req, "consultations", 5);
+  if (limited) return limited;
+
   if (!hasSupabaseAdminCredentials()) {
     return NextResponse.json(
       {

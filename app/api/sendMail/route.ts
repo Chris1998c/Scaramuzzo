@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { enforceRateLimit } from "@/lib/rateLimit";
 
 // 🔥 Forza runtime Node (Nodemailer NON funziona in Edge)
 export const runtime = "nodejs";
@@ -128,6 +129,9 @@ function buildContactEmailHtml(input: {
 }
 
 export async function POST(req: NextRequest) {
+  const limited = enforceRateLimit(req, "sendmail", 3);
+  if (limited) return limited;
+
   try {
     const body = await req.json();
 

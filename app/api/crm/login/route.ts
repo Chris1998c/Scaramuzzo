@@ -6,10 +6,14 @@ import {
   isCrmAuthConfigured,
   verifyPassword,
 } from "@/lib/crm/auth";
+import { enforceRateLimit } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  const limited = enforceRateLimit(req, "crm-login", 10);
+  if (limited) return limited;
+
   if (!isCrmAuthConfigured()) {
     return NextResponse.redirect(
       new URL("/crm/login?error=config", req.url),
