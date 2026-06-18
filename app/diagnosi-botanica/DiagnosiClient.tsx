@@ -16,7 +16,7 @@ import { trackBceComplete, trackWhatsappClick, getAttributionForPayload } from "
 type Lang = "it" | "en";
 
 // Numero WhatsApp ufficiale (formato internazionale, solo cifre).
-const WHATSAPP_NUMBER = "393470914731";
+const WHATSAPP_NUMBER = "393895817411";
 
 type AnswerKey =
   | "base"
