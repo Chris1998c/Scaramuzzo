@@ -190,7 +190,7 @@ export default async function CrmRequestDetailPage({
   return (
     <div>
       <Link
-        href="/crm"
+        href="/crm/richieste"
         className="text-sm font-medium text-accent hover:underline"
       >
         ← Torna alla lista
