@@ -70,19 +70,23 @@ export default function CartPage() {
                   € {item.price.toFixed(2)}
                 </p>
 
-                <div className="flex items-center gap-4 mt-5">
+                <div className="mt-5 flex items-center gap-2">
                   <button
                     onClick={() => decrease(item.id)}
-                    className="h-9 w-9 rounded-full bg-neutral-900 text-white flex items-center justify-center hover:bg-neutral-700 transition text-lg"
+                    aria-label="Diminuisci quantità"
+                    className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-neutral-900 text-white transition hover:bg-neutral-700 text-lg"
                   >
                     –
                   </button>
 
-                  <span className="text-xl font-semibold">{item.qty}</span>
+                  <span className="min-w-[2ch] text-center text-xl font-semibold">
+                    {item.qty}
+                  </span>
 
                   <button
                     onClick={() => increase(item.id)}
-                    className="h-9 w-9 rounded-full bg-neutral-900 text-white flex items-center justify-center hover:bg-neutral-700 transition text-lg"
+                    aria-label="Aumenta quantità"
+                    className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-neutral-900 text-white transition hover:bg-neutral-700 text-lg"
                   >
                     +
                   </button>
@@ -90,7 +94,7 @@ export default function CartPage() {
 
                 <button
                   onClick={() => remove(item.id)}
-                  className="text-red-400 text-sm mt-4 hover:underline"
+                  className="mt-4 inline-flex min-h-[44px] items-center rounded-lg px-2 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:underline"
                 >
                   Rimuovi
                 </button>

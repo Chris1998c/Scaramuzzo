@@ -83,9 +83,10 @@ export default function CartDrawer() {
               </h2>
               <button
                 onClick={closeCart}
-                className="text-neutral-300 hover:text-white transition"
+                aria-label="Chiudi carrello"
+                className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-neutral-300 transition hover:bg-neutral-800 hover:text-white"
               >
-                <X size={24} />
+                <X size={22} />
               </button>
             </div>
 
@@ -121,32 +122,33 @@ export default function CartDrawer() {
                       </p>
 
                       {/* QUANTITY */}
-                      <div className="flex items-center gap-3 mt-2">
+                      <div className="mt-3 flex items-center gap-2">
                         <button
                           onClick={() => decrease(item.id)}
-                          className="w-7 h-7 rounded-full bg-neutral-900 flex items-center justify-center hover:bg-neutral-700 transition"
+                          aria-label="Diminuisci quantità"
+                          className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-neutral-900 transition hover:bg-neutral-700"
                         >
-                          <Minus size={14} />
+                          <Minus size={16} />
                         </button>
 
-                        <span className="text-neutral-100 font-semibold">
+                        <span className="min-w-[2ch] text-center text-neutral-100 font-semibold">
                           {item.qty}
                         </span>
 
                         <button
                           onClick={() => increase(item.id)}
-                          className="w-7 h-7 rounded-full bg-neutral-900 flex items-center justify-center hover:bg-neutral-700 transition"
+                          aria-label="Aumenta quantità"
+                          className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-neutral-900 transition hover:bg-neutral-700"
                         >
-                          <Plus size={14} />
+                          <Plus size={16} />
                         </button>
                       </div>
 
-                      {/* REMOVE */}
                       <button
                         onClick={() => remove(item.id)}
-                        className="text-red-400 text-xs mt-2 flex items-center gap-1 hover:underline"
+                        className="mt-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-2 py-2 text-sm text-red-400 transition hover:bg-red-500/10 hover:underline"
                       >
-                        <Trash size={12} /> Rimuovi
+                        <Trash size={14} /> Rimuovi
                       </button>
                     </div>
                   </div>

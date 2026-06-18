@@ -15,7 +15,7 @@ export default function CartButton() {
       onClick={openCart}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="relative flex items-center justify-center w-10 h-10 rounded-full bg-neutral-900 text-white shadow-lg hover:bg-neutral-800 transition"
+      className="relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-neutral-900 text-white shadow-lg transition hover:bg-neutral-800"
     >
       <ShoppingCart size={20} />
 

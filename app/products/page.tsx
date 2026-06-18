@@ -141,6 +141,27 @@ export default function ProductsPage() {
          {language === "it" ? "I Nostri Prodotti" : "Our Products"}
         </motion.h2>
 
+        {/* Ingresso guidato quiz */}
+        <motion.div
+          initial={fadeInitial}
+          whileInView={fadeAnim}
+          viewport={{ once: true }}
+          className="mx-auto max-w-2xl rounded-2xl border border-accent/25 bg-[#1b0d08]/80 px-5 py-5 text-center sm:px-8 sm:py-6"
+        >
+          <p className="text-sm leading-relaxed text-neutral-300 sm:text-base">
+            {language === "it"
+              ? "Non sai cosa scegliere? Fai il quiz prodotti personalizzati."
+              : "Not sure what to choose? Take the personalized products quiz."}
+          </p>
+          <button
+            type="button"
+            onClick={() => router.push("/erbe")}
+            className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full border border-accent/40 bg-accent/10 px-6 py-2.5 text-sm font-semibold text-[#f1e4d0] transition hover:bg-accent/20"
+          >
+            {language === "it" ? "Inizia il quiz" : "Start the quiz"}
+          </button>
+        </motion.div>
+
         {/* SEZIONI */}
         <Section title="Shampoo" items={shampoo} />
         <Section title="Maschere" items={masks} />
