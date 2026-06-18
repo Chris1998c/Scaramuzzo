@@ -1,28 +1,31 @@
 import Link from "next/link";
+import { hasSupabaseAdminCredentials } from "@/lib/supabase/admin";
 import { isStripeConfigured } from "@/lib/stripe/client";
+import { listCrmOrdersUnified } from "@/lib/crm/fetchOrders";
 import {
   formatOrderMoney,
   labelPaymentStatus,
-  labelSessionStatus,
-  listCrmOrders,
 } from "@/lib/crm/stripeOrders";
-import { formatDateTime, labelSource } from "@/lib/crm/format";
+import { formatDateTime, labelOrderStatus, labelSource } from "@/lib/crm/format";
 
 export default async function CrmOrdersPage() {
-  if (!isStripeConfigured()) {
+  if (!isStripeConfigured() && !hasSupabaseAdminCredentials()) {
     return (
       <div className="rounded-2xl border border-border/40 bg-card/40 p-6 text-sm text-muted-foreground">
-        Configurazione server incompleta: manca{" "}
-        <code className="text-foreground">STRIPE_SECRET_KEY</code>.
+        Configurazione server incompleta: mancano{" "}
+        <code className="text-foreground">STRIPE_SECRET_KEY</code> o Supabase.
       </div>
     );
   }
 
-  let orders: Awaited<ReturnType<typeof listCrmOrders>> = [];
+  let orders: Awaited<ReturnType<typeof listCrmOrdersUnified>>["orders"] = [];
+  let dataSource: "database" | "stripe" = "stripe";
   let errorMessage: string | null = null;
 
   try {
-    orders = await listCrmOrders(50);
+    const result = await listCrmOrdersUnified(50);
+    orders = result.orders;
+    dataSource = result.source;
   } catch (err) {
     errorMessage =
       err instanceof Error ? err.message : "Errore nel caricamento ordini.";
@@ -32,9 +35,9 @@ export default async function CrmOrdersPage() {
     <div>
       <div className="mb-6 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold">Ordini Stripe</h2>
+          <h2 className="text-2xl font-semibold">Ordini</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Ultime 50 Checkout Sessions — fonte ordine: Stripe.
+            Fonte: {dataSource === "database" ? "Supabase (operativo)" : "Stripe (fallback)"}.
           </p>
         </div>
         <p className="text-sm text-muted-foreground">{orders.length} ordini</p>
@@ -48,7 +51,7 @@ export default async function CrmOrdersPage() {
 
       {orders.length === 0 && !errorMessage ? (
         <div className="rounded-2xl border border-border/40 bg-card/40 p-8 text-center text-sm text-muted-foreground">
-          Nessun ordine trovato su Stripe.
+          Nessun ordine trovato.
         </div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-border/40 bg-card/40">
@@ -60,41 +63,49 @@ export default async function CrmOrdersPage() {
                   <th className="px-4 py-3 font-semibold">Data</th>
                   <th className="px-4 py-3 font-semibold">Email</th>
                   <th className="px-4 py-3 font-semibold">Totale</th>
+                  <th className="px-4 py-3 font-semibold">Stato</th>
                   <th className="px-4 py-3 font-semibold">Pagamento</th>
-                  <th className="px-4 py-3 font-semibold">Sessione</th>
                   <th className="px-4 py-3 font-semibold">Source</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map((order) => (
                   <tr
-                    key={order.sessionId}
+                    key={order.id}
                     className="border-b border-border/30 transition hover:bg-background/30"
                   >
                     <td className="px-4 py-3">
                       <Link
-                        href={`/crm/ordini/${order.sessionId}`}
+                        href={`/crm/ordini/${order.id}`}
                         className="font-medium text-accent hover:underline"
                       >
                         {order.orderRef}
                       </Link>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {formatDateTime(new Date(order.createdAt * 1000).toISOString())}
+                      {formatDateTime(order.createdAt)}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {order.customerEmail ?? "—"}
                     </td>
                     <td className="px-4 py-3 font-medium">
-                      {formatOrderMoney(order.total, order.currency)}
+                      {formatOrderMoney(
+                        order.totalCents,
+                        order.currency,
+                        order.fromDatabase
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <span className="inline-flex rounded-full border border-border/50 px-2.5 py-0.5 text-xs font-medium">
-                        {labelPaymentStatus(order.paymentStatus)}
+                        {order.fromDatabase
+                          ? labelOrderStatus(order.status)
+                          : order.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {labelSessionStatus(order.status)}
+                      {order.paymentStatus
+                        ? labelPaymentStatus(order.paymentStatus)
+                        : "—"}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {order.source ? labelSource(order.source) : "—"}

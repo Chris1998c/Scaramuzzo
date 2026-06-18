@@ -7,6 +7,7 @@ import {
   isOrderProcessing,
 } from "@/lib/stripe/orderIdempotency";
 import { parseCheckoutSession } from "@/lib/stripe/parseCheckoutSession";
+import { persistOrderFromCheckoutSession } from "@/lib/crm/persistOrder";
 
 export const runtime = "nodejs";
 
@@ -45,11 +46,6 @@ export async function POST(req: Request) {
 
   const session = event.data.object as Stripe.Checkout.Session;
 
-  if (session.metadata?.emailed === "1") {
-    console.log("↩️ Ordine già processato (metadata), skip:", session.id);
-    return NextResponse.json({ received: true });
-  }
-
   if (isOrderProcessing(session.id)) {
     console.log("↩️ Ordine già in elaborazione su questa istanza, skip:", session.id);
     return NextResponse.json({ received: true });
@@ -61,15 +57,49 @@ export async function POST(req: Request) {
 
   try {
     const fresh = await stripe.checkout.sessions.retrieve(session.id);
-
-    if (fresh.metadata?.emailed === "1") {
-      console.log("↩️ Ordine già processato (re-fetch), skip:", session.id);
-      return NextResponse.json({ received: true });
-    }
-
     const order = await parseCheckoutSession(stripe, fresh);
+    const emailsAlreadySent = fresh.metadata?.emailed === "1";
 
     console.log("📦 Nuovo ordine completato:", order.orderRef);
+
+    let persistOk = false;
+    try {
+      const persisted = await persistOrderFromCheckoutSession(fresh, order);
+      persistOk = persisted.persisted;
+      if (persisted.persisted) {
+        console.log("💾 Ordine persistito su Supabase:", {
+          orderRef: order.orderRef,
+          sessionId: fresh.id,
+          orderId: persisted.orderId,
+          itemsSynced: persisted.itemsSynced,
+          itemsRepaired: persisted.itemsRepaired,
+        });
+      }
+    } catch (persistErr) {
+      const message =
+        persistErr instanceof Error ? persistErr.message : String(persistErr);
+      console.error("❌ PERSISTENZA ORDINE FALLITA — registro operativo incompleto:", {
+        orderRef: order.orderRef,
+        sessionId: fresh.id,
+        error: message,
+        emailsAlreadySent,
+      });
+    }
+
+    if (emailsAlreadySent) {
+      if (!persistOk) {
+        console.error(
+          "❌ Ordine già emailato ma persistenza Supabase ancora assente — attendere retry webhook Stripe:",
+          order.orderRef
+        );
+      } else {
+        console.log(
+          "↩️ Email già inviate, persistenza verificata/riparata:",
+          order.orderRef
+        );
+      }
+      return NextResponse.json({ received: true });
+    }
 
     const emailPayload = {
       orderId: order.orderId,
@@ -112,10 +142,19 @@ export async function POST(req: Request) {
       metadata: {
         ...fresh.metadata,
         emailed: "1",
+        ...(persistOk ? { persisted: "1" } : {}),
       },
     });
 
-    console.log("📨 Email inviate per ordine:", order.orderRef);
+    if (!persistOk) {
+      console.error(
+        "❌ Email inviate ma persistenza Supabase fallita — ordine operativo mancante, retry webhook possibile:",
+        order.orderRef
+      );
+    } else {
+      console.log("📨 Email inviate e ordine persistito:", order.orderRef);
+    }
+
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error("❌ Errore webhook checkout.session.completed:", err);

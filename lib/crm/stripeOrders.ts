@@ -1,51 +1,59 @@
 import type Stripe from "stripe";
 import { getStripeClient } from "@/lib/stripe/client";
-import { parseCheckoutSession, type ParsedOrder } from "@/lib/stripe/parseCheckoutSession";
-
-export type CrmOrderListItem = {
-  sessionId: string;
-  orderRef: string;
-  createdAt: number;
-  customerEmail: string | null;
-  total: number;
-  currency: string;
-  paymentStatus: string;
-  status: string;
-  source: string | null;
-};
+import { parseCheckoutSession } from "@/lib/stripe/parseCheckoutSession";
+import type { CrmOrderListItem } from "@/lib/crm/fetchOrders";
 
 function sessionToListItem(session: Stripe.Checkout.Session): CrmOrderListItem {
   return {
-    sessionId: session.id,
+    id: session.id,
     orderRef: session.metadata?.order_ref ?? session.id,
-    createdAt: session.created,
     customerEmail: session.customer_details?.email ?? session.customer_email ?? null,
-    total: (session.amount_total ?? 0) / 100,
-    currency: (session.currency ?? "eur").toUpperCase(),
-    paymentStatus: session.payment_status,
+    totalCents: session.amount_total ?? 0,
+    currency: (session.currency ?? "eur").toLowerCase(),
     status: session.status ?? "unknown",
+    paymentStatus: session.payment_status,
     source: session.metadata?.source ?? null,
+    createdAt: new Date(session.created * 1000).toISOString(),
+    stripeSessionId: session.id,
+    fromDatabase: false,
   };
 }
 
-export async function listCrmOrders(limit = 50): Promise<CrmOrderListItem[]> {
+export async function listCrmOrdersFromStripe(
+  limit = 50
+): Promise<CrmOrderListItem[]> {
   const stripe = getStripeClient();
   const response = await stripe.checkout.sessions.list({ limit });
 
   return response.data.map(sessionToListItem);
 }
 
-export type CrmOrderDetail = ParsedOrder & {
+export type StripeOrderDetailFallback = {
+  fromDatabase: false;
   sessionId: string;
-  paymentStatus: string;
-  status: string;
+  orderRef: string;
+  customerEmail: string;
+  subtotal: number;
+  shipping: number;
+  discount: number;
+  total: number;
   currency: string;
+  paymentStatus: string;
+  stripeStatus: string;
+  billingAddress?: string;
+  shippingAddress?: string;
+  items: Array<{
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
+  }>;
   metadata: Record<string, string>;
 };
 
-export async function getCrmOrderBySessionId(
+export async function getCrmOrderFromStripe(
   sessionId: string
-): Promise<CrmOrderDetail | null> {
+): Promise<StripeOrderDetailFallback | null> {
   if (!/^cs_[a-zA-Z0-9_]+$/.test(sessionId)) {
     return null;
   }
@@ -62,11 +70,25 @@ export async function getCrmOrderBySessionId(
     }
 
     return {
-      ...parsed,
+      fromDatabase: false,
       sessionId: session.id,
-      paymentStatus: session.payment_status,
-      status: session.status ?? "unknown",
+      orderRef: parsed.orderRef,
+      customerEmail: parsed.customerEmail,
+      subtotal: parsed.subtotal,
+      shipping: parsed.shipping,
+      discount: parsed.discount,
+      total: parsed.total,
       currency: (session.currency ?? "eur").toUpperCase(),
+      paymentStatus: session.payment_status,
+      stripeStatus: session.status ?? "unknown",
+      billingAddress: parsed.billingAddress,
+      shippingAddress: parsed.shippingAddress,
+      items: parsed.items.map((item) => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
       metadata,
     };
   } catch {
@@ -74,11 +96,16 @@ export async function getCrmOrderBySessionId(
   }
 }
 
-export function formatOrderMoney(amount: number, currency: string): string {
+export function formatOrderMoney(
+  amount: number,
+  currency: string,
+  inCents = false
+): string {
+  const value = inCents ? amount / 100 : amount;
   return new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: currency.toUpperCase(),
-  }).format(amount);
+  }).format(value);
 }
 
 export function labelPaymentStatus(value: string): string {

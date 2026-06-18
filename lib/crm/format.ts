@@ -39,6 +39,19 @@ export function labelStatus(value: string): string {
   return STATUS_LABELS[value] ?? value;
 }
 
+const ORDER_STATUS_LABELS: Record<string, string> = {
+  paid: "Pagato",
+  processing: "In lavorazione",
+  shipped: "Spedito",
+  delivered: "Consegnato",
+  cancelled: "Annullato",
+  refunded: "Rimborsato",
+};
+
+export function labelOrderStatus(value: string): string {
+  return ORDER_STATUS_LABELS[value] ?? value;
+}
+
 export function labelComplexity(value: string): string {
   const map: Record<string, string> = {
     basso: "Basso",
