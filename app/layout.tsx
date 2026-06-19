@@ -84,7 +84,7 @@ export default function RootLayout({
         {/* Tema pre-paint: applica la classe prima dell'hydration per evitare il flash */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var d=document.documentElement;d.classList.remove('light','dark');d.classList.add(t==='light'?'light':'dark');}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=document.documentElement;d.classList.remove('light','dark');d.classList.add(t==='dark' ? 'dark' : 'light');}catch(e){}})();`,
           }}
         />
 
