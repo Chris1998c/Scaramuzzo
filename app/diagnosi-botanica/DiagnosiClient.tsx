@@ -630,6 +630,12 @@ export default function DiagnosiClient() {
   const savedFingerprintRef = useRef<string | null>(null);
   const trackedBceCompleteRef = useRef<string | null>(null);
 
+  // Hero → quiz / risultati: il browser mantiene scrollY; senza reset l'utente resta in fondo pagina.
+  useEffect(() => {
+    if (!started) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [started, showResults]);
+
   const isContactValid =
     customerName.trim().length >= 2 &&
     customerPhone.replace(/\D/g, "").length >= 8 &&
