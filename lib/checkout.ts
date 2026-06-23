@@ -1,6 +1,7 @@
 "use client";
 
 import type { CartItem } from "@/lib/store/cartStore";
+import { getShippingEur } from "@/lib/shipping";
 import { savePendingPurchase, sumCartQty, getAttributionForStripeMetadata } from "@/lib/tracking";
 
 /**
@@ -33,9 +34,8 @@ export async function startStripeCheckout(cart: CartItem[]): Promise<void> {
     if (data.error) throw new Error(data.error);
     if (!data.url) throw new Error("URL checkout Stripe mancante.");
 
-    const value = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
-    const subtotal = value;
-    const shipping = subtotal >= 49 ? 0 : 7;
+    const subtotal = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+    const shipping = getShippingEur(subtotal);
 
     savePendingPurchase({
       order_ref: data.order_ref ?? "",

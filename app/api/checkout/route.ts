@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { randomBytes } from "crypto";
 import { productTranslations } from "@/app/products/data";
+import { getShippingEur, shippingFlatCents } from "@/lib/shipping";
 import { sanitizeAttributionForStripe } from "@/lib/tracking/attributionMetadata";
 
 export const runtime = "nodejs";
@@ -109,8 +110,7 @@ export async function POST(request: Request) {
       0
     );
 
-    // --- SPEDIZIONE: GRATIS sopra 49€ ---
-    const shippingCost = subtotal >= 49 ? 0 : 7;
+    const shippingCost = getShippingEur(subtotal);
 
     // --- LINE ITEMS PRODOTTI ---
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
@@ -138,7 +138,7 @@ export async function POST(request: Request) {
               `${process.env.NEXT_PUBLIC_SITE_URL}/scaramuzzo-hair-natural-beauty-video-01-immagine-sovrapposta-removebg-preview.webp`
             ],
           },
-          unit_amount: shippingCost * 100,
+          unit_amount: shippingFlatCents(),
         },
         quantity: 1,
       });

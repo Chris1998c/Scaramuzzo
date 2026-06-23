@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { getShippingEur } from "@/lib/shipping";
 import { trackAddToCart } from "@/lib/tracking";
 
 export type CartItem = {
@@ -93,26 +94,9 @@ export const useCartStore = create<CartState>()(
           0
         ),
 
-      // 📌 SPEDIZIONE: 7€ sotto 49€, gratis sopra
-      getShipping: () => {
-        const subtotal = get().items.reduce(
-          (acc, item) => acc + item.price * item.qty,
-          0
-        );
+      getShipping: () => getShippingEur(get().getSubtotal()),
 
-        return subtotal >= 49 ? 0 : 7;
-      },
-
-      // 📌 TOTALE FINALE
-      getTotal: () => {
-        const subtotal = get().items.reduce(
-          (acc, item) => acc + item.price * item.qty,
-          0
-        );
-        const shipping = subtotal >= 49 ? 0 : 7;
-
-        return subtotal + shipping;
-      },
+      getTotal: () => get().getSubtotal() + get().getShipping(),
     }),
     {
       name: "scaramuzzo-cart",

@@ -113,7 +113,7 @@ export function ManualPaymentForm({ consultationId, defaultEmail }: Props) {
               value={shipping}
               onChange={(e) => setShipping(e.target.value)}
               className={inputClass}
-              placeholder="7.00"
+              placeholder="4.99"
               pattern="^\d+([.,]\d{1,2})?$"
               title="Massimo 2 decimali"
             />
