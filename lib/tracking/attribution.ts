@@ -242,7 +242,9 @@ export function getAttributionForTracking(): Record<string, string> {
 
   const out: Record<string, string> = {};
   if (touch.utm_source) out.utm_source = touch.utm_source;
+  if (touch.utm_medium) out.utm_medium = touch.utm_medium;
   if (touch.utm_campaign) out.utm_campaign = touch.utm_campaign;
+  if (touch.utm_content) out.utm_content = touch.utm_content;
   if (touch.gclid) out.gclid = touch.gclid;
   if (touch.fbclid) out.fbclid = touch.fbclid;
 

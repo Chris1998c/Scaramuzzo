@@ -44,12 +44,23 @@ export { trackEventOnce } from "./trackEventOnce";
 
 export {
   trackQuizPersonalizzatiComplete,
+  trackAnticadutaQuizView,
+  trackAnticadutaQuizStart,
+  trackAnticadutaQuizStep,
+  trackAnticadutaQuizComplete,
+  trackAnticadutaOfferView,
+  trackAnticadutaOfferReveal,
+  trackAnticadutaDiagnosiClick,
+  trackAnticadutaMetodoClick,
   trackBceComplete,
   trackWhatsappClick,
 } from "./businessEvents";
 
 export type {
   QuizCompleteTrackingInput,
+  AnticadutaBaseTrackingInput,
+  AnticadutaStepTrackingInput,
+  AnticadutaCompleteTrackingInput,
   BceCompleteTrackingInput,
   WhatsappClickLocation,
   WhatsappClickTrackingInput,
