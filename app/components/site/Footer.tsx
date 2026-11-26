@@ -193,8 +193,15 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t pt-6 text-center text-sm text-muted-foreground">
-          © {year} Scaramuzzo Hair Natural Beauty — {t.allRights}
+        <div className="mt-10 border-t pt-6 text-center text-sm text-muted-foreground space-y-2 px-2">
+          <p className="leading-relaxed">
+            Scaramuzzo Studio SRL – Via Nazionale 70, Corigliano-Rossano (CS)
+            <br />
+            P.IVA IT03630030785
+          </p>
+          <p>
+            © {year} Scaramuzzo Hair Natural Beauty — {t.allRights}
+          </p>
         </div>
       </div>
     </footer>
